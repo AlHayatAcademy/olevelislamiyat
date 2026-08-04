@@ -24,6 +24,15 @@ const config: Config = {
         success: "#247A52",
         warning: "#B7791F",
         error: "#B42318",
+        // Harmonious tile-accent palette used to differentiate feature/resource
+        // cards without straying from the brand's warm green/gold family.
+        tile: {
+          green: "#247A52",
+          gold: "#C89B3C",
+          purple: "#6B5B95",
+          blue: "#2E6C8E",
+          teal: "#1E7D75",
+        },
       },
       fontFamily: {
         heading: ["var(--font-manrope)", "system-ui", "sans-serif"],

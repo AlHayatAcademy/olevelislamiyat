@@ -25,9 +25,9 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children, id }: { title: string; children: React.ReactNode; id?: string }) {
   return (
-    <div className="mt-8">
+    <div id={id} className="mt-8 scroll-mt-24">
       <h2 className="text-xl font-semibold mb-3">{title}</h2>
       {children}
     </div>
@@ -61,7 +61,7 @@ export default async function ModelAnswerDetailPage({ params }: PageProps) {
         </Link>
       </div>
 
-      <Section title="Answer plan">
+      <Section title="Answer plan" id="plan">
         <ul className="list-disc pl-5 space-y-1">
           {answer.plan.map((point, i) => (
             <li key={i}>{point}</li>

@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { Mail, MessageCircle } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
-import { pastPaperQuestions, availableYears } from "@/data/questions";
+import { PastPapersYearList, type YearStat } from "@/components/PastPapersYearList";
+import { pastPaperQuestions, availableYears, getQuestionsByYear } from "@/data/questions";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
+import { siteConfig } from "@/data/site-config";
 import { canonical } from "@/lib/seo";
 
 export const metadata = {
@@ -38,6 +41,16 @@ const faqSchema = {
 export default function PastPapersPage() {
   const allSections = [...paper1Sections, ...paper2Sections];
 
+  const yearStats: YearStat[] = availableYears.map((year) => {
+    const questions = getQuestionsByYear(year);
+    return {
+      year,
+      sessions: Array.from(new Set(questions.map((q) => q.session))),
+      papers: Array.from(new Set(questions.map((q) => q.paper))).sort((a, b) => a - b),
+      questionCount: questions.length,
+    };
+  });
+
   return (
     <PageShell
       title="Past Papers"
@@ -58,45 +71,90 @@ export default function PastPapersPage() {
         rehosted here.
       </p>
 
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-3">Browse by year</h2>
-        <div className="flex flex-wrap gap-2">
-          {availableYears.map((year) => (
-            <Link
-              key={year}
-              href={`/past-papers/year-wise/${year}`}
-              className="rounded-md border border-primary/30 px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white transition-colors"
-            >
-              {year}
-            </Link>
-          ))}
-        </div>
-      </div>
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
+        <div>
+          <h2 className="text-xl font-semibold mb-3">Browse by year</h2>
+          <PastPapersYearList years={yearStats} />
 
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-3">Browse by topic</h2>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {allSections.map((section) => (
-            <Link
-              key={section.slug}
-              href={`/past-papers/topical/${section.slug}`}
-              className="rounded-md border border-surface-soft px-4 py-3 text-sm hover:border-primary transition-colors"
-            >
-              <span className="font-medium">
-                Paper {section.paper} · {section.title}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
+          <div id="browse-by-topic" className="mt-10 scroll-mt-24">
+            <h2 className="text-xl font-semibold mb-3">Browse by topic</h2>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {allSections.map((section) => (
+                <Link
+                  key={section.slug}
+                  href={`/past-papers/topical/${section.slug}`}
+                  className="rounded-md border border-surface-soft px-4 py-3 text-sm hover:border-primary transition-colors"
+                >
+                  <span className="font-medium">
+                    Paper {section.paper} · {section.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-      <p className="mt-8 text-sm">
-        See{" "}
-        <Link href="/model-answers" className="text-primary underline">
-          model answers with AO1/AO2 mark-scheme guidance
-        </Link>{" "}
-        for detailed answer structure on individual questions.
-      </p>
+          <p className="mt-8 text-sm">
+            See{" "}
+            <Link href="/model-answers" className="text-primary underline">
+              model answers with AO1/AO2 mark-scheme guidance
+            </Link>{" "}
+            for detailed answer structure on individual questions.
+          </p>
+        </div>
+
+        <aside className="space-y-6">
+          <div className="rounded-xl border border-border bg-surface p-5 shadow-soft">
+            <h3 className="font-heading font-semibold text-text">Quick Links</h3>
+            <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <Link href="/model-answers" className="text-primary hover:underline">
+                  Model Answers
+                </Link>
+              </li>
+              <li>
+                <Link href="/quotes-references" className="text-primary hover:underline">
+                  Quotes &amp; References
+                </Link>
+              </li>
+              <li>
+                <Link href="/revision" className="text-primary hover:underline">
+                  Revision Centre
+                </Link>
+              </li>
+              <li>
+                <Link href="/quizzes" className="text-primary hover:underline">
+                  Quizzes
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-xl border border-border bg-surface-soft p-5">
+            <h3 className="font-heading font-semibold text-text">Need Help?</h3>
+            <p className="mt-2 text-sm text-text-muted">
+              Can&apos;t find a past-paper question or session? Reach out directly.
+            </p>
+            <div className="mt-4 space-y-2 text-sm">
+              <a
+                href={siteConfig.contact.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 font-medium text-primary hover:underline"
+              >
+                <MessageCircle aria-hidden="true" size={16} />
+                Chat on WhatsApp
+              </a>
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="flex items-center gap-2 font-medium text-primary hover:underline"
+              >
+                <Mail aria-hidden="true" size={16} />
+                {siteConfig.contact.email}
+              </a>
+            </div>
+          </div>
+        </aside>
+      </div>
 
       <section className="mt-12">
         <h2 className="text-xl font-heading font-bold text-primary">Frequently asked questions</h2>

@@ -3,10 +3,12 @@ import { Hero } from "@/components/Hero";
 import { Button } from "@/components/Button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { GeometricPattern } from "@/components/GeometricPattern";
+import { TrustBar } from "@/components/TrustBar";
 import { PaperIllustration } from "@/components/illustrations/PaperIllustration";
 import { StudyBadgeIllustration } from "@/components/illustrations/StudyBadgeIllustration";
 import { siteConfig } from "@/data/site-config";
 import { features, examPatternSummary, faqs } from "@/data/homepage-content";
+import { tileAccentClasses } from "@/lib/tile-accent";
 import { canonical } from "@/lib/seo";
 
 export const metadata = {
@@ -44,19 +46,26 @@ export default function HomePage() {
           <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Everything You Need to Succeed</h2>
         </ScrollReveal>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((f, i) => (
-            <ScrollReveal key={f.title} delayMs={i * 60}>
-              <div className="group h-full rounded-xl border border-border bg-surface p-6 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-secondary/40 hover:shadow-card-hover">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-secondary/10 text-secondary transition-all duration-200 group-hover:scale-110 group-hover:bg-secondary group-hover:text-white">
-                  <f.icon aria-hidden="true" size={24} />
-                </span>
-                <h3 className="mt-4 font-heading font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm text-text-muted">{f.description}</p>
-              </div>
-            </ScrollReveal>
-          ))}
+          {features.map((f, i) => {
+            const accent = tileAccentClasses[f.accent];
+            return (
+              <ScrollReveal key={f.title} delayMs={i * 60}>
+                <div className="group h-full rounded-xl border border-border bg-surface p-6 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-secondary/40 hover:shadow-card-hover">
+                  <span
+                    className={`inline-flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-110 ${accent.badge} ${accent.badgeHover}`}
+                  >
+                    <f.icon aria-hidden="true" size={24} />
+                  </span>
+                  <h3 className="mt-4 font-heading font-semibold">{f.title}</h3>
+                  <p className="mt-2 text-sm text-text-muted">{f.description}</p>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </section>
+
+      <TrustBar />
 
       {/* Paper 1 / Paper 2 cards */}
       <section className="relative overflow-hidden bg-surface-soft py-16 sm:py-20">

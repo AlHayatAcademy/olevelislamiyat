@@ -1,8 +1,12 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, MessageSquareQuote, ScrollText, Crown, ListChecks, Download, ClipboardList } from "lucide-react";
 import { paper2Sections } from "@/data/syllabus";
 import { getTopicsForSection } from "@/data/topics";
+import { PaperTabs } from "@/components/PaperTabs";
+import { Button } from "@/components/Button";
 import { canonical } from "@/lib/seo";
+
+const sectionIcons = [MessageSquareQuote, ScrollText, Crown, ListChecks];
 
 export const metadata = {
   title: "Islamiyat Paper 2 Notes (Hadith & Caliphs)",
@@ -57,33 +61,48 @@ export default function Paper2Page() {
         .
       </p>
 
-      <div className="mt-8 space-y-4">
-        {paper2Sections.map((section) => {
+      <div className="mt-6">
+        <PaperTabs />
+      </div>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        {paper2Sections.map((section, i) => {
           const topicCount = getTopicsForSection(2, section.slug).length;
+          const Icon = sectionIcons[i % sectionIcons.length];
           return (
             <Link
               key={section.slug}
               href={`/paper-2/${section.slug}`}
               className="block rounded-xl border border-border bg-surface p-5 transition-colors hover:border-primary hover:bg-surface-soft"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-wide text-secondary">
-                    Section {section.number} &middot; {section.marks} marks
-                  </p>
-                  <h2 className="mt-1 text-xl font-semibold font-heading text-text">{section.title}</h2>
-                  <p className="mt-2 text-sm text-text-muted">{section.description}</p>
-                  <p className="mt-2 text-xs text-text-muted">
-                    {topicCount > 0
-                      ? `${topicCount} lesson${topicCount === 1 ? "" : "s"} available`
-                      : "Lessons coming soon"}
-                  </p>
-                </div>
-                <ChevronRight size={20} className="shrink-0 text-primary" aria-hidden="true" />
+              <div className="flex items-start justify-between gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Icon aria-hidden="true" size={22} />
+                </span>
+                <ChevronRight size={20} className="mt-2 shrink-0 text-primary" aria-hidden="true" />
               </div>
+              <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-secondary">
+                Section {section.number} &middot; {section.marks} marks
+              </p>
+              <h2 className="mt-1 text-xl font-semibold font-heading text-text">{section.title}</h2>
+              <p className="mt-2 text-sm text-text-muted">{section.description}</p>
+              <p className="mt-2 text-xs text-text-muted">
+                {topicCount > 0
+                  ? `${topicCount} lesson${topicCount === 1 ? "" : "s"} available`
+                  : "Lessons coming soon"}
+              </p>
             </Link>
           );
         })}
+      </div>
+
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Button href="/syllabus" variant="outline" icon={Download} iconPosition="left">
+          View Full Syllabus
+        </Button>
+        <Button href="/exam-pattern" variant="ghost" icon={ClipboardList} iconPosition="left">
+          View Exam Pattern
+        </Button>
       </div>
 
       <section className="mt-12">

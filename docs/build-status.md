@@ -342,6 +342,96 @@ OpenNext build complete.
 Both the standard Next.js build and the Cloudflare-specific build succeed
 cleanly with no errors.
 
+## Design Elevation Pass
+
+A reference mockup (8 page designs) was used as a polish bar to build toward
+and exceed with original execution — not cloned pixel-for-pixel. Rebuilt:
+
+1. **Homepage hero** — new original SVG illustration
+   `components/illustrations/QuranLanternIllustration.tsx` (Qur'an on a
+   stand + lantern + flat mosque-skyline silhouette, warm gold/cream/green,
+   abstract/geometric, no figurative or religious imagery). Added eyebrow
+   pill badges ("Syllabus Aligned", "Exam-Focused", "Original Content")
+   above the heading in `components/Hero.tsx`.
+2. **Feature tiles** — `data/homepage-content.ts` features now carry a
+   `TileAccent` (`green`/`gold`/`purple`/`blue`/`teal`), rendered via static
+   class lookups in `lib/tile-accent.ts` and a `tile.*` color extension in
+   `tailwind.config.ts`. Used on both the homepage feature grid
+   (`app/page.tsx`) and the Resources tiles.
+3. **Honest trust bar** — new `components/TrustBar.tsx`, dark-green band
+   with real, computed badges (see below) plus phone/email/WhatsApp/social
+   links from `data/site-config.ts` (empty socials hidden).
+4. **Past Papers year-wise** — new `components/PastPapersYearList.tsx`
+   (client component): Paper/Session filters + Reset, year cards with
+   badge/session/question counts and "View Questions" / "Browse Topics"
+   buttons, driven by real per-year stats computed from
+   `data/questions.ts`. `app/past-papers/page.tsx` also gained a "Quick
+   Links" + "Need Help?" (WhatsApp/email) sidebar.
+5. **Topical/section hub pages** — `components/SectionHub.tsx` rebuilt with
+   a left sidebar of Paper 1/2 sections (active-state highlighted), the
+   existing subtopic list as main content, and a "Browse Other Sections"
+   row at the bottom. Shared by all `/paper-1/[section]` and
+   `/paper-2/[section]` pages.
+6. **Question detail page** — `app/past-papers/question/[id]/page.tsx`
+   restructured into a two-column body: Guidance (derived from the
+   question's real `ao`/`marks` fields) + Key Points checklist (from the
+   model answer's marking points where available) on the left; Related
+   questions (same syllabus section) + a static Command Words glossary on
+   the right. Bottom action bar: Previous/Next question nav plus "View
+   Answer Plan" (secondary, links to `/model-answers/[id]#plan`), "View
+   Model Answer" (success), "Add to Practice" (warning, links to
+   `/revision`), and "Report an Issue" (destructive-outline, `mailto:`
+   link to the support email — no backend, per constraint).
+7. **Paper 1 / Paper 2 syllabus overview** — new client component
+   `components/PaperTabs.tsx` (tab switch between `/paper-1` and
+   `/paper-2`), section list restyled as a 2-column icon grid, plus
+   "View Full Syllabus" (→ `/syllabus`, no PDF exists in `public/` so this
+   honestly links to the syllabus content page rather than faking a
+   download) and "View Exam Pattern" (→ `/exam-pattern`) buttons.
+8. **Resources page** — tiles elevated to the same per-tile accent-color
+   treatment as the homepage, plus a new dark-green promotional card
+   ("Consistent study today, confident results on exam day" / "Start
+   Learning" → `/revision`) with the geometric pattern overlay.
+9. **Footer** — `components/Footer.tsx` rebuilt as four columns (brand +
+   tagline, Quick Links, Contact Us with icons, Follow Us with social
+   icons from `data/site-config.ts`, hidden when empty) plus a bottom bar
+   with copyright and Privacy/Terms links.
+10. **Favicon/app icon** — `app/icon.tsx` and `app/apple-icon.tsx` redrawn
+    as a rounded dark-green square with a gold open-book + small cream
+    crescent motif (simplified stroke detail at 32×32, spine lines added
+    at 180×180 for legibility at the larger size).
+
+### No fabricated statistics — verification
+
+Every numeric claim added in this pass is computed directly from the real
+data arrays (see `data/homepage-content.ts`, `trustBadges`), not typed as a
+literal:
+
+| Badge / claim | Value at time of writing | Real source |
+|---|---|---|
+| "All 8 Official Syllabus Sections Covered" | 8 | `paper1Sections.length + paper2Sections.length` in `data/syllabus.ts` |
+| "52 Structured Lessons" | 52 | `allTopics.length` in `data/topics/index.ts` |
+| "14 Interactive Quizzes" | 14 | `quizzes.length` in `data/quizzes.ts` |
+| "Aligned to 2058 & 0493" | — | qualitative, no number |
+| "Founder-Reviewed Content" | — | qualitative, no number |
+| Past Papers year cards — question counts | varies per year | `getQuestionsByYear(year).length` in `data/questions.ts`, computed live in `app/past-papers/page.tsx` |
+| Past Papers year cards — paper/session lists | varies per year | derived from the real `paper`/`session` fields on each question |
+
+Confirmed by grep: `grep -rn "10+\|50+\|10,000\|98%" app components data`
+returns only one pre-existing, unrelated hit (a quiz multiple-choice option
+in `data/quizzes.ts` about historical Hadith numbers — not a site stat, not
+introduced by this pass). No invented numeric claims (e.g. "10,000+
+students", "98% success rate") were introduced anywhere.
+
+**QA re-run after this pass — all real output:**
+
+```
+$ npm run lint          → 0 errors, 0 warnings
+$ npm run typecheck     → tsc --noEmit, exit 0
+$ npm run build         → ✓ Compiled successfully, 192/192 static pages
+$ npx opennextjs-cloudflare build → OpenNext build complete, worker.js saved
+```
+
 ## Git state
 
 No commits, branch switches, or `git add`/`git commit`/`git push` were performed. All work is uncommitted in the working tree on branch `main`, ready for the user's review.

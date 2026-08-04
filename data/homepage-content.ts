@@ -6,43 +6,58 @@ import {
   NotebookPen,
   Puzzle,
   TrendingUp,
+  Layers,
+  Award,
+  Target,
 } from "lucide-react";
+import { paper1Sections, paper2Sections } from "@/data/syllabus";
+import { allTopics } from "@/data/topics";
+import { quizzes } from "@/data/quizzes";
 
-export const features = [
+export type TileAccent = "green" | "gold" | "purple" | "blue" | "teal";
+
+export const features: { icon: typeof BookMarked; title: string; description: string; accent: TileAccent }[] = [
   {
     icon: BookMarked,
     title: "Syllabus Aligned",
     description: "Every page maps directly to the official Cambridge 2058 / 0493 syllabus content.",
+    accent: "green",
   },
   {
     icon: FileStack,
     title: "Past Papers",
     description: "Structured access to past exam sessions, organised by paper and topic.",
+    accent: "gold",
   },
   {
     icon: ListChecks,
     title: "Topical Questions",
     description: "Practice questions grouped by syllabus topic, not just by session.",
+    accent: "purple",
   },
   {
     icon: NotebookPen,
     title: "Model Answers",
     description: "Guidance on answer structure aligned with AO1/AO2 mark schemes.",
+    accent: "blue",
   },
   {
     icon: MessageSquareQuote,
     title: "Quotes & References",
     description: "Qur'an and Hadith references relevant to each syllabus topic.",
+    accent: "teal",
   },
   {
     icon: Puzzle,
     title: "Quizzes",
     description: "Self-check quizzes to test recall and understanding as you study.",
+    accent: "green",
   },
   {
     icon: TrendingUp,
     title: "Progress Tracking",
     description: "Track which topics you have covered as you work through each paper.",
+    accent: "gold",
   },
 ];
 
@@ -78,6 +93,33 @@ export const examPatternSummary = {
     },
   ],
 };
+
+// Every count below is computed directly from the real data arrays, never
+// invented — no fabricated statistics per the site's content policy.
+const sectionCount = paper1Sections.length + paper2Sections.length;
+
+export const trustBadges = [
+  {
+    icon: BookMarked,
+    label: `All ${sectionCount} Official Syllabus Sections Covered`,
+  },
+  {
+    icon: Layers,
+    label: `${allTopics.length} Structured Lessons`,
+  },
+  {
+    icon: Target,
+    label: `${quizzes.length} Interactive Quizzes`,
+  },
+  {
+    icon: Award,
+    label: "Aligned to 2058 & 0493",
+  },
+  {
+    icon: TrendingUp,
+    label: "Founder-Reviewed Content",
+  },
+];
 
 export const faqs = [
   {

@@ -1,8 +1,10 @@
 import { BookOpen, FileText } from "lucide-react";
 import { Button } from "@/components/Button";
 import { GeometricPattern } from "@/components/GeometricPattern";
-import { HeroIllustration } from "@/components/illustrations/HeroIllustration";
+import { QuranLanternIllustration } from "@/components/illustrations/QuranLanternIllustration";
 import { siteConfig } from "@/data/site-config";
+
+const eyebrowPills = ["Syllabus Aligned", "Exam-Focused", "Original Content"];
 
 export function Hero() {
   return (
@@ -19,7 +21,17 @@ export function Hero() {
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
         <div className="text-center lg:text-left">
-          <p className="font-heading text-sm uppercase tracking-widest text-accent">
+          <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+            {eyebrowPills.map((pill) => (
+              <span
+                key={pill}
+                className="rounded-full border border-accent/40 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent"
+              >
+                {pill}
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 font-heading text-sm uppercase tracking-widest text-accent">
             Cambridge O Level {siteConfig.qualifications.oLevel.code} / IGCSE{" "}
             {siteConfig.qualifications.igcse.code}
           </p>
@@ -46,7 +58,7 @@ export function Hero() {
         </div>
 
         <div className="hidden justify-self-center lg:flex lg:justify-self-end">
-          <HeroIllustration className="h-72 w-auto max-w-full drop-shadow-[0_12px_28px_rgba(0,0,0,0.25)]" />
+          <QuranLanternIllustration className="h-72 w-auto max-w-full drop-shadow-[0_12px_28px_rgba(0,0,0,0.25)]" />
         </div>
       </div>
     </section>
