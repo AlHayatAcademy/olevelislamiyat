@@ -37,6 +37,13 @@ export default async function QuestionDetailPage({ params }: PageProps) {
     <PageShell
       title={`${question.session} ${question.year} — Paper ${question.paper} (${question.variant})`}
       description={`Question ${question.questionNumber}${question.part !== "whole" ? ` part (${question.part})` : ""} · ${question.marks} marks · ${question.ao}`}
+      breadcrumbs={[
+        { label: "Past Papers", href: "/past-papers" },
+        {
+          label: `${question.session} ${question.year} — Q${question.questionNumber}`,
+          href: `/past-papers/question/${question.id}`,
+        },
+      ]}
     >
       <div className="rounded-md border border-surface-soft p-4">
         <p className="text-xs uppercase tracking-wide text-text-muted mb-2">

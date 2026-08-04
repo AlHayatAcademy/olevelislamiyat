@@ -32,7 +32,15 @@ export default async function ReferenceDetailPage({ params }: PageProps) {
   const section = getSection(ref.paper, ref.sectionSlug);
 
   return (
-    <PageShell title={ref.title} description={`${ref.type} · ${ref.citation}`}>
+    <PageShell
+      title={ref.title}
+      description={`${ref.type} · ${ref.citation}`}
+      breadcrumbs={[
+        { label: "Quotes & References", href: "/quotes-references" },
+        { label: ref.type, href: `/quotes-references/${category}` },
+        { label: ref.title, href: `/quotes-references/${category}/${ref.id}` },
+      ]}
+    >
       {ref.arabic && (
         <p dir="rtl" className="text-2xl leading-loose font-arabic">
           {ref.arabic}

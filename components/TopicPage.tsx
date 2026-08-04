@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import type { Topic } from "@/data/topics";
 import { getSection } from "@/data/syllabus";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 interface TopicPageProps {
   topic: Topic;
@@ -50,15 +51,13 @@ export function TopicPage({ topic }: TopicPageProps) {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <p className="text-sm text-text-muted">
-        <Link href={`/paper-${topic.paper}`} className="hover:underline">
-          Paper {topic.paper}
-        </Link>
-        {" / "}
-        <Link href={`/paper-${topic.paper}/${topic.section}`} className="hover:underline">
-          {section?.title ?? topic.section}
-        </Link>
-      </p>
+      <Breadcrumbs
+        items={[
+          { label: `Paper ${topic.paper}`, href: `/paper-${topic.paper}` },
+          { label: section?.title ?? topic.section, href: `/paper-${topic.paper}/${topic.section}` },
+          { label: topic.title, href: `/paper-${topic.paper}/${topic.section}/${topic.slug}` },
+        ]}
+      />
       <h1 className="mt-2 text-3xl font-bold font-heading text-text">{topic.title}</h1>
       <p className="mt-3 text-text-muted">{topic.standing}</p>
 

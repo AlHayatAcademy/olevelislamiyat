@@ -32,6 +32,10 @@ export default async function YearWisePastPapersPage({ params }: PageProps) {
     <PageShell
       title={`Past Papers — ${year}`}
       description={`${questions.length} documented question(s) from the ${year} sessions, paraphrased in original wording.`}
+      breadcrumbs={[
+        { label: "Past Papers", href: "/past-papers" },
+        { label: `${year}`, href: `/past-papers/year-wise/${year}` },
+      ]}
     >
       {["May/June", "Oct/Nov"].map((session) => {
         const sessionQuestions = questions.filter((q) => q.session === session);

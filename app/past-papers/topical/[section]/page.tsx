@@ -37,6 +37,10 @@ export default async function TopicalPastPapersPage({ params }: PageProps) {
     <PageShell
       title={`Topical: ${section.title}`}
       description={`Paper ${section.paper} · ${questions.length} documented question(s) tagged to this syllabus section.`}
+      breadcrumbs={[
+        { label: "Past Papers", href: "/past-papers" },
+        { label: `Topical: ${section.title}`, href: `/past-papers/topical/${section.slug}` },
+      ]}
     >
       {questions.length === 0 ? (
         <p className="text-sm text-text-muted">

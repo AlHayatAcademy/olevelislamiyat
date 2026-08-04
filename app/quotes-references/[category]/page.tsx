@@ -35,7 +35,14 @@ export default async function ReferenceCategoryPage({ params }: PageProps) {
   const items = getReferencesByType(type);
 
   return (
-    <PageShell title={type} description={`${items.length} entr${items.length === 1 ? "y" : "ies"} in this category.`}>
+    <PageShell
+      title={type}
+      description={`${items.length} entr${items.length === 1 ? "y" : "ies"} in this category.`}
+      breadcrumbs={[
+        { label: "Quotes & References", href: "/quotes-references" },
+        { label: type, href: `/quotes-references/${category}` },
+      ]}
+    >
       <ul className="space-y-2">
         {items.map((ref) => (
           <li key={ref.id}>

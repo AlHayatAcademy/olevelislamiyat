@@ -13,6 +13,18 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.siteName}`,
   },
   description: siteConfig.tagline,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: siteConfig.siteName,
+    title: `${siteConfig.siteName} — Cambridge O Level 2058 / IGCSE 0493`,
+    description: siteConfig.tagline,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.siteName} — Cambridge O Level 2058 / IGCSE 0493`,
+    description: siteConfig.tagline,
+  },
 };
 
 const educationalOrgSchema = {
