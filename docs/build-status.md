@@ -432,6 +432,60 @@ $ npm run build         → ✓ Compiled successfully, 192/192 static pages
 $ npx opennextjs-cloudflare build → OpenNext build complete, worker.js saved
 ```
 
+## Full Past-Paper Question Extraction
+
+`data/questions.ts` was expanded from 21 representative (paraphrased) entries to **351 verbatim
+question-part records**, extracted directly from the 17 `.docx` files in
+`source/07-word-extractions/` (the only remaining source for past-paper question data — raw PDFs
+were removed from the repo). Per explicit instruction, question wording is no longer paraphrased:
+the `prompt` field is the actual text of the official question, transcribed as-is. Full extraction
+methodology, per-file notes and known gaps are logged in
+`docs/past-paper-extraction-log.md`.
+
+**Total questions: 351** (up from 21), covering **39 of 40** paper instances (2058/11, /12, /21,
+/22 across May/June and Oct/Nov, 2021–2025). The only paper without verbatim source text is
+Oct/Nov 2025 Paper 1 Variant 12 (2058/12) — no extraction file contains it.
+
+Breakdown by year:
+
+| Year | Question-part records |
+|---|---|
+| 2021 | 72 |
+| 2022 | 72 |
+| 2023 | 72 |
+| 2024 | 72 |
+| 2025 | 63 (Oct/Nov Paper 1 Variant 12 missing) |
+
+Breakdown by paper: **Paper 1 — 171**, **Paper 2 — 180**.
+
+The pre-existing 21 sample questions were all located verbatim in the source files and replaced
+in place (same `id`s) rather than dropped — none needed to be discarded for lack of a match.
+
+`ao` (AO1/AO2) is assigned structurally: part (a) = AO1 (Knowledge), part (b) = AO2
+(Understanding), for every question in every paper — confirmed against the syllabus's own AO
+weighting description in `2058_s24_summary.docx`, not guessed per-question. `sectionSlug` is an
+editorial classification of each question against `data/syllabus.ts`'s official section slugs,
+made by reading the question content (Question 1 is fixed by exam structure; Questions 2–5 were
+classified individually by topic).
+
+**QA re-run after this pass — all real output:**
+
+```
+$ npm run lint          → eslint . — no errors, no warnings
+$ npm run typecheck     → tsc --noEmit — exit 0
+$ npm run build         → ✓ Compiled successfully
+                           /past-papers/question/[id] — 351 SSG paths generated (matches
+                           pastPaperQuestions.length exactly)
+                           /past-papers/year-wise/[year] — 5 SSG paths (2021–2025)
+                           /past-papers/topical/[section] — 8 SSG paths (all syllabus sections)
+```
+
+Note: `generateStaticParams` counts scale directly with `pastPaperQuestions.length` (351) via the
+existing `getQuestionById`/`getQuestionsByYear`/`getQuestionsBySection` helpers in
+`data/questions.ts`, which were preserved unchanged — no route-level code was modified to
+accommodate the expanded dataset, confirming the new data plugs into the existing schema as
+required.
+
 ## Git state
 
 No commits, branch switches, or `git add`/`git commit`/`git push` were performed. All work is uncommitted in the working tree on branch `main`, ready for the user's review.
