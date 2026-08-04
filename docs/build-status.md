@@ -1,5 +1,41 @@
 # Build Status
 
+## UI/UX Polish Pass (this session, 2026-08-04)
+
+Scope: visual/interaction-only pass in response to user feedback that the site "did not look professional, needs best graphics, best navigation, every button must be working." No factual/textual content was changed; no new dependencies were added (no animation library — CSS transitions + Tailwind utilities + vanilla React state only, per the original minimal-bundle constraint).
+
+### Visual system
+- `tailwind.config.ts` — added a layered `boxShadow` scale (`soft`, `card`, `card-hover`, `gold`, `inner-glow`) and `fade-in-up`/`fade-in` keyframes/animations, replacing flat `shadow-sm` usage.
+- `components/GeometricPattern.tsx` (new) — abstract, tasteful interlocking-star SVG pattern tile (`<pattern>`), low opacity, brand colours only, no figurative/religious iconography. Used in the hero, the Paper 1/2 section, and the founder section.
+- `components/illustrations/HeroIllustration.tsx`, `PaperIllustration.tsx`, `StudyBadgeIllustration.tsx` (new) — three hand-authored, original, abstract inline-SVG illustrations (open-book + geometric star motif for the hero; stacked-document + rosette motif for the Paper 1/Paper 2 cards; geometric medallion for the founder/CTA sections). Brand palette only, no copied artwork, no figurative imagery.
+- `components/ScrollReveal.tsx` (new, client) — small IntersectionObserver-based fade-in-on-scroll wrapper (`.reveal-on-scroll` in `styles/globals.css`). Fully inert (content always visible, no transition) under `prefers-reduced-motion: reduce` or when `IntersectionObserver` is unavailable.
+- `styles/globals.css` — added the `.reveal-on-scroll` utility and reduced-motion overrides (also disables smooth `scroll-behavior` under reduced motion).
+
+### Button system (`components/Button.tsx`)
+Every variant (primary/secondary/outline/ghost/gold/success/warning/destructive/whatsapp/download) now has: a distinct shadow-based hover treatment (`shadow-soft` → `shadow-card`/`shadow-card-hover` on hover, not just an opacity or colour swap), a subtle hover lift (`-translate-y-0.5`) and press-down on `:active`, a 200ms `transition-all`, unchanged but verified `focus-visible:ring-2` keyboard-focus rings per variant, and disabled-state handling. Icons now shift 2px in their pointing direction on hover (`group-hover/btn:translate-x-0.5` etc.), all wrapped in `motion-reduce:` variants so this is inert under reduced-motion preference.
+
+### Navigation (`components/Header.tsx`)
+Rebuilt as a client component: desktop nav grouped into a 3-column mega-menu (Study / Practice / More) with a per-item Lucide icon and active-route highlighting (via `usePathname`), smooth open/close transition on hover and click, keyboard-operable (`focus`/`aria-expanded`); mobile nav is now a proper right-side slide-in overlay panel (backdrop + `translate-x` panel transition, body-scroll lock while open, visible close button, 44px-min tap targets, closes automatically on route change) replacing the old cramped inline link-wrap. All 14 `siteConfig.primaryNav` links and the WhatsApp CTA are present in both desktop and mobile nav.
+
+### Cards & content blocks
+Homepage feature cards: icons now sit inside a colour-tinted circular badge (`bg-secondary/10`) that fills solid gold on hover with an icon scale-up; feature/Paper-1/Paper-2/exam-pattern cards all gained consistent hover-lift + shadow-growth + border-colour-shift, plus scroll-reveal entrance animation staggered per card. Paper 1/2 cards gained the new abstract illustrations and an eyebrow label. FAQ `<details>` items gained a rotating chevron and hover/open border-colour shift. `components/SectionHub.tsx` topic-list rows gained the same hover-lift/shadow/chevron-shift treatment as the homepage cards.
+
+### Interactive-element audit
+See `docs/ui-polish-audit.md` for the full checklist. Summary: 97 `<Link>`/`<Button>`/`<a>` usages plus 5 in-page `onClick` handlers (the Quiz component's retry/review/submit actions) were grepped and reviewed across `app/` and `components/`. **Zero dead links found** (`href="#"` count: 0) — every button/link already pointed to a real route, a real `mailto:`/`tel:`/WhatsApp deep link, or was an honestly-labelled non-interactive "Coming soon" badge (`app/resources/page.tsx`, `app/teacher-resources/page.tsx`, `components/SectionHub.tsx`, `app/notes/page.tsx`, `app/paper-1/page.tsx`, `app/paper-2/page.tsx`) that was already styled as non-clickable (plain badge span, no href/button semantics). No routing fixes were required; the audit and this pass's changes were about upgrading those elements' visual/interaction polish, not their destinations.
+
+### QA (run this session, exact output)
+- `npm run lint` → `eslint .` — **passed, zero warnings/errors**.
+- `npm run typecheck` → `tsc --noEmit` — **passed, zero errors**.
+- `npm run build` → Next.js production build — **passed**, all static/SSG/dynamic routes generated successfully (homepage, all paper/section/topic pages, past-papers, model-answers, quizzes, quotes-references, revision, about, legal pages, API route), shared First Load JS **102 kB**, no new route regressions.
+- `npx opennextjs-cloudflare build` → **passed**, `.open-next/worker.js` generated successfully, no errors.
+
+### Follow-ups worth a future pass
+- The mega-menu grouping (Study/Practice/More) is a new information architecture on top of the existing flat `siteConfig.primaryNav` list — worth a quick content-owner sanity check that the three group labels and item groupings read naturally.
+- Illustrations are deliberately abstract/geometric (per the no-figurative-imagery constraint); if a more editorial/illustrative style is wanted later, treat these three as a starting placeholder set, not a final art system.
+- Search and a bookmark/dashboard feature were not found as existing stubs anywhere in `app/`/`components/` during this pass — if earlier build docs referenced them, they are not present in the current codebase, so there was nothing to visually polish there.
+
+---
+
 Date: 2026-08-03. Session scope: Milestone 1 (audit & scaffold) fully done, Milestone 2/3 (Next.js app scaffold, homepage, route stubs, build pipeline) done to a real-but-lightweight-content level, Milestone 4 added a real content data layer plus working dynamic routes for a representative slice of Paper 1 and Paper 2, and Milestone 5 (this session) fills in every remaining syllabus section for both papers so all 8 syllabus sections (4 per paper) now have full lesson content, not just section hubs.
 
 ## Milestone 5 — remaining syllabus sections completed (this session)

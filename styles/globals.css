@@ -23,4 +23,32 @@
   .skip-link {
     @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-white;
   }
+
+  /* Scroll-reveal: elements start hidden and are revealed by IntersectionObserver
+     toggling the `is-visible` class. No-op (always visible) when JS is unavailable
+     or the user prefers reduced motion. */
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-on-scroll {
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on-scroll {
+      opacity: 1;
+      transform: none;
+    }
+    html {
+      scroll-behavior: auto;
+    }
+  }
 }

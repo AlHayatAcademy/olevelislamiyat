@@ -15,17 +15,26 @@ export type ButtonVariant =
   | "download";
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-primary text-white hover:bg-primary-dark focus-visible:ring-primary",
-  secondary: "bg-secondary text-primary hover:bg-accent focus-visible:ring-secondary",
+  primary:
+    "bg-primary text-white shadow-soft hover:bg-primary-dark hover:shadow-card active:bg-primary-dark active:shadow-none focus-visible:ring-primary",
+  secondary:
+    "bg-secondary text-primary shadow-soft hover:bg-accent hover:shadow-card active:shadow-none focus-visible:ring-secondary",
   outline:
-    "border border-primary text-primary bg-transparent hover:bg-primary hover:text-white focus-visible:ring-primary",
-  ghost: "bg-transparent text-primary hover:bg-surface-soft focus-visible:ring-primary",
-  gold: "bg-accent text-primary hover:bg-secondary focus-visible:ring-accent",
-  success: "bg-success text-white hover:opacity-90 focus-visible:ring-success",
-  warning: "bg-warning text-white hover:opacity-90 focus-visible:ring-warning",
-  destructive: "bg-error text-white hover:opacity-90 focus-visible:ring-error",
-  whatsapp: "bg-[#25D366] text-white hover:opacity-90 focus-visible:ring-[#25D366]",
-  download: "bg-primary-dark text-white hover:bg-primary focus-visible:ring-primary-dark",
+    "border border-primary text-primary bg-transparent hover:bg-primary hover:text-white hover:shadow-card active:bg-primary-dark focus-visible:ring-primary",
+  ghost:
+    "bg-transparent text-primary hover:bg-surface-soft active:bg-border/40 focus-visible:ring-primary",
+  gold:
+    "bg-accent text-primary shadow-gold hover:bg-secondary hover:shadow-card-hover active:shadow-soft focus-visible:ring-accent",
+  success:
+    "bg-success text-white shadow-soft hover:brightness-110 hover:shadow-card active:brightness-95 focus-visible:ring-success",
+  warning:
+    "bg-warning text-white shadow-soft hover:brightness-110 hover:shadow-card active:brightness-95 focus-visible:ring-warning",
+  destructive:
+    "bg-error text-white shadow-soft hover:brightness-110 hover:shadow-card active:brightness-95 focus-visible:ring-error",
+  whatsapp:
+    "bg-[#25D366] text-white shadow-soft hover:brightness-105 hover:shadow-card active:brightness-95 focus-visible:ring-[#25D366]",
+  download:
+    "bg-primary-dark text-white shadow-soft hover:bg-primary hover:shadow-card active:shadow-none focus-visible:ring-primary-dark",
 };
 
 interface BaseProps {
@@ -56,7 +65,12 @@ const sizeClasses: Record<NonNullable<BaseProps["size"]>, string> = {
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-heading font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+  "group/btn relative inline-flex items-center justify-center gap-2 rounded-lg font-heading font-semibold " +
+  "transition-all duration-200 ease-out will-change-transform " +
+  "hover:-translate-y-0.5 active:translate-y-0 active:duration-100 " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 " +
+  "disabled:opacity-50 disabled:pointer-events-none disabled:translate-y-0 disabled:shadow-none " +
+  "motion-reduce:hover:translate-y-0 motion-reduce:transition-colors";
 
 export function Button(props: ButtonProps) {
   const {
@@ -69,12 +83,16 @@ export function Button(props: ButtonProps) {
   } = props;
 
   const classes = cn(baseClasses, variantClasses[variant], sizeClasses[size], className);
+  const iconMotion =
+    iconPosition === "right"
+      ? "transition-transform duration-200 group-hover/btn:translate-x-0.5 motion-reduce:group-hover/btn:translate-x-0"
+      : "transition-transform duration-200 group-hover/btn:-translate-x-0.5 motion-reduce:group-hover/btn:translate-x-0";
 
   const content = (
     <>
-      {Icon && iconPosition === "left" && <Icon aria-hidden="true" size={18} />}
+      {Icon && iconPosition === "left" && <Icon aria-hidden="true" size={18} className={iconMotion} />}
       <span>{children}</span>
-      {Icon && iconPosition === "right" && <Icon aria-hidden="true" size={18} />}
+      {Icon && iconPosition === "right" && <Icon aria-hidden="true" size={18} className={iconMotion} />}
     </>
   );
 

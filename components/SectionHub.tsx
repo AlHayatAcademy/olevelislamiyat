@@ -25,8 +25,10 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
           const hasContent = topicSlugs.has(subtopic.slug);
           const content = (
             <div
-              className={`flex items-center justify-between rounded-lg border border-border px-4 py-3 transition-colors ${
-                hasContent ? "bg-surface hover:border-primary hover:bg-surface-soft" : "bg-surface-soft"
+              className={`group flex items-center justify-between rounded-lg border border-border px-4 py-3 shadow-soft transition-all duration-200 ${
+                hasContent
+                  ? "bg-surface hover:-translate-y-0.5 hover:border-primary hover:bg-surface-soft hover:shadow-card"
+                  : "bg-surface-soft"
               }`}
             >
               <span className="flex items-center gap-2">
@@ -34,7 +36,11 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
                 <span className={hasContent ? "font-medium text-text" : "text-text-muted"}>{subtopic.title}</span>
               </span>
               {hasContent ? (
-                <ChevronRight size={18} className="text-primary" aria-hidden="true" />
+                <ChevronRight
+                  size={18}
+                  className="text-primary transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               ) : (
                 <span className="text-xs text-text-muted">Coming soon</span>
               )}
