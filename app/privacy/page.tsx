@@ -14,6 +14,7 @@ export default function PrivacyPage() {
     <PageShell
       title="Privacy Policy"
       description="How this site handles personal data. Last updated 3 August 2026."
+      breadcrumbs={[{ label: "Privacy Policy", href: "/privacy" }]}
     >
       <p>
         {siteConfig.siteName} is published by {siteConfig.institution.legalName}. This policy

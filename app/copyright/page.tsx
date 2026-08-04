@@ -14,6 +14,7 @@ export default function CopyrightPage() {
     <PageShell
       title="Copyright Policy"
       description="Copyright notice and content-licence terms. Last updated 3 August 2026."
+      breadcrumbs={[{ label: "Copyright Policy", href: "/copyright" }]}
     >
       <p className="rounded-lg border border-border bg-surface-soft p-4 text-sm font-semibold text-text">
         © 2026 {siteConfig.institution.legalName}. All rights reserved.

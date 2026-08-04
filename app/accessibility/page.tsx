@@ -14,6 +14,7 @@ export default function AccessibilityPage() {
     <PageShell
       title="Accessibility"
       description="Our approach to accessibility. Last updated 3 August 2026."
+      breadcrumbs={[{ label: "Accessibility", href: "/accessibility" }]}
     >
       <p>
         {siteConfig.siteName} is built to be usable by as many students and teachers as possible,

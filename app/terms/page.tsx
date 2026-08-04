@@ -14,6 +14,7 @@ export default function TermsPage() {
     <PageShell
       title="Terms of Use"
       description="Terms governing use of this website. Last updated 3 August 2026."
+      breadcrumbs={[{ label: "Terms of Use", href: "/terms" }]}
     >
       <p>
         These terms govern your use of {siteConfig.siteName} ({siteConfig.domain}), published by{" "}

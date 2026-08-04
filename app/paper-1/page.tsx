@@ -4,6 +4,7 @@ import { paper1Sections } from "@/data/syllabus";
 import { getTopicsForSection } from "@/data/topics";
 import { PaperTabs } from "@/components/PaperTabs";
 import { Button } from "@/components/Button";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { canonical } from "@/lib/seo";
 
 const sectionIcons = [BookOpen, ScrollText, Users, Landmark];
@@ -47,7 +48,8 @@ export default function Paper1Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <h1 className="text-3xl font-bold font-heading text-text">Paper 1</h1>
+      <Breadcrumbs items={[{ label: "Paper 1", href: "/paper-1" }]} />
+      <h1 className="mt-4 text-3xl font-bold font-heading text-text">Paper 1</h1>
       <p className="mt-3 text-text-muted">
         Major themes of the Qur&apos;an, its history, the life of the Prophet Muhammad (pbuh), and the first Islamic
         community. 1½ hours, 50 marks — answer Question 1, Question 2 and two others. See also{" "}

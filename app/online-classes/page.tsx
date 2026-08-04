@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Mail, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/Button";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { siteConfig } from "@/data/site-config";
 import { canonical } from "@/lib/seo";
 
@@ -61,6 +62,7 @@ export default function OnlineClassesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+      <Breadcrumbs items={[{ label: "Online Classes", href: "/online-classes" }]} />
       <h1 className="text-3xl font-bold font-heading text-text">Online Classes</h1>
       <p className="mt-3 text-text-muted">
         Structured online classes for {siteConfig.qualifications.oLevel.name} (

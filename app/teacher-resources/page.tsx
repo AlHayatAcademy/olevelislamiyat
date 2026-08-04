@@ -10,6 +10,7 @@ import {
   Lightbulb,
   type LucideIcon,
 } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { siteConfig } from "@/data/site-config";
 import { canonical } from "@/lib/seo";
 
@@ -72,7 +73,8 @@ const categories: Category[] = [
 export default function TeacherResourcesPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <h1 className="text-3xl font-bold font-heading text-text">Teacher Resources</h1>
+      <Breadcrumbs items={[{ label: "Teacher Resources", href: "/teacher-resources" }]} />
+      <h1 className="mt-4 text-3xl font-bold font-heading text-text">Teacher Resources</h1>
       <p className="mt-3 text-text-muted">
         A dedicated hub for teachers preparing students for {siteConfig.qualifications.oLevel.name}{" "}
         ({siteConfig.qualifications.oLevel.code}) and {siteConfig.qualifications.igcse.name} (

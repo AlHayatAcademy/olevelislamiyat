@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
 import { getTopicsForSection } from "@/data/topics";
 import { canonical } from "@/lib/seo";
@@ -61,7 +62,8 @@ function PaperBlock({ paper, sections }: { paper: 1 | 2; sections: typeof paper1
 export default function NotesPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <div className="flex items-center gap-3">
+      <Breadcrumbs items={[{ label: "Notes", href: "/notes" }]} />
+      <div className="mt-4 flex items-center gap-3">
         <BookOpen aria-hidden="true" className="text-secondary" size={28} />
         <h1 className="text-3xl font-bold font-heading text-text">Notes</h1>
       </div>

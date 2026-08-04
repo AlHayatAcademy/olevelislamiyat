@@ -1,5 +1,6 @@
 import { Mail, MessageCircle, MapPin } from "lucide-react";
 import { Button } from "@/components/Button";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { siteConfig } from "@/data/site-config";
 import { ContactForm } from "./ContactForm";
 import { canonical } from "@/lib/seo";
@@ -47,6 +48,7 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+      <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
       <h1 className="text-3xl font-bold font-heading text-text">Contact</h1>
       <p className="mt-3 text-text-muted">
         Get in touch with {siteConfig.siteName}, a project of{" "}

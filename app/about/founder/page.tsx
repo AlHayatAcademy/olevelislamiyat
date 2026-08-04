@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { User } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { siteConfig } from "@/data/site-config";
 import { canonical } from "@/lib/seo";
 
@@ -32,6 +33,12 @@ export default function FounderPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <Breadcrumbs
+        items={[
+          { label: "About", href: "/about" },
+          { label: "Founder", href: "/about/founder" },
+        ]}
       />
       <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
         <div

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, Target } from "lucide-react";
+import { Target } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { allTopics } from "@/data/topics";
 import { canonical } from "@/lib/seo";
 
@@ -18,13 +19,12 @@ export default function ExamTechniquePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <Link
-        href="/revision"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <ArrowLeft size={16} aria-hidden="true" />
-        Revision Centre
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: "Revision", href: "/revision" },
+          { label: "Exam Technique", href: "/revision/exam-technique" },
+        ]}
+      />
 
       <div className="mt-4 flex items-center gap-2">
         <Target size={24} className="text-secondary" aria-hidden="true" />

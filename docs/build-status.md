@@ -697,3 +697,88 @@ $ npm run build      → ✓ Compiled successfully
 
 Files touched: `app/past-papers/topical/page.tsx` (new), `app/past-papers/page.tsx` (one `Button`
 added, imports updated). No files under `source/` or `.git` were touched; no commits made.
+
+## Site-Wide Structure & Polish Sweep (this session, 2026-08-04)
+
+Scope: whole-site IA/navigation/icon/button/data-organisation pass, per user request "work on
+polishing the site structure, graphics, navigation, best ever menu, best user friendly, best
+organization of data, best usage of icons, best colorful buttons." Model-answer content
+(`data/model-answers.ts`) was not touched. No new dependencies added; `lucide-react` only.
+
+### IA fix — orphaned page
+`/teacher-resources` had zero entry points in `siteConfig.primaryNav`/the header — it was only
+reachable via one inline text link inside `/resources`. Added it to `data/site-config.ts`
+`primaryNav` and to the header's "Resources" mega-menu group so it is a first-class, discoverable
+route. Full findings in `docs/ia-polish-audit.md`.
+
+### Navigation (`components/Header.tsx`)
+- Regrouped the mega-menu from 3 groups (Study/Practice/More) to 4 (Study/Practice/Resources/About)
+  — "More" was a catch-all mixing revision tools, teaching material, and company pages; splitting
+  out "About" (About, Contact) makes both groups scannable at a glance.
+- Added a one-line description under every mega-menu item (`navDescriptions` map) — each item is
+  now an icon badge + bold label + muted one-liner, matching the "premium nav" pattern requested.
+  Dropdown width increased 64→80 (20rem) to fit descriptions without crowding.
+- Added `/teacher-resources` (icon: `Presentation`) to the icon map and Resources group.
+- Mobile slide-in menu rebuilt from one flat 14-item list into the same 4 sections as the desktop
+  mega-menu, each with an uppercase section label, mirroring desktop structure as requested.
+
+### Breadcrumbs — sitewide coverage
+`components/Breadcrumbs.tsx` existed but was used on **zero** pages before this pass. Added it (or
+its `PageShell` `breadcrumbs` prop) to every page previously missing it:
+top-level PageShell pages (`/syllabus`, `/exam-pattern`, `/past-papers`, `/model-answers`,
+`/quotes-references`, `/copyright`, `/accessibility`, `/cambridge-disclaimer`, `/terms`,
+`/disclaimer`, `/privacy`), `/notes`, `/about`, `/about/founder`, `/about/institute`, `/contact`,
+`/online-classes`, `/teacher-resources`, `/paper-1`, `/paper-2`, `/quizzes`, `/quizzes/[id]`,
+`/past-papers/topical`, and — via the shared `components/SectionHub.tsx` — both
+`/paper-1/[section]` and `/paper-2/[section]`. (`components/TopicPage.tsx` already had breadcrumbs,
+so all `[topic]` pages were already covered.) Revision sub-pages (`common-mistakes`,
+`exam-technique`, `key-dates`, `key-personalities`) had their own one-off "← Revision Centre" back
+link swapped for the standard `Breadcrumbs` component so they read as siblings of the rest of the
+site rather than a separate pattern.
+
+### Icons
+- Consistent Lucide usage confirmed/extended: `Presentation` added for Teacher Resources (was
+  reusing `Users`, now semantically distinct from Online Classes).
+- Mega-menu items now show their icon inside a small tinted badge (active/inactive states) instead
+  of a bare icon, matching the icon-badge pattern already used on card grids.
+
+### Buttons — colour/intent sweep
+- `/quizzes`: "Start Quiz" changed from a plain full-card link to a `success`-variant `Button`
+  (quiz-taking = a start/take action), inside a redesigned card with a rotating `tileAccentClasses`
+  icon badge (green/gold/purple/blue/teal) and a real question-count pill.
+- `/revision`: added a `success`-variant "Go to Quizzes" `Button` in the quiz cross-link banner;
+  hub-link cards gained rotating tile-accent icon badges (previously a bare `text-secondary` icon).
+
+### Data organisation — richer card pattern extended
+`/resources` already used the icon-badge + `tileAccentClasses` + hover-lift card pattern from the
+homepage; this pass brought `/quizzes`, `/revision` and `/quotes-references` up to the same
+standard so the whole site reads as one system rather than different eras of polish:
+- `/quizzes` — quiz cards now show a tile-accent icon badge, a question-count pill, and a
+  success-variant Start Quiz button (previously a single flat bordered row).
+- `/revision` — hub cards gained tile-accent icon badges and an arrow-on-hover affordance; added a
+  visible cross-link banner to the quiz count (real, computed from `quizzes.length`).
+- `/quotes-references` — each reference-type section header now has a tile-accent icon badge; entry
+  cards moved from a single-column bordered list to a 2-column grid with hover-lift/shadow and an
+  arrow-on-hover affordance, matching `/paper-1`, `/paper-2` and `/notes` card conventions. The
+  `[category]` sub-page's entry list got the same 2-column hover-lift card treatment.
+All counts shown (question counts, quiz counts, reference counts) are computed directly from the
+underlying data arrays (`quizzes.length`, `items.length`, etc.) — no fabricated numbers were added.
+
+### QA (run this session, exact output)
+- `npm run lint` → `eslint .` — passed, zero errors/warnings.
+- `npx tsc --noEmit -p .` (typecheck) — passed, zero errors.
+- `npm run build` → Next.js production build — passed; all static/SSG/dynamic routes generated
+  successfully, including every route touched above; shared First Load JS 102 kB, unchanged.
+- `npx opennextjs-cloudflare build` → passed; `.open-next/worker.js` generated with no errors.
+
+Files touched: `data/site-config.ts`, `components/Header.tsx`, `components/SectionHub.tsx`,
+`app/quizzes/page.tsx`, `app/quizzes/[id]/page.tsx`, `app/revision/page.tsx`,
+`app/revision/common-mistakes/page.tsx`, `app/revision/exam-technique/page.tsx`,
+`app/revision/key-dates/page.tsx`, `app/revision/key-personalities/page.tsx`,
+`app/quotes-references/page.tsx`, `app/quotes-references/[category]/page.tsx`,
+`app/notes/page.tsx`, `app/about/page.tsx`, `app/about/founder/page.tsx`,
+`app/about/institute/page.tsx`, `app/contact/page.tsx`, `app/online-classes/page.tsx`,
+`app/teacher-resources/page.tsx`, `app/paper-1/page.tsx`, `app/paper-2/page.tsx`,
+`app/past-papers/topical/page.tsx`, and breadcrumb additions to the 11 `PageShell` pages listed
+above. `data/model-answers.ts` was not touched. No files under `source/` or `.git` were touched;
+no commits made.

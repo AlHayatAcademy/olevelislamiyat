@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { getQuiz, quizzes } from "@/data/quizzes";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
 import { Quiz } from "@/components/Quiz";
@@ -37,13 +38,12 @@ export default async function QuizDetailPage({ params }: PageProps) {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <Link
-        href="/quizzes"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <ArrowLeft size={16} aria-hidden="true" />
-        All quizzes
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: "Quizzes", href: "/quizzes" },
+          { label: quiz.title, href: `/quizzes/${quiz.id}` },
+        ]}
+      />
 
       <p className="mt-4 text-sm font-semibold uppercase tracking-wide text-secondary">
         Paper {quiz.paper} &middot; {sectionTitle(quiz.paper, quiz.section)}

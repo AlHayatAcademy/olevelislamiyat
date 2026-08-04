@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { allTopics } from "@/data/topics";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
 import { canonical } from "@/lib/seo";
@@ -22,13 +23,12 @@ export default function CommonMistakesPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <Link
-        href="/revision"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <ArrowLeft size={16} aria-hidden="true" />
-        Revision Centre
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: "Revision", href: "/revision" },
+          { label: "Common Mistakes", href: "/revision/common-mistakes" },
+        ]}
+      />
 
       <div className="mt-4 flex items-center gap-2">
         <AlertTriangle size={24} className="text-warning" aria-hidden="true" />

@@ -43,14 +43,14 @@ export default async function ReferenceCategoryPage({ params }: PageProps) {
         { label: type, href: `/quotes-references/${category}` },
       ]}
     >
-      <ul className="space-y-2">
+      <ul className="grid gap-3 sm:grid-cols-2">
         {items.map((ref) => (
           <li key={ref.id}>
             <Link
               href={`/quotes-references/${category}/${ref.id}`}
-              className="block rounded-md border border-surface-soft px-4 py-3 hover:border-primary transition-colors"
+              className="block rounded-lg border border-border bg-surface px-4 py-3 shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:shadow-card"
             >
-              <p className="font-medium">{ref.title}</p>
+              <p className="font-medium text-text">{ref.title}</p>
               <p className="text-sm text-text-muted mt-1">{ref.citation}</p>
             </Link>
           </li>

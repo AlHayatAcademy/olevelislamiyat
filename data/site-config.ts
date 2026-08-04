@@ -63,6 +63,7 @@ export const siteConfig = {
     { label: "Notes", href: "/notes" },
     { label: "Resources", href: "/resources" },
     { label: "Online Classes", href: "/online-classes" },
+    { label: "Teacher Resources", href: "/teacher-resources" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ] satisfies NavLink[],

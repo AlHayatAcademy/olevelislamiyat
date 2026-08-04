@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/Button";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { GeometricPattern } from "@/components/GeometricPattern";
 import { paper1Sections, paper2Sections, type SyllabusSection } from "@/data/syllabus";
 import { pastPaperQuestions, getQuestionsBySection } from "@/data/questions";
@@ -159,6 +160,12 @@ export default function TopicalPastPapersLandingPage() {
       </section>
 
       <div className="mx-auto max-w-6xl px-4 py-12">
+        <Breadcrumbs
+          items={[
+            { label: "Past Papers", href: "/past-papers" },
+            { label: "Topical", href: "/past-papers/topical" },
+          ]}
+        />
         {/* How to use card */}
         <div className="rounded-2xl border border-border bg-surface p-6 shadow-card sm:p-8">
           <h2 className="font-heading text-2xl font-bold text-text">

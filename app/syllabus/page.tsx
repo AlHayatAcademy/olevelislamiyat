@@ -39,6 +39,7 @@ export default function SyllabusPage() {
     <PageShell
       title="Syllabus"
       description="Full breakdown of the Cambridge O Level Islamiyat (2058) and IGCSE Islamiyat (0493) syllabus content."
+      breadcrumbs={[{ label: "Syllabus", href: "/syllabus" }]}
     >
       <script
         type="application/ld+json"

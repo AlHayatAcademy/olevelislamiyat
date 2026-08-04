@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { siteConfig } from "@/data/site-config";
 import { canonical } from "@/lib/seo";
 
@@ -12,7 +13,8 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <h1 className="text-3xl font-bold font-heading text-text">About {siteConfig.siteName}</h1>
+      <Breadcrumbs items={[{ label: "About", href: "/about" }]} />
+      <h1 className="mt-4 text-3xl font-bold font-heading text-text">About {siteConfig.siteName}</h1>
       <p className="mt-3 text-lg text-text-muted">{siteConfig.tagline}</p>
 
       <div className="mt-8 space-y-6">

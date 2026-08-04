@@ -38,6 +38,7 @@ export default function ExamPatternPage() {
     <PageShell
       title="Exam Pattern"
       description="How Cambridge O Level Islamiyat 2058 / IGCSE 0493 is assessed."
+      breadcrumbs={[{ label: "Exam Pattern", href: "/exam-pattern" }]}
     >
       <script
         type="application/ld+json"

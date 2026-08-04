@@ -56,6 +56,7 @@ export default function PastPapersPage() {
     <PageShell
       title="Past Papers"
       description="Cambridge O Level Islamiyat 2058 past exam sessions, organised by paper and topic."
+      breadcrumbs={[{ label: "Past Papers", href: "/past-papers" }]}
     >
       <script
         type="application/ld+json"

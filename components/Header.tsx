@@ -15,6 +15,7 @@ import {
   StickyNote,
   LibraryBig,
   Users,
+  Presentation,
   Info,
   Mail,
   Menu,
@@ -25,7 +26,9 @@ import {
 import { siteConfig } from "@/data/site-config";
 import { SearchModal } from "@/components/SearchModal";
 
-const navIcons: Record<string, React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>> = {
+type NavIcon = React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>;
+
+const navIcons: Record<string, NavIcon> = {
   "/syllabus": BookOpen,
   "/exam-pattern": ClipboardList,
   "/paper-1": FileText,
@@ -38,8 +41,27 @@ const navIcons: Record<string, React.ComponentType<{ size?: number; className?: 
   "/notes": StickyNote,
   "/resources": LibraryBig,
   "/online-classes": Users,
+  "/teacher-resources": Presentation,
   "/about": Info,
   "/contact": Mail,
+};
+
+const navDescriptions: Record<string, string> = {
+  "/syllabus": "The full 2058/0493 syllabus, section by section.",
+  "/exam-pattern": "How Paper 1 and Paper 2 are structured and marked.",
+  "/paper-1": "Qur'an, Seerah and the first Islamic community.",
+  "/paper-2": "Hadith, the Caliphs, faith and practice.",
+  "/past-papers": "Real exam questions, organised by topic and by year.",
+  "/model-answers": "Worked, examiner-style answers to real questions.",
+  "/quotes-references": "Qur'an and Hadith references for special study.",
+  "/revision": "Notes, key dates, personalities and exam technique.",
+  "/quizzes": "Self-check quizzes with instant feedback.",
+  "/notes": "Concise section-by-section revision notes.",
+  "/resources": "The full study resource hub in one place.",
+  "/online-classes": "Live and recorded classes with Al-Hayat Academy.",
+  "/teacher-resources": "Lesson plans and classroom material for teachers.",
+  "/about": "About Al-Hayat Academy and the founder.",
+  "/contact": "Get in touch by email or WhatsApp.",
 };
 
 const navGroups = [
@@ -52,8 +74,12 @@ const navGroups = [
     hrefs: ["/past-papers", "/model-answers", "/quizzes", "/quotes-references"],
   },
   {
-    label: "More",
-    hrefs: ["/revision", "/notes", "/resources", "/online-classes", "/about", "/contact"],
+    label: "Resources",
+    hrefs: ["/revision", "/notes", "/resources", "/online-classes", "/teacher-resources"],
+  },
+  {
+    label: "About",
+    hrefs: ["/about", "/contact"],
   },
 ];
 
@@ -135,7 +161,7 @@ export function Header() {
                       : "pointer-events-none -translate-y-1 opacity-0"
                   }`}
                 >
-                  <div className="w-64 rounded-xl border border-border bg-surface p-2 text-text shadow-card-hover">
+                  <div className="w-80 rounded-xl border border-border bg-surface p-2 text-text shadow-card-hover">
                     <ul>
                       {group.hrefs.map((href) => {
                         const link = navByHref.get(href);
@@ -146,16 +172,31 @@ export function Header() {
                           <li key={href}>
                             <Link
                               href={href}
-                              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                              className={`flex items-start gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                                 active
-                                  ? "bg-primary/10 font-semibold text-primary"
+                                  ? "bg-primary/10 text-primary"
                                   : "text-text hover:bg-surface-soft hover:text-primary"
                               }`}
                             >
                               {Icon && (
-                                <Icon aria-hidden={true} size={16} className="shrink-0 text-secondary" />
+                                <span
+                                  className={`mt-0.5 flex shrink-0 items-center justify-center rounded-lg p-1.5 ${
+                                    active ? "bg-primary/15 text-primary" : "bg-surface-soft text-secondary"
+                                  }`}
+                                >
+                                  <Icon aria-hidden={true} size={16} />
+                                </span>
                               )}
-                              {link.label}
+                              <span>
+                                <span className={`block font-semibold ${active ? "text-primary" : "text-text"}`}>
+                                  {link.label}
+                                </span>
+                                {navDescriptions[href] && (
+                                  <span className="mt-0.5 block text-xs leading-snug text-text-muted">
+                                    {navDescriptions[href]}
+                                  </span>
+                                )}
+                              </span>
                             </Link>
                           </li>
                         );
@@ -253,25 +294,36 @@ export function Header() {
               Search
             </button>
           </div>
-          <ul className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-            {siteConfig.primaryNav.map((link) => {
-              const Icon = navIcons[link.href];
-              const active = isActive(pathname, link.href);
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                      active ? "bg-white/15 font-semibold text-accent" : "hover:bg-white/10"
-                    }`}
-                  >
-                    {Icon && <Icon aria-hidden={true} size={18} className="shrink-0 text-accent" />}
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+            {navGroups.map((group) => (
+              <div key={group.label}>
+                <p className="px-3 pb-1.5 text-xs font-semibold uppercase tracking-wide text-white/50">
+                  {group.label}
+                </p>
+                <ul className="space-y-1">
+                  {group.hrefs.map((href) => {
+                    const link = navByHref.get(href);
+                    if (!link) return null;
+                    const Icon = navIcons[href];
+                    const active = isActive(pathname, href);
+                    return (
+                      <li key={href}>
+                        <Link
+                          href={href}
+                          className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                            active ? "bg-white/15 font-semibold text-accent" : "hover:bg-white/10"
+                          }`}
+                        >
+                          {Icon && <Icon aria-hidden={true} size={18} className="shrink-0 text-accent" />}
+                          {link.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
           <div className="border-t border-white/10 p-4">
             <Link
               href={siteConfig.contact.whatsapp}

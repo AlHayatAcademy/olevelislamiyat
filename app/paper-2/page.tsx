@@ -4,6 +4,7 @@ import { paper2Sections } from "@/data/syllabus";
 import { getTopicsForSection } from "@/data/topics";
 import { PaperTabs } from "@/components/PaperTabs";
 import { Button } from "@/components/Button";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { canonical } from "@/lib/seo";
 
 const sectionIcons = [MessageSquareQuote, ScrollText, Crown, ListChecks];
@@ -47,7 +48,8 @@ export default function Paper2Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <h1 className="text-3xl font-bold font-heading text-text">Paper 2</h1>
+      <Breadcrumbs items={[{ label: "Paper 2", href: "/paper-2" }]} />
+      <h1 className="mt-4 text-3xl font-bold font-heading text-text">Paper 2</h1>
       <p className="mt-3 text-text-muted">
         Hadith teachings, their history, the Rightly Guided Caliphs, and the Articles of Faith &amp; Pillars of
         Islam. 1½ hours, 50 marks — answer Question 1, Question 2 and two others. See also{" "}

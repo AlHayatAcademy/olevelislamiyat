@@ -15,6 +15,7 @@ export default function ModelAnswersPage() {
     <PageShell
       title="Model Answers"
       description="Answer-structure guidance aligned with AO1/AO2 mark schemes."
+      breadcrumbs={[{ label: "Model Answers", href: "/model-answers" }]}
     >
       <p>
         Each model answer below is written from scratch — a full answer plan, an original sample

@@ -11,7 +11,11 @@ export const metadata = {
 
 export default function DisclaimerPage() {
   return (
-    <PageShell title="Disclaimer" description="General disclaimer. Last updated 3 August 2026.">
+    <PageShell
+      title="Disclaimer"
+      description="General disclaimer. Last updated 3 August 2026."
+      breadcrumbs={[{ label: "Disclaimer", href: "/disclaimer" }]}
+    >
       <h2 className="text-xl font-heading font-bold text-primary">Educational purpose only</h2>
       <p>
         The content on {siteConfig.siteName} is provided for general educational purposes to

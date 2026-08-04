@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, Users } from "lucide-react";
+import { Users } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { allTopics } from "@/data/topics";
 import { canonical } from "@/lib/seo";
 
@@ -21,13 +22,12 @@ export default function KeyPersonalitiesPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <Link
-        href="/revision"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <ArrowLeft size={16} aria-hidden="true" />
-        Revision Centre
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: "Revision", href: "/revision" },
+          { label: "Key Personalities", href: "/revision/key-personalities" },
+        ]}
+      />
 
       <div className="mt-4 flex items-center gap-2">
         <Users size={24} className="text-secondary" aria-hidden="true" />

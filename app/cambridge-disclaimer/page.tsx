@@ -14,6 +14,7 @@ export default function CambridgeDisclaimerPage() {
     <PageShell
       title="Cambridge Disclaimer"
       description="Independence disclaimer. Last updated 3 August 2026."
+      breadcrumbs={[{ label: "Cambridge Disclaimer", href: "/cambridge-disclaimer" }]}
     >
       <p className="rounded-lg border border-secondary/40 bg-surface-soft p-4 text-lg font-semibold text-text">
         {siteConfig.cambridgeDisclaimer}

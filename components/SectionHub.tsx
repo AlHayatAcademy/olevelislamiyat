@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, CircleDot, BookOpen } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { paper1Sections, paper2Sections, type SyllabusSection } from "@/data/syllabus";
 import type { Topic } from "@/data/topics";
 
@@ -16,7 +17,13 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+      <Breadcrumbs
+        items={[
+          { label: `Paper ${paper}`, href: `/paper-${paper}` },
+          { label: section.title, href: `/paper-${paper}/${section.slug}` },
+        ]}
+      />
+      <div className="mt-4 grid gap-8 lg:grid-cols-[240px_1fr]">
         {/* Left sidebar: section list with active-state highlighting */}
         <nav aria-label={`Paper ${paper} sections`} className="lg:sticky lg:top-24 lg:self-start">
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
