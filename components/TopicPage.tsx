@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import type { Topic } from "@/data/topics";
 import { getSection } from "@/data/syllabus";
+import { getQuestionsBySubtopic } from "@/data/questions";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 interface TopicPageProps {
@@ -48,6 +49,7 @@ function Section({
 
 export function TopicPage({ topic }: TopicPageProps) {
   const section = getSection(topic.paper, topic.section);
+  const relatedQuestions = getQuestionsBySubtopic(topic.section, topic.slug);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
@@ -60,6 +62,15 @@ export function TopicPage({ topic }: TopicPageProps) {
       />
       <h1 className="mt-2 text-3xl font-bold font-heading text-text">{topic.title}</h1>
       <p className="mt-3 text-text-muted">{topic.standing}</p>
+
+      {relatedQuestions.length > 0 && (
+        <Link
+          href={`/past-papers/topical/${topic.section}/${topic.slug}`}
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+        >
+          {relatedQuestions.length} related past-paper question{relatedQuestions.length === 1 ? "" : "s"} for this topic &rarr;
+        </Link>
+      )}
 
       <div className="mt-8 space-y-6">
         <Section icon={Target} title="Learning objectives">

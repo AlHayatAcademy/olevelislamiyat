@@ -78,6 +78,12 @@ export default function PastPapersPage() {
 
           <div id="browse-by-topic" className="mt-10 scroll-mt-24">
             <h2 className="text-xl font-semibold mb-3">Browse by topic</h2>
+            <p className="mb-4 text-sm text-text-muted">
+              Each syllabus section below opens onto its own subtopics (real lesson pages), with a
+              question count next to each — drill down to see only the past-paper questions that
+              test that specific subtopic. Questions too broad for one subtopic are grouped under a
+              &ldquo;General / Whole-Section Questions&rdquo; bucket instead of being hidden.
+            </p>
             <div className="grid gap-2 sm:grid-cols-2">
               {allSections.map((section) => (
                 <Link

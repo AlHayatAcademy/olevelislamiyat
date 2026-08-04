@@ -6,7 +6,11 @@
 // source). Marks, question/part numbers, and session/paper metadata are reproduced exactly as
 // they appear in those extractions. "topicHint" is an original short label (not verbatim).
 // "sectionSlug" is an editorial classification of the question against the official syllabus
-// (data/syllabus.ts), assigned by reading each question's content.
+// (data/syllabus.ts), assigned by reading each question's content. "subtopicSlug" is a finer,
+// optional classification against a section's `subtopics` list (data/syllabus.ts) — set only
+// where a question maps confidently to one specific lesson; left unset where a question is
+// genuinely broad/general (spans multiple subtopics or the whole section) rather than forcing
+// an inaccurate match. See docs/build-status.md for classification coverage figures.
 //
 // Coverage: May/June and Oct/Nov series 2021-2025, Papers 11/12 (Paper 1) and 21/22 (Paper 2),
 // with one exception: October/November 2025 Paper 1 Variant 12 (2058/12) has no verbatim
@@ -29,6 +33,7 @@ export interface PastPaperQuestion {
   ao: AO;
   syllabusPaper: Paper;
   sectionSlug: string; // links into data/syllabus.ts sections
+  subtopicSlug?: string; // links into the section's subtopics in data/syllabus.ts; unset if the question is general/whole-section
   topicHint: string; // short human label of the specific topic examined (original, not verbatim)
   prompt: string; // VERBATIM question wording from the official question paper
   sourceNote: string; // which source/07-word-extractions/ file this was transcribed from
@@ -67,6 +72,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "modes-of-revelation",
     topicHint: "Give an account of the different ways in which the Prophet (pbuh) received revelation",
     prompt:
       "Give an account of the different ways in which the Prophet (pbuh) received revelation.",
@@ -86,6 +92,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "modes-of-revelation",
     topicHint: "The Qur'an was not revealed all at one time",
     prompt:
       "The Qur'an was not revealed all at one time. Why do you think this was important?",
@@ -105,6 +112,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "Describe the main events of the Prophet's migration (hijra) from Makka to his welcome in Madina",
     prompt:
       "Describe the main events of the Prophet's migration (hijra) from Makka to his welcome in Madina.",
@@ -124,6 +132,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "The Companions showed friendship and support for the Prophet (pbuh)",
     prompt:
       "The Companions showed friendship and support for the Prophet (pbuh). How can Muslims show friendship and support for each other?",
@@ -181,6 +190,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "The first wife of the Prophet (pbuh) was Khadija",
     prompt:
       "The first wife of the Prophet (pbuh) was Khadija. Write about the main events of her life.",
@@ -200,6 +210,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "What does Khadija's marriage to the Prophet (pbuh) teach Muslims about family relationships",
     prompt:
       "What does Khadija's marriage to the Prophet (pbuh) teach Muslims about family relationships?",
@@ -409,6 +420,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "isnad-and-matn",
     topicHint: "Write a detailed account of the two components of Hadiths",
     prompt:
       "Write a detailed account of the two components of Hadiths: chain of transmission (isnad) and text (matn) [10]",
@@ -428,6 +440,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "isnad-and-matn",
     topicHint: "Both of these components are equally important for establishing the authenticity of Hadiths",
     prompt:
       "Both of these components are equally important for establishing the authenticity of Hadiths. Do you agree? Give reasons to support your answer.",
@@ -447,6 +460,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Write an account of the false prophet Musailimah and the battle fought against him in 632",
     prompt:
       "Write an account of the false prophet Musailimah and the battle fought against him in 632.",
@@ -466,6 +480,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "What was the importance of this battle to future generations of Muslims",
     prompt:
       "What was the importance of this battle to future generations of Muslims?",
@@ -485,6 +500,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "sawm",
     topicHint: "Fasting in Ramadan benefits Muslims in many ways",
     prompt:
       "Fasting in Ramadan benefits Muslims in many ways. Write about the major benefits of fasting in Ramadan.",
@@ -504,6 +520,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "sawm",
     topicHint: "Explain why the Night of Power (Layla-tul-Qadr) is so important for Muslims",
     prompt:
       "Explain why the Night of Power (Layla-tul-Qadr) is so important for Muslims.",
@@ -523,6 +540,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "zakah",
     topicHint: "Give an account of the Pillar of Almsgiving (zakat)",
     prompt:
       "Give an account of the Pillar of Almsgiving (zakat).",
@@ -542,6 +560,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "zakah",
     topicHint: "In your opinion, what is the most important benefit of giving zakat",
     prompt:
       "In your opinion, what is the most important benefit of giving zakat? Give reasons to support your answer.",
@@ -580,6 +599,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "Write about the importance of knowing the Prophet's Hadiths and following his Sunna for Muslims",
     prompt:
       "Write about the importance of knowing the Prophet's Hadiths and following his Sunna for Muslims.",
@@ -599,6 +619,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "Why are belief and action both important for Muslims",
     prompt:
       "Why are belief and action both important for Muslims? Give reasons to support your answer.",
@@ -618,6 +639,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Give an account of the election of Abu Bakr and the expedition he sent to Syria soon after becoming",
     prompt:
       "Give an account of the election of Abu Bakr and the expedition he sent to Syria soon after becoming caliph.",
@@ -637,6 +659,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Explain the most significant action Abu Bakr took as caliph",
     prompt:
       "Explain the most significant action Abu Bakr took as caliph.",
@@ -656,6 +679,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write in detail about the Battle of Siffin and the events that led up to it",
     prompt:
       "Write in detail about the Battle of Siffin and the events that led up to it.",
@@ -675,6 +699,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "In your opinion, what was the main consequence of this battle",
     prompt:
       "In your opinion, what was the main consequence of this battle? Give reasons to support your answer.",
@@ -694,6 +719,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Write about the different types of purification before the performance of salat",
     prompt:
       "Write about the different types of purification before the performance of salat: wudu, tayammum and ghusl.",
@@ -713,6 +739,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "In your opinion, what is the most important benefit of salat in the lives of Muslims",
     prompt:
       "In your opinion, what is the most important benefit of salat in the lives of Muslims? Give reasons to support your answer.",
@@ -789,6 +816,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "Describe the main events of the Pledges of Aqaba and the details in the Pledges",
     prompt:
       "Describe the main events of the Pledges of Aqaba and the details in the Pledges.",
@@ -808,6 +836,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "What might Muslims do to set an example and welcome others who move to their areas",
     prompt:
       "What might Muslims do to set an example and welcome others who move to their areas?",
@@ -922,6 +951,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "quran-as-source-of-law",
     topicHint: "Write about the way in which the Qur'an and Sunna are used in Islamic Law",
     prompt:
       "Write about the way in which the Qur'an and Sunna are used in Islamic Law.",
@@ -941,6 +971,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "quran-as-source-of-law",
     topicHint: "Give one example where using ijma or qiyas has been significant for Muslims today",
     prompt:
       "Give one example where using ijma or qiyas has been significant for Muslims today.",
@@ -1036,6 +1067,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "four-caliphs-in-prophets-lifetime",
     topicHint: "Write about the lives of 'Umar and 'Uthman during the lifetime of the Prophet (pbuh)",
     prompt:
       "Write about the lives of 'Umar and 'Uthman during the lifetime of the Prophet (pbuh).",
@@ -1055,6 +1087,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "four-caliphs-in-prophets-lifetime",
     topicHint: "What lessons can be learned from 'Uthman's life before he became Caliph",
     prompt:
       "What lessons can be learned from 'Uthman's life before he became Caliph?",
@@ -1093,6 +1126,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "Referring to the set Hadiths write about the benefits to the community of following the Prophet's gu",
     prompt:
       "Referring to the set Hadiths write about the benefits to the community of following the Prophet's guidance.",
@@ -1112,6 +1146,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "Why is the example of the Prophet (pbuh) important for Muslims today",
     prompt:
       "Why is the example of the Prophet (pbuh) important for Muslims today?",
@@ -1131,6 +1166,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "'Uthman was the third caliph of Islam",
     prompt:
       "'Uthman was the third caliph of Islam. Write an account of his election and the administration of his caliphate.",
@@ -1150,6 +1186,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "'Uthman's greatest achievement as caliph was the compilation of the Qur'an'",
     prompt:
       "'Uthman's greatest achievement as caliph was the compilation of the Qur'an'. Do you agree or disagree? Give reasons to support your answer.",
@@ -1169,6 +1206,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-revealed-books",
     topicHint: "Write an account of Muslim belief in divinely revealed books and their content and purpose",
     prompt:
       "Write an account of Muslim belief in divinely revealed books and their content and purpose.",
@@ -1188,6 +1226,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-revealed-books",
     topicHint: "In your opinion, why is the Qur'an the most important source of Islamic law",
     prompt:
       "In your opinion, why is the Qur'an the most important source of Islamic law? Give reasons to support your answer.",
@@ -1264,6 +1303,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "authentication-of-hadith",
     topicHint: "Write about the checks made on the transmitters of Hadiths and on the text of Hadiths to ensure thei",
     prompt:
       "Write about the checks made on the transmitters of Hadiths and on the text of Hadiths to ensure their authenticity.",
@@ -1283,6 +1323,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "authentication-of-hadith",
     topicHint: "Why was so much importance given to collecting and preserving authentic Hadiths",
     prompt:
       "Why was so much importance given to collecting and preserving authentic Hadiths?",
@@ -1302,6 +1343,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write a detailed account of the Battle of the Camel",
     prompt:
       "Write a detailed account of the Battle of the Camel.",
@@ -1321,6 +1363,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "What was the most serious consequence of this battle to the Muslims at the time it was fought",
     prompt:
       "What was the most serious consequence of this battle to the Muslims at the time it was fought? Give reasons to support your answer.",
@@ -1378,6 +1421,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Write a detailed account about the second Pillar of Islam",
     prompt:
       "Write a detailed account about the second Pillar of Islam: prayer (salat).",
@@ -1397,6 +1441,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "What is the importance of praying in the mosque for Muslims",
     prompt:
       "What is the importance of praying in the mosque for Muslims?",
@@ -1435,6 +1480,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "quran-as-source-of-law",
     topicHint: "Write about the Qur'an and Sunna and how they are used with ijma' in Islamic Law",
     prompt:
       "Write about the Qur'an and Sunna and how they are used with ijma' in Islamic Law.",
@@ -1454,6 +1500,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "quran-as-source-of-law",
     topicHint: "How has the Qur'an, as a primary source of law, helped to unify Muslims over time",
     prompt:
       "How has the Qur'an, as a primary source of law, helped to unify Muslims over time?",
@@ -1511,6 +1558,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "farewell-sermon",
     topicHint: "Describe the Prophet's pilgrimage in the final year of his life and his Farewell Sermon",
     prompt:
       "Describe the Prophet's pilgrimage in the final year of his life and his Farewell Sermon.",
@@ -1530,6 +1578,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "farewell-sermon",
     topicHint: "In your opinion, what was the most important teaching from the Farewell Sermon",
     prompt:
       "In your opinion, what was the most important teaching from the Farewell Sermon? Give reasons to support your answer.",
@@ -1549,6 +1598,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "scribes-of-revelation",
     topicHint: "Write about the various tasks performed by some of the Prophet's Companions as his Scribes",
     prompt:
       "Write about the various tasks performed by some of the Prophet's Companions as his Scribes.",
@@ -1568,6 +1618,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "scribes-of-revelation",
     topicHint: "What are the benefits of the Qur'an being available to everyone on the internet",
     prompt:
       "What are the benefits of the Qur'an being available to everyone on the internet?",
@@ -1606,6 +1657,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "first-revelation",
     topicHint: "Give an account of the Prophet's experience of receiving the first revelation of the Qur'an",
     prompt:
       "Give an account of the Prophet's experience of receiving the first revelation of the Qur'an.",
@@ -1625,6 +1677,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "modes-of-revelation",
     topicHint: "What was the significance of the Qur'an being revealed over 23 years",
     prompt:
       "What was the significance of the Qur'an being revealed over 23 years?",
@@ -1777,6 +1830,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "authentication-of-hadith",
     topicHint: "Write an account of the following three categories of Hadiths",
     prompt:
       "Write an account of the following three categories of Hadiths: Sound Hadith (Sahih), Good Hadith (Hasan), Weak Hadith (Da'if).",
@@ -1796,6 +1850,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "authentication-of-hadith",
     topicHint: "In your opinion, why was it considered important to classify Hadiths into Sahih, Hasan and Da'if",
     prompt:
       "In your opinion, why was it considered important to classify Hadiths into Sahih, Hasan and Da'if? Give reasons to support your answer.",
@@ -1815,6 +1870,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Write about the Battle of the Bridge and the Battle of Buwayb, fought during the caliphate of 'Umar",
     prompt:
       "Write about the Battle of the Bridge and the Battle of Buwayb, fought during the caliphate of 'Umar.",
@@ -1834,6 +1890,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Why was victory in the Battle of Buwayb significant for Muslims",
     prompt:
       "Why was victory in the Battle of Buwayb significant for Muslims?",
@@ -1853,6 +1910,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "Give an account of the main reasons for the revolt against 'Uthman's rule and the events of the rebe",
     prompt:
       "Give an account of the main reasons for the revolt against 'Uthman's rule and the events of the rebellion in Madina.",
@@ -1872,6 +1930,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "In your opinion, what was the most serious consequence of 'Uthman's assassination",
     prompt:
       "In your opinion, what was the most serious consequence of 'Uthman's assassination? Give reasons to support your answer.",
@@ -1891,6 +1950,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Friday (Jum'a) prayer is of special importance to Muslims",
     prompt:
       "Friday (Jum'a) prayer is of special importance to Muslims. Describe: how worshippers prepare for this prayer; what its main features are.",
@@ -1910,6 +1970,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "What are the benefits of praying in a congregation",
     prompt:
       "What are the benefits of praying in a congregation? Give reasons to support your answer.",
@@ -2024,6 +2085,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write an account of the martyrdom of 'Uthman and the election of 'Ali as caliph",
     prompt:
       "Write an account of the martyrdom of 'Uthman and the election of 'Ali as caliph.",
@@ -2043,6 +2105,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Why do you think 'Ali encountered so much opposition after becoming caliph",
     prompt:
       "Why do you think 'Ali encountered so much opposition after becoming caliph?",
@@ -2062,6 +2125,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "Give an account of the significance of the following",
     prompt:
       "Give an account of the significance of the following: Day of 'Arafah; Eid-ul Adha.",
@@ -2081,6 +2145,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "The Prophet (pbuh) performed pilgrimage (hajj) only once in his lifetime",
     prompt:
       "The Prophet (pbuh) performed pilgrimage (hajj) only once in his lifetime. What do you think this tells Muslims today?",
@@ -2290,6 +2355,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "compilation-under-abu-bakr",
     topicHint: "Write about the ways in which the Qur'an was compiled and preserved after the Prophet's death",
     prompt:
       "Write about the ways in which the Qur'an was compiled and preserved after the Prophet's death.",
@@ -2404,6 +2470,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "Write about the lives of two of the following wives of the Prophet (pbuh)",
     prompt:
       "Write about the lives of two of the following wives of the Prophet (pbuh): Sawda bint Zama'a; Aisha bint Abu Bakr; Hafsa bint 'Umar; Umm Salama.",
@@ -2423,6 +2490,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "Choose from one of the wives named in part (a) and write about what her life might teach Muslims abo",
     prompt:
       "Choose from one of the wives named in part (a) and write about what her life might teach Muslims about the role of women in society.",
@@ -2499,6 +2567,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Give an account of the steps taken by Abu Bakr to establish his caliphate",
     prompt:
       "Give an account of the steps taken by Abu Bakr to establish his caliphate.",
@@ -2518,6 +2587,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "In your opinion, which one of Abu Bakr's achievements as caliph was the most significant",
     prompt:
       "In your opinion, which one of Abu Bakr's achievements as caliph was the most significant? Give reasons to support your answer.",
@@ -2537,6 +2607,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-prophets",
     topicHint: "God sent prophets throughout the ages to guide mankind",
     prompt:
       "God sent prophets throughout the ages to guide mankind. Write an account of Muslim belief in prophets.",
@@ -2556,6 +2627,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-prophets",
     topicHint: "Why were prophets chosen from within their own communities",
     prompt:
       "Why were prophets chosen from within their own communities? Give reasons to support your answer.",
@@ -2575,6 +2647,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-allah",
     topicHint: "Write an account of Muslim belief in the oneness of God (tawhid)",
     prompt:
       "Write an account of Muslim belief in the oneness of God (tawhid).",
@@ -2594,6 +2667,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-allah",
     topicHint: "How do signs from the natural world strengthen a Muslim's belief in God",
     prompt:
       "How do signs from the natural world strengthen a Muslim's belief in God?",
@@ -2651,6 +2725,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "In your opinion, what are the communal benefits of following the Prophet's Hadiths",
     prompt:
       "In your opinion, what are the communal benefits of following the Prophet's Hadiths? Give reasons to support your answer.",
@@ -2670,6 +2745,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Give an account of the administrative reforms that improved the lives of people in 'Umar's caliphate",
     prompt:
       "Give an account of the administrative reforms that improved the lives of people in 'Umar's caliphate.",
@@ -2689,6 +2765,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "What do 'Umar's actions in his last days after his attack tell you about his character",
     prompt:
       "What do 'Umar's actions in his last days after his attack tell you about his character?",
@@ -2746,6 +2823,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-resurrection",
     topicHint: "Give a descriptive account of Muslim belief in life after death and the Day of Judgement",
     prompt:
       "Give a descriptive account of Muslim belief in life after death and the Day of Judgement.",
@@ -2765,6 +2843,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-resurrection",
     topicHint: "How does the belief in life after death affect the daily lives of Muslims",
     prompt:
       "How does the belief in life after death affect the daily lives of Muslims?",
@@ -2803,6 +2882,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "first-revelation-event",
     topicHint: "The Prophet (pbuh) received revelation from God when he was 40 years old",
     prompt:
       "The Prophet (pbuh) received revelation from God when he was 40 years old. Write about this experience of the first revelation.",
@@ -2822,6 +2902,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "first-revelation-event",
     topicHint: "Explain the importance of the revelation being sent to a prophet who could not read or write",
     prompt:
       "Explain the importance of the revelation being sent to a prophet who could not read or write.",
@@ -2974,6 +3055,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "modes-of-revelation",
     topicHint: "Write about the different ways that revelations were received by the Prophet (pbuh)",
     prompt:
       "Write about the different ways that revelations were received by the Prophet (pbuh).",
@@ -2993,6 +3075,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "modes-of-revelation",
     topicHint: "Why do you think it was important for revelations to come over a period of time",
     prompt:
       "Why do you think it was important for revelations to come over a period of time?",
@@ -3183,6 +3266,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Write a detailed account of the false prophets that Abu Bakr dealt with during his caliphate",
     prompt:
       "Write a detailed account of the false prophets that Abu Bakr dealt with during his caliphate.",
@@ -3202,6 +3286,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "In your opinion, what was more important for Islam",
     prompt:
       "In your opinion, what was more important for Islam: defeating the false prophets or fighting the tribes that refused to pay zakat? Give reasons to support your answer.",
@@ -3221,6 +3306,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "shahadah-pillar",
     topicHint: "State the words of the Shahada and give an account of the Shahada's significance in Islam",
     prompt:
       "State the words of the Shahada and give an account of the Shahada's significance in Islam.",
@@ -3240,6 +3326,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "shahadah-pillar",
     topicHint: "What do you think is the importance of understanding the Shahada",
     prompt:
       "What do you think is the importance of understanding the Shahada? Give reasons to support your answer.",
@@ -3259,6 +3346,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "sawm",
     topicHint: "Describe the moral and spiritual benefits of fasting in Ramadan for Muslims and their society",
     prompt:
       "Describe the moral and spiritual benefits of fasting in Ramadan for Muslims and their society.",
@@ -3278,6 +3366,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "sawm",
     topicHint: "What do you consider to be the most important benefit of fasting in Ramadan",
     prompt:
       "What do you consider to be the most important benefit of fasting in Ramadan? Give reasons to support your answer.",
@@ -3316,6 +3405,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "isnad-and-matn",
     topicHint: "Write about the following terms and the relationship between them",
     prompt:
       "Write about the following terms and the relationship between them: isnad; matn; musnad; musannaf.",
@@ -3335,6 +3425,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "How do compilations of genuine Hadiths benefit Muslims today",
     prompt:
       "How do compilations of genuine Hadiths benefit Muslims today?",
@@ -3354,6 +3445,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Give an account of the Battle of Nihawand",
     prompt:
       "Give an account of the Battle of Nihawand.",
@@ -3373,6 +3465,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Why was the Battle of Nihawand known as the 'Victory of Victories'",
     prompt:
       "Why was the Battle of Nihawand known as the 'Victory of Victories'?",
@@ -3392,6 +3485,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "What are the benefits of prayer (salat) to an individual and to the community",
     prompt:
       "What are the benefits of prayer (salat) to an individual and to the community?",
@@ -3411,6 +3505,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "What is the importance of beginning to pray (salat) from a young age",
     prompt:
       "What is the importance of beginning to pray (salat) from a young age?",
@@ -3449,6 +3544,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-predestination",
     topicHint: "How might the belief in God's divine decree influence the everyday life of a Muslim",
     prompt:
       "How might the belief in God's divine decree influence the everyday life of a Muslim?",
@@ -3772,6 +3868,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "four-caliphs-in-prophets-lifetime",
     topicHint: "Give an account of the life of 'Ali ibn Abi Talib during the life of the Prophet (pbuh)",
     prompt:
       "Give an account of the life of 'Ali ibn Abi Talib during the life of the Prophet (pbuh).",
@@ -3791,6 +3888,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "four-caliphs-in-prophets-lifetime",
     topicHint: "How might 'Ali ibn Abi Talib's life with the Prophet (pbuh) inspire young people in their lives toda",
     prompt:
       "How might 'Ali ibn Abi Talib's life with the Prophet (pbuh) inspire young people in their lives today?",
@@ -3867,6 +3965,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "Write an account of 'Uthman's administration and military achievements during his caliphate",
     prompt:
       "Write an account of 'Uthman's administration and military achievements during his caliphate.",
@@ -3886,6 +3985,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "In your opinion what was 'Uthman's greatest act as caliph",
     prompt:
       "In your opinion what was 'Uthman's greatest act as caliph? Give reasons to support your answer.",
@@ -3905,6 +4005,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Describe the events of one of the following battles",
     prompt:
       "Describe the events of one of the following battles: Battle of Qadisiyya; Battle of Yarmuk.",
@@ -3924,6 +4025,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "In your opinion, did the Battle of Qadisiyya or the Battle of Yarmuk have more significance for Isla",
     prompt:
       "In your opinion, did the Battle of Qadisiyya or the Battle of Yarmuk have more significance for Islam? Give reasons for your answer.",
@@ -3962,6 +4064,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "What is the most important benefit to a Muslim of completing the annual pilgrimage (hajj)",
     prompt:
       "What is the most important benefit to a Muslim of completing the annual pilgrimage (hajj)? Give reasons to support your answer.",
@@ -4000,6 +4103,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "compilation-stages",
     topicHint: "Give an account of the compilation of Hadiths during the period of the Successors of the Successors,",
     prompt:
       "Give an account of the compilation of Hadiths during the period of the Successors of the Successors, referred to as the golden age of Hadith compilation.",
@@ -4019,6 +4123,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "How did the preservation of the Hadiths help Islam develop",
     prompt:
       "How did the preservation of the Hadiths help Islam develop?",
@@ -4038,6 +4143,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Give an account of why the Battle of Nahrawan was fought, its main events and the fall of Egypt",
     prompt:
       "Give an account of why the Battle of Nahrawan was fought, its main events and the fall of Egypt.",
@@ -4057,6 +4163,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "In your opinion, which event from 'Ali's caliphate weakened his position and led to his martyrdom",
     prompt:
       "In your opinion, which event from 'Ali's caliphate weakened his position and led to his martyrdom? Give reasons to support your answer.",
@@ -4076,6 +4183,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Give an account of the call to prayer (adhan) and the steps of the five prayers (salat)",
     prompt:
       "Give an account of the call to prayer (adhan) and the steps of the five prayers (salat).",
@@ -4095,6 +4203,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "How do Muslims benefit from praying (salat) five times each day",
     prompt:
       "How do Muslims benefit from praying (salat) five times each day?",
@@ -4114,6 +4223,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-angels",
     topicHint: "Write an account of Muslim belief in angels",
     prompt:
       "Write an account of Muslim belief in angels. Include examples of instances in which angels met with Abraham and Muhammad (pbuh).",
@@ -4133,6 +4243,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-angels",
     topicHint: "In your opinion, why is belief in angels important in Islam",
     prompt:
       "In your opinion, why is belief in angels important in Islam? Give reasons to support your answer.",
@@ -4285,6 +4396,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "four-caliphs-in-prophets-lifetime",
     topicHint: "Describe the conversion to Islam of Abu Bakr, 'Umar, 'Uthman and 'Ali",
     prompt:
       "Describe the conversion to Islam of Abu Bakr, 'Umar, 'Uthman and 'Ali.",
@@ -4304,6 +4416,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "four-caliphs-in-prophets-lifetime",
     topicHint: "What do the conversions of the Companions tell Muslims about the challenges faced by converts to Isl",
     prompt:
       "What do the conversions of the Companions tell Muslims about the challenges faced by converts to Islam?",
@@ -4380,6 +4493,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "Give an account of the main events of the Pledges of Aqaba and the details of the pledges made",
     prompt:
       "Give an account of the main events of the Pledges of Aqaba and the details of the pledges made.",
@@ -4399,6 +4513,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "In your opinion, what is the best way for Muslims to welcome those who move into their communities",
     prompt:
       "In your opinion, what is the best way for Muslims to welcome those who move into their communities? Give reasons for your answer.",
@@ -4456,6 +4571,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "ten-blessed-companions",
     topicHint: "Give an account of the lives of three of the following Blessed Companions during the lifetime of the",
     prompt:
       "Give an account of the lives of three of the following Blessed Companions during the lifetime of the Prophet (pbuh): 'Umar ibn al-Khattab; Talhah ibn 'Ubaydullah; Zubayr ibn al-'Awwam; 'Abd al-Rahman ibn 'Awf; Sa'd ibn Abi Waqqas.",
@@ -4475,6 +4591,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "ten-blessed-companions",
     topicHint: "Many new converts were persecuted for their beliefs",
     prompt:
       "Many new converts were persecuted for their beliefs. To what extent can their responses help Muslims in their daily lives now?",
@@ -4513,6 +4630,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "isnad-and-matn",
     topicHint: "Give an account of the two components of Hadiths (isnad and matn) and the checks made on them to con",
     prompt:
       "Give an account of the two components of Hadiths (isnad and matn) and the checks made on them to confirm their reliability.",
@@ -4532,6 +4650,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "compilation-stages",
     topicHint: "Explain the reasons why the compilation of Hadiths became necessary",
     prompt:
       "Explain the reasons why the compilation of Hadiths became necessary.",
@@ -4551,6 +4670,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Give an account of 'Umar's administrative policies while governing the Muslim empire",
     prompt:
       "Give an account of 'Umar's administrative policies while governing the Muslim empire.",
@@ -4570,6 +4690,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "In your opinion, what was 'Umar's greatest achievement during his caliphate",
     prompt:
       "In your opinion, what was 'Umar's greatest achievement during his caliphate? Give reasons for your answer.",
@@ -4589,6 +4710,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write about the Battle of the Camel, fought during the caliphate of 'Ali",
     prompt:
       "Write about the Battle of the Camel, fought during the caliphate of 'Ali.",
@@ -4608,6 +4730,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Explain the impact of the Battle of the Camel on 'Ali's caliphate",
     prompt:
       "Explain the impact of the Battle of the Camel on 'Ali's caliphate.",
@@ -4646,6 +4769,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-prophets",
     topicHint: "Explain why belief in all prophets is important in Islam",
     prompt:
       "Explain why belief in all prophets is important in Islam.",
@@ -4722,6 +4846,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Give an account of the four false prophets in Arabia and their defeat by Abu Bakr",
     prompt:
       "Give an account of the four false prophets in Arabia and their defeat by Abu Bakr.",
@@ -4741,6 +4866,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Why do you think Abu Bakr was determined to challenge the tribes who refused to pay charity (zakat)",
     prompt:
       "Why do you think Abu Bakr was determined to challenge the tribes who refused to pay charity (zakat)?",
@@ -4760,6 +4886,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Write an account of the Battle of Buwayb and the Battle of Qadisiyyah, fought during the caliphate o",
     prompt:
       "Write an account of the Battle of Buwayb and the Battle of Qadisiyyah, fought during the caliphate of 'Umar.",
@@ -4779,6 +4906,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "What do 'Umar's actions following the conquest of Jerusalem tell you about his character",
     prompt:
       "What do 'Umar's actions following the conquest of Jerusalem tell you about his character?",
@@ -4798,6 +4926,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Give an account of missed (qada) prayers and the importance of prayers for Muslims",
     prompt:
       "Give an account of missed (qada) prayers and the importance of prayers for Muslims.",
@@ -4817,6 +4946,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "In your opinion, why is so much importance given to purification (wudu) before prayer (salat)",
     prompt:
       "In your opinion, why is so much importance given to purification (wudu) before prayer (salat)?",
@@ -4855,6 +4985,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "modes-of-revelation",
     topicHint: "Give an account of the different ways that revelation came to the Prophet (pbuh)",
     prompt:
       "Give an account of the different ways that revelation came to the Prophet (pbuh).",
@@ -5026,6 +5157,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "quran-as-source-of-law",
     topicHint: "Describe how the four sources of Islamic Law work with each other in law making",
     prompt:
       "Describe how the four sources of Islamic Law work with each other in law making.",
@@ -5045,6 +5177,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "history-of-the-quran",
+    subtopicSlug: "quran-as-source-of-law",
     topicHint: "To what extent is the use of ijma' and qiyas more important today than in the past",
     prompt:
       "To what extent is the use of ijma' and qiyas more important today than in the past?",
@@ -5064,6 +5197,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "Give an account of the Prophet's migration (hijrah) from Makka to Madina",
     prompt:
       "Give an account of the Prophet's migration (hijrah) from Makka to Madina.",
@@ -5083,6 +5217,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "hijrah",
     topicHint: "What are two important lessons for Muslims from the Prophet's experiences on this journey from Makka",
     prompt:
       "What are two important lessons for Muslims from the Prophet's experiences on this journey from Makka to Madina? Give reasons for your answer.",
@@ -5102,6 +5237,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "farewell-sermon",
     topicHint: "Describe the events of the final year of the Prophet's life",
     prompt:
       "Describe the events of the final year of the Prophet's life.",
@@ -5121,6 +5257,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "farewell-sermon",
     topicHint: "Explain how two of the teachings from the Prophet's Farewell Sermon are significant for Muslims toda",
     prompt:
       "Explain how two of the teachings from the Prophet's Farewell Sermon are significant for Muslims today.",
@@ -5140,6 +5277,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "Give an account of the life of Khadijah bint Khuwaylid",
     prompt:
       "Give an account of the life of Khadijah bint Khuwaylid.",
@@ -5159,6 +5297,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "In what ways can Khadijah be a role model for Muslims today",
     prompt:
       "In what ways can Khadijah be a role model for Muslims today?",
@@ -5197,6 +5336,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "Write an account of why it is important to know and act upon the Hadiths of the Prophet (pbuh)",
     prompt:
       "Write an account of why it is important to know and act upon the Hadiths of the Prophet (pbuh).",
@@ -5216,6 +5356,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "authentication-of-hadith",
     topicHint: "In your opinion, why is it necessary to classify Hadiths into categories",
     prompt:
       "In your opinion, why is it necessary to classify Hadiths into categories? Give reasons to support your answer.",
@@ -5235,6 +5376,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write an account of the causes and events of the Battle of Siffin",
     prompt:
       "Write an account of the causes and events of the Battle of Siffin.",
@@ -5254,6 +5396,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "In your opinion, what was the most important outcome of the Battle of Siffin",
     prompt:
       "In your opinion, what was the most important outcome of the Battle of Siffin? Give reasons to support your answer.",
@@ -5273,6 +5416,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "sawm",
     topicHint: "Describe how Muslims observe the fast of Ramadan and how they should spend this month",
     prompt:
       "Describe how Muslims observe the fast of Ramadan and how they should spend this month.",
@@ -5292,6 +5436,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "sawm",
     topicHint: "In your opinion, how does fasting in Ramadan encourage unity amongst Muslims",
     prompt:
       "In your opinion, how does fasting in Ramadan encourage unity amongst Muslims? Give reasons to support your answer.",
@@ -5311,6 +5456,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Write an account of the three ways Muslims might achieve ritual purity before prayer (salat)",
     prompt:
       "Write an account of the three ways Muslims might achieve ritual purity before prayer (salat).",
@@ -5330,6 +5476,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Why do you think so much importance is given to ritual purification in Islam",
     prompt:
       "Why do you think so much importance is given to ritual purification in Islam? Give reasons for your answer.",
@@ -5406,6 +5553,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Write an account of Abu Bakr's accomplishments as caliph",
     prompt:
       "Write an account of Abu Bakr's accomplishments as caliph.",
@@ -5425,6 +5573,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "In your opinion, why was Abu Bakr chosen to be the first caliph of Islam",
     prompt:
       "In your opinion, why was Abu Bakr chosen to be the first caliph of Islam? Give reasons to support your answer.",
@@ -5444,6 +5593,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "Describe the rites that are performed from the 8th to 12th of Dhu al-Hijjah during the annual pilgri",
     prompt:
       "Describe the rites that are performed from the 8th to 12th of Dhu al-Hijjah during the annual pilgrimage (Hajj).",
@@ -5463,6 +5613,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "What is the importance for Muslims of performing sacrifice during Eid al-Adha",
     prompt:
       "What is the importance for Muslims of performing sacrifice during Eid al-Adha?",
@@ -5482,6 +5633,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-allah",
     topicHint: "Give an account of the First Article of Faith (tawhid), referring to the",
     prompt:
       "Give an account of the First Article of Faith (tawhid), referring to the: Oneness of God's Lordship; Oneness of the worship of God; Oneness of God's names and attributes.",
@@ -5501,6 +5653,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-allah",
     topicHint: "How does Muslim belief in the Oneness of God influence their daily lives",
     prompt:
       "How does Muslim belief in the Oneness of God influence their daily lives? Give reasons to support your answer.",
@@ -5919,6 +6072,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "Write about how Abu Bakr set the example of leadership as the first Caliph of Islam",
     prompt:
       "Write about how Abu Bakr set the example of leadership as the first Caliph of Islam.",
@@ -5938,6 +6092,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "abu-bakr",
     topicHint: "In your opinion which was the greatest service of Abu Bakr as Caliph",
     prompt:
       "In your opinion which was the greatest service of Abu Bakr as Caliph? Give reasons to support your answer.",
@@ -5957,6 +6112,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-predestination",
     topicHint: "Write a detailed account of Muslim belief in predestination and decree",
     prompt:
       "Write a detailed account of Muslim belief in predestination and decree.",
@@ -5976,6 +6132,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-predestination",
     topicHint: "How does belief in predestination strengthen a Muslim's belief in God",
     prompt:
       "How does belief in predestination strengthen a Muslim's belief in God?",
@@ -5995,6 +6152,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "zakah",
     topicHint: "Write a detailed account of the Pillar of alms-giving (zakat) giving its benefits",
     prompt:
       "Write a detailed account of the Pillar of alms-giving (zakat) giving its benefits.",
@@ -6014,6 +6172,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "zakah",
     topicHint: "In your opinion does the giving of zakat benefit the individual more or the society",
     prompt:
       "In your opinion does the giving of zakat benefit the individual more or the society? Give reasons for your answer.",
@@ -6052,6 +6211,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "isnad-and-matn",
     topicHint: "Write about the isnad and matn of Hadiths and their importance in Hadith collection",
     prompt:
       "Write about the isnad and matn of Hadiths and their importance in Hadith collection.",
@@ -6090,6 +6250,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write about one significant reason for the Battle of Siffin and give a detailed account of the battl",
     prompt:
       "Write about one significant reason for the Battle of Siffin and give a detailed account of the battle.",
@@ -6109,6 +6270,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "To what extent was the emergence of the kharijis the most serious issue facing 'Ali after the Battle",
     prompt:
       "To what extent was the emergence of the kharijis the most serious issue facing 'Ali after the Battle of Siffin?",
@@ -6128,6 +6290,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-revealed-books",
     topicHint: "God revealed books to some of His prophets",
     prompt:
       "God revealed books to some of His prophets. Write about Muslim belief in prophets and the books revealed to them.",
@@ -6147,6 +6310,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "belief-in-revealed-books",
     topicHint: "Why were books revealed to prophets at different time periods",
     prompt:
       "Why were books revealed to prophets at different time periods? Give reasons to support your answer.",
@@ -6166,6 +6330,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Outline how Muslims prepare for Friday (Jumʿa) prayers and Eid prayers and describe the special feat",
     prompt:
       "Outline how Muslims prepare for Friday (Jumʿa) prayers and Eid prayers and describe the special features of these prayers.",
@@ -6185,6 +6350,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Why, for Muslim men, is so much importance given to praying in congregation at a mosque",
     prompt:
       "Why, for Muslim men, is so much importance given to praying in congregation at a mosque?",
@@ -6223,6 +6389,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "first-revelation-event",
     topicHint: "Describe the first revelation, and the roles of Jibril, Khadija and Waraqah ibn Nawfal at the time o",
     prompt:
       "Describe the first revelation, and the roles of Jibril, Khadija and Waraqah ibn Nawfal at the time of the first revelation.",
@@ -6242,6 +6409,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "life-of-prophet-muhammad",
+    subtopicSlug: "first-revelation-event",
     topicHint: "What is the significance of God sending the first revelation through an angel",
     prompt:
       "What is the significance of God sending the first revelation through an angel? Give reasons for your answer.",
@@ -6337,6 +6505,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "Write about the life of ʿAisha during the years she was married to the Prophet (pbuh)",
     prompt:
       "Write about the life of ʿAisha during the years she was married to the Prophet (pbuh).",
@@ -6356,6 +6525,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 1,
     sectionSlug: "first-islamic-community",
+    subtopicSlug: "mothers-of-the-faithful",
     topicHint: "How can Muslims today apply lessons learned from ʿAisha's life about the importance of education and",
     prompt:
       "How can Muslims today apply lessons learned from ʿAisha's life about the importance of education and knowledge?",
@@ -6394,6 +6564,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "Write about the importance of knowing the Hadiths of the Prophet (pbuh) and of following his sunna f",
     prompt:
       "Write about the importance of knowing the Hadiths of the Prophet (pbuh) and of following his sunna for Muslims.",
@@ -6413,6 +6584,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "history-of-hadith",
+    subtopicSlug: "importance-of-hadith",
     topicHint: "How do Muslims benefit from following the Hadiths",
     prompt:
       "How do Muslims benefit from following the Hadiths?",
@@ -6432,6 +6604,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "Write an account of ʿUthman's selection as caliph and how he governed the caliphate",
     prompt:
       "Write an account of ʿUthman's selection as caliph and how he governed the caliphate.",
@@ -6451,6 +6624,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "uthman",
     topicHint: "To what extent was ʿUthman a successful military commander",
     prompt:
       "To what extent was ʿUthman a successful military commander? Give reasons to support your answer.",
@@ -6508,6 +6682,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "Give a detailed account of the method and importance of ablution (wudu) before prayer",
     prompt:
       "Give a detailed account of the method and importance of ablution (wudu) before prayer.",
@@ -6527,6 +6702,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "salah",
     topicHint: "What in your opinion are the benefits of dry ablution (tayammum)",
     prompt:
       "What in your opinion are the benefits of dry ablution (tayammum)?",
@@ -6603,6 +6779,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "Write about the way in which the lives of ordinary people improved during ʿUmar's caliphate",
     prompt:
       "Write about the way in which the lives of ordinary people improved during ʿUmar's caliphate. Refer to his administrative policies.",
@@ -6622,6 +6799,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "umar",
     topicHint: "What were the effects of ʿUmar's military successes on Muslims living under his caliphate",
     prompt:
       "What were the effects of ʿUmar's military successes on Muslims living under his caliphate?",
@@ -6641,6 +6819,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Write about the leadership qualities of the fourth caliph ʿAli",
     prompt:
       "Write about the leadership qualities of the fourth caliph ʿAli.",
@@ -6660,6 +6839,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "rightly-guided-caliphs",
+    subtopicSlug: "ali",
     topicHint: "Which in your opinion was ʿAli's single most outstanding quality",
     prompt:
       "Which in your opinion was ʿAli's single most outstanding quality? Give reasons for your choice.",
@@ -6679,6 +6859,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO1",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "Write about and give the importance of the following three elements of the annual pilgrimage (Hajj)",
     prompt:
       "Write about and give the importance of the following three elements of the annual pilgrimage (Hajj): ihram; sa'i; rami.",
@@ -6698,6 +6879,7 @@ export const pastPaperQuestions: PastPaperQuestion[] = [
     ao: "AO2",
     syllabusPaper: 2,
     sectionSlug: "articles-of-faith-and-pillars",
+    subtopicSlug: "hajj",
     topicHint: "What is the importance of offering sacrifice (Qurbani) during Hajj for pilgrims and Muslims worldwid",
     prompt:
       "What is the importance of offering sacrifice (Qurbani) during Hajj for pilgrims and Muslims worldwide?",
@@ -6712,6 +6894,18 @@ export function getQuestionsByYear(year: number): PastPaperQuestion[] {
 
 export function getQuestionsBySection(sectionSlug: string): PastPaperQuestion[] {
   return pastPaperQuestions.filter((q) => q.sectionSlug === sectionSlug);
+}
+
+export function getQuestionsBySubtopic(sectionSlug: string, subtopicSlug: string): PastPaperQuestion[] {
+  return pastPaperQuestions.filter(
+    (q) => q.sectionSlug === sectionSlug && q.subtopicSlug === subtopicSlug,
+  );
+}
+
+// Questions tagged to a section but not confidently mapped to one specific subtopic —
+// shown under a "General / Whole-Section Questions" bucket in the topical browsing UI.
+export function getGeneralQuestionsForSection(sectionSlug: string): PastPaperQuestion[] {
+  return pastPaperQuestions.filter((q) => q.sectionSlug === sectionSlug && !q.subtopicSlug);
 }
 
 export function getQuestionById(id: string): PastPaperQuestion | undefined {

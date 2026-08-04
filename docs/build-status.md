@@ -489,3 +489,137 @@ required.
 ## Git state
 
 No commits, branch switches, or `git add`/`git commit`/`git push` were performed. All work is uncommitted in the working tree on branch `main`, ready for the user's review.
+
+## Site-Wide Search
+
+Added a dependency-free, static/local search system covering the whole site: search index +
+synonym map + ranking logic + a header-triggered modal (desktop and mobile) + a shareable
+`/search?q=` page, per the "add search bar throughout website" request.
+
+**New files:**
+- `data/search-index.ts` — builds the flat search index at module load by iterating the real
+  data arrays (`allTopics`, `pastPaperQuestions`, `modelAnswers`, `references`, `quizzes`) plus a
+  small hardcoded set of 15 static pages (Home, Syllabus, Exam Pattern, Paper 1/2, Past Papers,
+  Model Answers, Quotes & References, Revision, Quizzes, Notes, Resources, Online Classes, About,
+  Contact). No duplicate content list is hardcoded for the data-array-backed categories.
+- `data/search-synonyms.ts` — synonym groups exactly matching the brief: Islamiyat/Islamiat,
+  Qur'an/Quran/Koran, Hadith/Ahadith, Makka/Makkah/Mecca, Madina/Madinah/Medina,
+  Salah/Salat/prayer/namaz, Zakat/Zakah, Sawm/fasting/roza, Hajj/pilgrimage, Ijma/consensus,
+  Qiyas/analogy, Caliph/Khalifa/Khalifah — **12 groups**.
+- `lib/search.ts` — plain-TypeScript case-insensitive token search with synonym expansion
+  (query tokens expanded to all group variants before matching) and relevance ranking
+  (title match > description match > keyword match), capped at 20 results (`RESULT_LIMIT`).
+- `components/SearchModal.tsx` — accessible dialog (`role="dialog"`, `aria-modal`, focus trap,
+  restore-focus-on-close, `Escape` to close, arrow-key navigation, `Enter` to navigate), grouped
+  results by category, empty state ("Type to search...") and a no-results state with 3 suggested
+  popular searches.
+- `app/search/page.tsx` + `app/search/SearchPageClient.tsx` — `?q=` deep-linkable search page,
+  same search/ranking logic, same empty/no-results handling, `robots: { index: false, follow:
+  true }` metadata (no prior noindex convention existed in the codebase to match, so Next's
+  standard `robots.index: false` was used).
+
+**Header wiring (`components/Header.tsx`):** a search button was added to the desktop nav bar
+(shows a "Ctrl K" hint) and to both the mobile hamburger row and the top of the mobile slide-in
+panel — all three open the same `SearchModal`. A global `Cmd/Ctrl+K` keydown listener opens the
+modal from anywhere on the site. No other part of the existing mega-menu/mobile-panel structure
+was changed.
+
+**Search index size:** **471 entries** across 7 categories:
+
+| Category | Count |
+|---|---|
+| Page | 15 |
+| Paper 1 Lesson | 24 |
+| Paper 2 Lesson | 28 |
+| Past Paper Question | 351 |
+| Model Answer | 10 |
+| Reference | 29 |
+| Quiz | 14 |
+
+**QA — all real output:**
+
+```
+$ npm run lint          → eslint . — no errors, no warnings
+$ npm run typecheck     → tsc --noEmit — exit 0
+$ npm run build         → ✓ Compiled successfully
+                           /search — static, 1.35 kB page / 222 kB First Load JS
+                           all existing SSG routes unaffected (past-papers/question 351 paths,
+                           paper-1/2 lesson routes, quotes-references, quizzes all unchanged)
+```
+
+Files touched: only `data/search-index.ts`, `data/search-synonyms.ts`, `lib/search.ts`,
+`components/SearchModal.tsx`, `app/search/page.tsx`, `app/search/SearchPageClient.tsx` (all new),
+and `components/Header.tsx` (edited to add the search trigger). No files owned by the concurrent
+topical-reorganization agent (`data/questions.ts`, `app/past-papers/topical/**`,
+`app/past-papers/page.tsx`, `components/TopicPage.tsx`) were touched.
+
+## Topical Past-Paper Organization
+
+Organized the 351 verbatim past-paper questions in `data/questions.ts` into a genuine
+Section → Subtopic → Questions hierarchy against the official syllabus structure in
+`data/syllabus.ts`, and rebuilt the topical browsing UI around it.
+
+**Finer classification (`subtopicSlug`):** added an optional `subtopicSlug` field to
+`PastPaperQuestion` (`data/questions.ts`). Each of the 351 questions was read individually and
+checked against its section's real subtopic list; a question was only tagged when it maps
+confidently to one specific lesson (e.g. "Give an account of the Prophet's experience of
+receiving the first revelation" → section `history-of-the-quran`, subtopic `first-revelation`).
+Questions that are inherently multi-subtopic or whole-section in scope — e.g. "choose two of the
+following set Qur'an passages" (spans 2-3 designated passages by design), "compilation and
+standardisation of the Qur'an, first under Abu Bakr and then under ʿUthman" (spans two
+subtopics), or Seerah battle/event questions with no matching subtopic entry in the syllabus data
+— were deliberately left unset rather than forced into an inaccurate bucket.
+
+- **177 of 351 questions (50.4%)** were mapped to a specific `subtopicSlug`.
+- **174 of 351 questions (49.6%)** were left general/unset and are surfaced, not hidden, under a
+  "General / Whole-Section Questions" bucket per section.
+- Coverage varies sharply by section because syllabus subtopic lists are uneven in granularity —
+  e.g. `rightly-guided-caliphs` (4 subtopics: one per caliph) classified 52/56 (93%) since most
+  questions name a specific caliph or an event from a specific caliphate, while
+  `major-themes-of-the-quran` and `major-teachings-of-hadith` classified 0/29 and 0/20
+  respectively, because every Q1 on both papers is structurally a "choose two/four of the set
+  passages" question spanning multiple designated subtopics by design of the exam itself.
+- New helpers added to `data/questions.ts`: `getQuestionsBySubtopic(section, subtopic)` and
+  `getGeneralQuestionsForSection(section)`.
+
+**Browsing UI:**
+- `app/past-papers/topical/[section]/page.tsx` rebuilt as a Section hub: lists every subtopic
+  for that section with a real question count next to it (0-count subtopics shown greyed out,
+  not linked), plus a "General / Whole-Section Questions" card with its own count when any
+  questions in the section are unset.
+- `app/past-papers/topical/[section]/[subtopic]/page.tsx` (new) renders the actual question list
+  for one subtopic (or the `general` bucket), each with year/session/paper/marks/AO badges,
+  linking to the existing `/past-papers/question/[id]` detail pages.
+- `components/TopicalQuestionList.tsx` (new client component) adds year/AO filters and a
+  year/marks sort control, following the same client-filter pattern already established by
+  `components/PastPapersYearList.tsx`.
+- `app/past-papers/page.tsx`'s "Browse by topic" section gained one explanatory paragraph
+  describing the new Section → Subtopic → Questions drill-down and the general-questions bucket;
+  the topic card grid itself (linking into each section) was left unchanged.
+- `components/TopicPage.tsx` (per-lesson page, both Paper 1 and Paper 2) now shows a
+  "N related past-paper questions for this topic →" link when `getQuestionsBySubtopic` returns
+  a non-empty result for that lesson's `section`/`slug`, linking straight into the new subtopic
+  page. No other part of `TopicPage.tsx` was changed, and `components/Header.tsx` was not
+  touched (left to the concurrent search agent).
+
+**QA — all real output:**
+
+```
+$ npm run lint          → eslint . — no errors, no warnings
+$ npm run typecheck     → tsc --noEmit — exit 0
+$ npm run build         → ✓ Compiled successfully
+                           /past-papers/topical/[section] — 8 static paths (all sections)
+                           /past-papers/topical/[section]/[subtopic] — 60 static paths
+                           (52 syllabus subtopics + 8 "general" buckets, one per section; 30 of
+                           the 52 subtopics have ≥1 classified question, the rest render an
+                           empty-state), 1.85 kB page / 108 kB First Load JS
+                           all existing SSG routes unaffected (past-papers/question 351 paths,
+                           paper-1/2 lesson routes, /search, quotes-references, quizzes unchanged)
+```
+
+Files touched: `data/questions.ts` (added `subtopicSlug` field + 2 helper functions + 177
+classifications), `app/past-papers/topical/[section]/page.tsx` (rebuilt),
+`app/past-papers/topical/[section]/[subtopic]/page.tsx` (new), `components/TopicalQuestionList.tsx`
+(new), `app/past-papers/page.tsx` (one added paragraph), `components/TopicPage.tsx` (added
+related-questions link). `components/Header.tsx` and all `data/search-*`/`app/search/**` files
+owned by the concurrent search agent were not touched.

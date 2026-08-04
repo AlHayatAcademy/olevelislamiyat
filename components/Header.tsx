@@ -20,8 +20,10 @@ import {
   Menu,
   X,
   ChevronDown,
+  Search,
 } from "lucide-react";
 import { siteConfig } from "@/data/site-config";
+import { SearchModal } from "@/components/SearchModal";
 
 const navIcons: Record<string, React.ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>> = {
   "/syllabus": BookOpen,
@@ -63,11 +65,24 @@ export function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   // Close mobile menu on route change and lock body scroll while open.
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  // Global Cmd/Ctrl+K shortcut to open search from anywhere on the site.
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -153,7 +168,16 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="hidden shrink-0 lg:block">
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-2 rounded-md px-2.5 py-2 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label="Search the site"
+          >
+            <Search aria-hidden="true" size={18} />
+            <span className="text-xs text-white/60">Ctrl K</span>
+          </button>
           <Link
             href={siteConfig.contact.whatsapp}
             target="_blank"
@@ -164,17 +188,27 @@ export function Header() {
           </Link>
         </div>
 
-        {/* Mobile menu toggle */}
-        <button
-          type="button"
-          className="rounded-md p-2 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:hidden"
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-nav"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMobileOpen((v) => !v)}
-        >
-          {mobileOpen ? <X aria-hidden="true" size={24} /> : <Menu aria-hidden="true" size={24} />}
-        </button>
+        {/* Mobile search + menu toggle */}
+        <div className="flex items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="rounded-md p-2 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label="Search the site"
+          >
+            <Search aria-hidden="true" size={22} />
+          </button>
+          <button
+            type="button"
+            className="rounded-md p-2 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X aria-hidden="true" size={24} /> : <Menu aria-hidden="true" size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile slide-in overlay menu */}
@@ -204,6 +238,19 @@ export function Header() {
               onClick={() => setMobileOpen(false)}
             >
               <X aria-hidden="true" size={22} />
+            </button>
+          </div>
+          <div className="px-3 pt-3">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setSearchOpen(true);
+              }}
+              className="flex min-h-[44px] w-full items-center gap-3 rounded-lg bg-white/10 px-3 py-2.5 text-base transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            >
+              <Search aria-hidden="true" size={18} className="shrink-0 text-accent" />
+              Search
             </button>
           </div>
           <ul className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
@@ -237,6 +284,8 @@ export function Header() {
           </div>
         </nav>
       </div>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }
