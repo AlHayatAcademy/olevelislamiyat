@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/data/site-config";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
 import { allTopics } from "@/data/topics";
-import { availableYears } from "@/data/questions";
-import { referenceTypes, slugifyType } from "@/data/references";
+import { availableYears, pastPaperQuestions } from "@/data/questions";
+import { referenceTypes, slugifyType, references } from "@/data/references";
 import { modelAnswers } from "@/data/model-answers";
 import { quizzes } from "@/data/quizzes";
 
@@ -57,8 +57,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const year of availableYears) {
     entries.push({ url: `${siteConfig.domain}/past-papers/year-wise/${year}`, lastModified: now });
   }
+  entries.push({ url: `${siteConfig.domain}/past-papers/topical`, lastModified: now });
   for (const section of [...paper1Sections, ...paper2Sections]) {
     entries.push({ url: `${siteConfig.domain}/past-papers/topical/${section.slug}`, lastModified: now });
+    for (const sub of section.subtopics) {
+      entries.push({
+        url: `${siteConfig.domain}/past-papers/topical/${section.slug}/${sub.slug}`,
+        lastModified: now,
+      });
+    }
+  }
+  for (const question of pastPaperQuestions) {
+    entries.push({ url: `${siteConfig.domain}/past-papers/question/${question.id}`, lastModified: now });
   }
 
   for (const answer of modelAnswers) {
@@ -68,6 +78,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const type of referenceTypes) {
     entries.push({
       url: `${siteConfig.domain}/quotes-references/${slugifyType(type)}`,
+      lastModified: now,
+    });
+  }
+  for (const reference of references) {
+    entries.push({
+      url: `${siteConfig.domain}/quotes-references/${slugifyType(reference.type)}/${reference.id}`,
       lastModified: now,
     });
   }
