@@ -623,3 +623,77 @@ classifications), `app/past-papers/topical/[section]/page.tsx` (rebuilt),
 (new), `app/past-papers/page.tsx` (one added paragraph), `components/TopicPage.tsx` (added
 related-questions link). `components/Header.tsx` and all `data/search-*`/`app/search/**` files
 owned by the concurrent search agent were not touched.
+
+## Topical Past-Papers Landing Redesign
+
+`app/past-papers/topical/page.tsx` (new) is a top-level landing page for the topical past-papers
+system, sitting above the existing `[section]` and `[section]/[subtopic]` drill-down pages (both
+left unmodified and still working). It follows the structure of a reference screenshot the user
+supplied (dark hero band → "How to Use" info card with stats + shortcuts → Paper 1 topic-card
+grid → Paper 2 topic-card grid), rebuilt entirely in this site's own brand palette (`primary`
+#123C2C dark green, `secondary`/`accent` gold — no blue introduced) and reusing existing
+components/patterns rather than inventing new ones:
+
+- Hero band: same gradient/`GeometricPattern`/glow-blob structure as `components/Hero.tsx`, using
+  `Button` variants `gold`/`outline`/`whatsapp`. Three real CTAs: a Paper 1 section, a Paper 2
+  section, and `siteConfig.contact.whatsapp` (no invented "trial class" route was added — the
+  site's real contact channel is WhatsApp, so that's what the third CTA uses).
+- "How to Use These Islamiyat Past Papers" card: original instructional copy, plus a 4-tile stat
+  grid computed live from real data, not hardcoded numbers:
+  - "2 / Exam Papers" — `paper1Sections`/`paper2Sections` are two arrays (Paper 1, Paper 2).
+  - "8 / Syllabus Sections" — `paper1Sections.length + paper2Sections.length` (4 + 4), from
+    `data/syllabus.ts`.
+  - "52 / Topical Practice Areas" — sum of `.subtopics.length` across all 8 sections in
+    `data/syllabus.ts`, computed with `.reduce()` in the page itself.
+  - "2058 / 0493 / Cambridge Codes" — `siteConfig.qualifications.oLevel.code` /
+    `.igcse.code`, the same verified qualification codes used site-wide.
+  - The reference screenshot's fourth stat, a "10+4 answer structure" fact, was deliberately
+    **not** used: `data/syllabus.ts`'s `examPattern` and `app/exam-pattern/page.tsx` only confirm
+    "5 questions per paper, answer Q1 + Q2 + 2 of the remaining 3, 50 marks/paper" — no "10+4"
+    marks-per-question split is documented anywhere in the codebase, so stating it would have been
+    a fabricated number. Swapped for the subtopic-count stat instead, which is real.
+  - 4 shortcut buttons below: "Paper 1 Guide" → `/paper-1`, "Paper 2 Guide" → `/paper-2`,
+    "Paper 1 Topical Papers" / "Paper 2 Topical Papers" → in-page anchors to the two grids below
+    (no invented routes).
+- Paper 1 / Paper 2 sections: heading + original description, then a responsive grid (one card
+  per real `SyllabusSection` from `data/syllabus.ts`, 4 cards each) reusing the hover-lift card
+  treatment already established in `SectionHub.tsx`/`TrustBar.tsx`/homepage feature cards
+  (`hover:-translate-y-1 hover:shadow-card-hover`). Each card: a rounded icon badge (decorative
+  lucide icon per section, no fabricated data), the section's real title/description, tag pills
+  showing real `Paper N`, real `{section.marks} marks`, and a real live `{getQuestionsBySection}`
+  count, and a full-width dark CTA (`Open {section.title} Questions`) linking to
+  `/past-papers/topical/{section.slug}` — the existing, unmodified section-hub route.
+- `app/past-papers/page.tsx`: added one `Button` ("Open the Full Topical Past Papers Hub") linking
+  to the new `/past-papers/topical` landing page, placed above the existing per-section quick-link
+  grid (which was left in place, unchanged, as a compact alternative).
+- No new `'use client'` directive: the new page is a plain Server Component (only
+  `components/PaperTabs.tsx`, reused elsewhere, is a client component; this page doesn't use it).
+
+**Every stat shown is real, sourced as follows:**
+
+| Stat shown | Source |
+|---|---|
+| 2 Exam Papers | `paper1Sections` + `paper2Sections` arrays in `data/syllabus.ts` |
+| 8 Syllabus Sections | `paper1Sections.length + paper2Sections.length` (computed) |
+| 52 Topical Practice Areas | sum of `.subtopics.length` across all 8 sections (computed) |
+| 2058 / 0493 | `siteConfig.qualifications.oLevel.code` / `.igcse.code` |
+| Per-card marks (8/14/…) | `section.marks` field, `data/syllabus.ts` |
+| Per-card question count | `getQuestionsBySection(section.slug).length`, `data/questions.ts` |
+| Footer question count | `pastPaperQuestions.length`, `data/questions.ts` |
+
+**QA — all real output:**
+
+```
+$ npm run lint       → eslint . — no errors, no warnings
+$ npm run typecheck  → tsc --noEmit — exit 0
+$ npm run build      → ✓ Compiled successfully
+                        /past-papers/topical               ○ (Static)   212 B    106 kB
+                        /past-papers/topical/[section]      ● (SSG, 8 paths)     212 B    106 kB
+                        /past-papers/topical/[section]/[subtopic] ● (SSG, 60 paths) 1.85 kB 108 kB
+                        /past-papers                        ○ (Static)   2.84 kB  109 kB
+                        all other existing routes (past-papers/question × 351, paper-1/2,
+                        /search, quizzes, quotes-references, etc.) unaffected
+```
+
+Files touched: `app/past-papers/topical/page.tsx` (new), `app/past-papers/page.tsx` (one `Button`
+added, imports updated). No files under `source/` or `.git` were touched; no commits made.

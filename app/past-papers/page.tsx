@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, ArrowRight } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
+import { Button } from "@/components/Button";
 import { PastPapersYearList, type YearStat } from "@/components/PastPapersYearList";
 import { pastPaperQuestions, availableYears, getQuestionsByYear } from "@/data/questions";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
@@ -84,6 +85,15 @@ export default function PastPapersPage() {
               test that specific subtopic. Questions too broad for one subtopic are grouped under a
               &ldquo;General / Whole-Section Questions&rdquo; bucket instead of being hidden.
             </p>
+            <Button
+              href="/past-papers/topical"
+              variant="primary"
+              icon={ArrowRight}
+              iconPosition="right"
+              className="mb-4"
+            >
+              Open the Full Topical Past Papers Hub
+            </Button>
             <div className="grid gap-2 sm:grid-cols-2">
               {allSections.map((section) => (
                 <Link
