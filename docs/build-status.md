@@ -260,6 +260,52 @@ $ grep -rn "\[VERIFY" data/ app/ content/
 (no output — zero matches)
 ```
 
+## Cloudflare Deployment Setup
+
+Added the `@opennextjs/cloudflare` adapter (`^1.20.2`, with `wrangler ^4.118.0`
+as a required peer) to deploy this Next.js app — including its dynamic
+`/api/contact` route and `next/og`-based image generation
+(`opengraph-image.tsx`, `twitter-image.tsx`, `icon.tsx`, `apple-icon.tsx`) —
+as a Cloudflare Worker rather than a static export, since a plain static
+export cannot serve those dynamic routes.
+
+Files added:
+- `wrangler.jsonc` — Worker name `olevelislamiyat`, asset directory
+  `.open-next/assets`, `nodejs_compat` compatibility flag, and a
+  self-reference service binding used by the adapter's caching layer.
+- `open-next.config.ts` — default OpenNext Cloudflare config (in-memory
+  caching; no ISR/R2 cache needed for this app's current feature set).
+- npm scripts: `pages:build`, `preview`, `deploy`, `cf-typegen`.
+
+Full step-by-step deployment instructions: `docs/deployment-cloudflare.md`.
+
+**QA (all commands actually run, real output):**
+
+```
+$ npm run lint
+> eslint .
+(exit 0, no output)
+
+$ npm run typecheck
+> tsc --noEmit
+(exit 0, no output)
+
+$ npm run build
+✓ Compiled successfully
+✓ Generating static pages (192/192)
+(exit 0)
+
+$ npx opennextjs-cloudflare build
+...
+⚙️ Bundling the OpenNext server...
+Worker saved in `.open-next/worker.js` 🚀
+OpenNext build complete.
+(exit 0)
+```
+
+Both the standard Next.js build and the Cloudflare-specific build succeed
+cleanly with no errors.
+
 ## Git state
 
-No commits, branch switches, or `git add`/`git commit`/`git push` were performed. All work is uncommitted in the working tree on branch `claude/olevel-islamiyat-website-opbkvm`, ready for the user's review.
+No commits, branch switches, or `git add`/`git commit`/`git push` were performed. All work is uncommitted in the working tree on branch `main`, ready for the user's review.
