@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { paper1Sections } from "@/data/syllabus";
 import { getTopicsForSection } from "@/data/topics";
 import { SectionHub } from "@/components/SectionHub";
+import { canonical } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ section: string }>;
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: `Paper 1: ${section.title}`,
     description: section.description,
+    ...canonical(`/paper-1/${section.slug}`),
   };
 }
 

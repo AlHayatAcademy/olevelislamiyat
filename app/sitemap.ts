@@ -1,7 +1,13 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/data/site-config";
+import { paper1Sections, paper2Sections } from "@/data/syllabus";
+import { allTopics } from "@/data/topics";
+import { availableYears } from "@/data/questions";
+import { referenceTypes, slugifyType } from "@/data/references";
+import { modelAnswers } from "@/data/model-answers";
+import { quizzes } from "@/data/quizzes";
 
-const routes = [
+const staticRoutes = [
   "/",
   "/syllabus",
   "/exam-pattern",
@@ -15,6 +21,7 @@ const routes = [
   "/notes",
   "/resources",
   "/online-classes",
+  "/teacher-resources",
   "/about",
   "/about/institute",
   "/about/founder",
@@ -28,8 +35,46 @@ const routes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.map((route) => ({
+  const now = new Date();
+  const entries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${siteConfig.domain}${route}`,
-    lastModified: new Date(),
+    lastModified: now,
   }));
+
+  for (const section of paper1Sections) {
+    entries.push({ url: `${siteConfig.domain}/paper-1/${section.slug}`, lastModified: now });
+  }
+  for (const section of paper2Sections) {
+    entries.push({ url: `${siteConfig.domain}/paper-2/${section.slug}`, lastModified: now });
+  }
+  for (const topic of allTopics) {
+    entries.push({
+      url: `${siteConfig.domain}/paper-${topic.paper}/${topic.section}/${topic.slug}`,
+      lastModified: now,
+    });
+  }
+
+  for (const year of availableYears) {
+    entries.push({ url: `${siteConfig.domain}/past-papers/year-wise/${year}`, lastModified: now });
+  }
+  for (const section of [...paper1Sections, ...paper2Sections]) {
+    entries.push({ url: `${siteConfig.domain}/past-papers/topical/${section.slug}`, lastModified: now });
+  }
+
+  for (const answer of modelAnswers) {
+    entries.push({ url: `${siteConfig.domain}/model-answers/${answer.id}`, lastModified: now });
+  }
+
+  for (const type of referenceTypes) {
+    entries.push({
+      url: `${siteConfig.domain}/quotes-references/${slugifyType(type)}`,
+      lastModified: now,
+    });
+  }
+
+  for (const quiz of quizzes) {
+    entries.push({ url: `${siteConfig.domain}/quizzes/${quiz.id}`, lastModified: now });
+  }
+
+  return entries;
 }

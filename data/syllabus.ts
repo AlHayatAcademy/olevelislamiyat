@@ -28,9 +28,15 @@ export const paper1Sections: SyllabusSection[] = [
     description:
       "Three passages are set from the syllabus Appendix (15 designated passages grouped under three themes); candidates answer on two of the three. Passages are grouped under God in Himself, God's relationship with the created world, and God's relationship with His Messengers.",
     subtopics: [
-      { slug: "god-in-himself", title: "Theme 1: God in Himself (Tawhid)" },
-      { slug: "gods-relationship-with-creation", title: "Theme 2: God's Relationship with the Created World" },
-      { slug: "gods-relationship-with-messengers", title: "Theme 3: God's Relationship with His Messengers" },
+      { slug: "ayat-al-kursi", title: "Theme 1 (God in Himself): Ayat al-Kursi — Qur'an 2:255" },
+      { slug: "al-anam-6-101-103", title: "Theme 1 (God in Himself): Qur'an 6:101-103" },
+      { slug: "al-ikhlas-112", title: "Theme 1 (God in Himself): Surah al-Ikhlas — Qur'an 112:1-4" },
+      { slug: "al-fatiha-1-7", title: "Theme 2 (God and Creation): Surah al-Fatiha — Qur'an 1:1-7" },
+      { slug: "al-alaq-96-1-5", title: "Theme 2 (God and Creation): Qur'an 96:1-5" },
+      { slug: "al-zilzal-99-1-8", title: "Theme 2 (God and Creation): Surah al-Zilzal — Qur'an 99:1-8" },
+      { slug: "adam-al-baqarah-2-30-37", title: "Theme 3 (God and His Messengers): Adam — Qur'an 2:30-37" },
+      { slug: "isa-al-maidah-5-110", title: "Theme 3 (God and His Messengers): Isa — Qur'an 5:110" },
+      { slug: "muhammad-al-duha-93", title: "Theme 3 (God and His Messengers): Muhammad (pbuh) — Qur'an 93:1-11" },
     ],
   },
   {
@@ -75,6 +81,8 @@ export const paper1Sections: SyllabusSection[] = [
     subtopics: [
       { slug: "mothers-of-the-faithful", title: "Mothers of the Faithful (Ummahat al-Mu'minin)" },
       { slug: "ten-blessed-companions", title: "The Ten Blessed Companions" },
+      { slug: "emigrants-and-helpers", title: "The Muhajirun (Emigrants) and Ansar (Helpers)" },
+      { slug: "four-caliphs-in-prophets-lifetime", title: "Abu Bakr, Umar, Uthman and Ali in the Prophet's (pbuh) Lifetime" },
       { slug: "scribes-of-revelation", title: "Scribes of the Divine Revelation" },
       { slug: "status-of-women", title: "Status and Rights of Women in Islam" },
     ],
@@ -91,8 +99,14 @@ export const paper2Sections: SyllabusSection[] = [
     description:
       "Four passages are set from the syllabus Appendix, grouped under teachings for individual conduct and teachings for community life; candidates answer on two of the four.",
     subtopics: [
-      { slug: "individual-conduct", title: "Teachings for Individual Conduct" },
-      { slug: "community-life", title: "Teachings for Community Life" },
+      { slug: "shahadah-and-worship", title: "Individual Conduct: Belief and the Obligatory Acts of Worship" },
+      { slug: "sincerity-ikhlas", title: "Individual Conduct: Sincerity (Ikhlas)" },
+      { slug: "fighting-against-evil", title: "Individual Conduct: Fighting Against Evil" },
+      { slug: "serving-the-cause-of-allah", title: "Individual Conduct: Serving the Cause of Allah" },
+      { slug: "charity-and-sharing", title: "Community Life: Charity and Sharing with Others" },
+      { slug: "social-ethical-responsibilities", title: "Community Life: Social and Ethical Responsibilities" },
+      { slug: "enjoining-good-forbidding-evil", title: "Community Life: Enjoining Good and Forbidding Evil" },
+      { slug: "rights-and-brotherhood", title: "Community Life: Rights of Others and Muslim Brotherhood" },
     ],
   },
   {
@@ -135,8 +149,17 @@ export const paper2Sections: SyllabusSection[] = [
     description:
       "The six Articles of Faith (belief in Allah, angels, Books, Messengers, the Last Day, and predestination) and the Five Pillars of Islam (Shahadah, Salah, Zakah, Sawm, Hajj).",
     subtopics: [
-      { slug: "articles-of-faith", title: "The Six Articles of Faith" },
-      { slug: "pillars-of-islam", title: "The Five Pillars of Islam" },
+      { slug: "belief-in-allah", title: "Article of Faith: Belief in Allah" },
+      { slug: "belief-in-angels", title: "Article of Faith: Belief in Angels" },
+      { slug: "belief-in-revealed-books", title: "Article of Faith: Belief in the Revealed Books" },
+      { slug: "belief-in-prophets", title: "Article of Faith: Belief in the Prophets" },
+      { slug: "belief-in-predestination", title: "Article of Faith: Belief in Predestination (Qadr)" },
+      { slug: "belief-in-resurrection", title: "Article of Faith: Belief in the Day of Resurrection" },
+      { slug: "shahadah-pillar", title: "Pillar of Islam: Shahadah" },
+      { slug: "salah", title: "Pillar of Islam: Salah" },
+      { slug: "zakah", title: "Pillar of Islam: Zakah" },
+      { slug: "sawm", title: "Pillar of Islam: Sawm" },
+      { slug: "hajj", title: "Pillar of Islam: Hajj" },
     ],
   },
 ];

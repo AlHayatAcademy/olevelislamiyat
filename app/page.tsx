@@ -3,10 +3,32 @@ import { Hero } from "@/components/Hero";
 import { Button } from "@/components/Button";
 import { siteConfig } from "@/data/site-config";
 import { features, examPatternSummary, faqs } from "@/data/homepage-content";
+import { canonical } from "@/lib/seo";
+
+export const metadata = {
+  title: `${siteConfig.siteName} — Cambridge O Level 2058 / IGCSE 0493`,
+  description:
+    "Free Islamiyat notes, past papers, model answers and quizzes for Cambridge O Level Islamiyat (2058) and IGCSE Islamiyat (0493).",
+  ...canonical("/"),
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Hero />
 
       {/* Feature cards */}

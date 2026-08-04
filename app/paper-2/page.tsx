@@ -2,20 +2,59 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { paper2Sections } from "@/data/syllabus";
 import { getTopicsForSection } from "@/data/topics";
+import { canonical } from "@/lib/seo";
 
 export const metadata = {
-  title: "Paper 2",
+  title: "Islamiyat Paper 2 Notes (Hadith & Caliphs)",
   description:
-    "Hadith teachings, their history, the Rightly Guided Caliphs, and the Articles of Faith & Pillars of Islam.",
+    "Islamiyat 2058 / 0493 Paper 2 notes: Hadith teachings, their history, the Rightly Guided Caliphs, and the Articles of Faith & Pillars of Islam.",
+  ...canonical("/paper-2"),
+};
+
+const faqs = [
+  {
+    q: "How do I compare Abu Bakr, Umar, Uthman and Ali as leaders?",
+    a: "The Rightly Guided Caliphs section covers the leadership, achievements and character of each of the four caliphs individually, giving the material needed to build a comparison for exam questions.",
+  },
+  {
+    q: "What is the difference between isnad and matn?",
+    a: "Isnad is the chain of narrators through which a Hadith was transmitted; matn is the actual text/content of the Hadith. Both are explained in the History and Importance of the Hadiths section.",
+  },
+  {
+    q: "What are the six authentic books of Hadith?",
+    a: "The Sihah Sittah (six authentic books) are covered in the History and Importance of the Hadiths section, alongside the stages of compilation from the Companions to the Tabi'un.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 export default function Paper2Page() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <h1 className="text-3xl font-bold font-heading text-text">Paper 2</h1>
       <p className="mt-3 text-text-muted">
         Hadith teachings, their history, the Rightly Guided Caliphs, and the Articles of Faith &amp; Pillars of
-        Islam. 1½ hours, 50 marks — answer Question 1, Question 2 and two others.
+        Islam. 1½ hours, 50 marks — answer Question 1, Question 2 and two others. See also{" "}
+        <Link href="/past-papers" className="text-primary underline">
+          Islamiyat past papers by topic
+        </Link>{" "}
+        and{" "}
+        <Link href="/quotes-references" className="text-primary underline">
+          Hadith quotes and references
+        </Link>
+        .
       </p>
 
       <div className="mt-8 space-y-4">
@@ -46,6 +85,18 @@ export default function Paper2Page() {
           );
         })}
       </div>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-heading font-bold text-primary">Frequently asked questions</h2>
+        <div className="mt-4 space-y-4">
+          {faqs.map((f) => (
+            <div key={f.q} className="rounded-xl border border-border bg-surface p-5">
+              <h3 className="font-heading font-semibold text-text">{f.q}</h3>
+              <p className="mt-2 text-sm text-text-muted">{f.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

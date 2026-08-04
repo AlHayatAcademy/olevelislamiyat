@@ -4,6 +4,59 @@ const section = "life-of-prophet-muhammad";
 
 export const paper1LifeOfProphetTopics: Topic[] = [
   {
+    slug: "arabia-before-islam",
+    paper: 1,
+    section,
+    title: "Arabia Before Islam",
+    standing: "The religious, moral, social and political condition of Arabia before the Prophet's (pbuh) mission, and why it shows the scale of Islam's reform.",
+    learningObjectives: [
+      "Describe the religious condition of pre-Islamic Arabia, including the practice of idol worship and the exception of the hanifs.",
+      "Describe the moral, social and political conditions of the period.",
+      "Explain why understanding this background matters for appreciating the reform Islam brought.",
+      "Give a balanced assessment that also recognises the genuine virtues present in pre-Islamic Arab society.",
+    ],
+    keyTerms: [
+      { term: "Jahiliyyah", meaning: "\"The Age of Ignorance\" — the traditional term for the period in Arabia before Islam." },
+      { term: "Hanif", meaning: "A small number of individuals in pre-Islamic Arabia who rejected idol worship and sought to follow the pure monotheistic faith associated with Ibrahim (AS)." },
+      { term: "Wa'd al-Banat", meaning: "The practice of female infanticide found among some pre-Islamic tribes." },
+    ],
+    explanation: [
+      "Prophet Muhammad (pbuh) was born into a society with strong tribal loyalties, an active commercial culture, and respected traditions of courage and hospitality — but pre-Islamic Arabia also suffered from serious religious, moral, social and political problems that Islam directly addressed.",
+      "Religiously, most Arabs had moved away from the monotheistic faith associated with the Prophets Ibrahim (AS) and Isma'il (AS); idol worship was widespread, and the Ka'bah itself came to house many tribal idols. Many people denied the resurrection and final judgement. A small number of individuals, known as hanifs, nevertheless rejected idol worship and sought to follow the pure faith of Ibrahim (AS).",
+      "Morally and socially, practices such as drinking, gambling, adultery, tribal revenge and dishonest commercial dealing were widespread. The weak could be exploited by the powerful: slaves, orphans and widows often lacked real protection, women generally had limited legal and inheritance rights, and female infanticide (wa'd al-banat) existed among some tribes. Marriage practices lacked the moral and legal regulation later established by Islam.",
+      "Politically and economically, Arabia had no single central government; each tribe protected its own members, and feuds between tribes could continue for generations. Makkah, however, was commercially important, supported by trade caravans, seasonal markets (such as 'Ukaz, Majannah and Dhul-Majaz), leather and cloth production, animal rearing and oasis agriculture; the Ka'bah also gave Makkah religious prestige and attracted pilgrims from across Arabia.",
+      "At the same time, Arab society held genuine virtues that Islam preserved and built upon rather than discarding entirely: courage and bravery, hospitality and generosity, strong loyalty to family and tribe, a rich tradition of poetry, and (in commercial dealings, at least in principle) a value placed on honesty in trade.",
+      "Understanding this mixed background — real virtues alongside serious religious, moral and social disorder — helps explain both why reform was urgently needed and why it succeeded: Islam corrected idolatry, injustice and moral disorder while retaining and elevating the positive qualities already present in Arab culture.",
+    ],
+    keyFacts: [
+      { label: "Term for the period", detail: "Jahiliyyah (\"the Age of Ignorance\")." },
+      { label: "Religious condition", detail: "Widespread idol worship centred on the Ka'bah; denial of resurrection and judgement by most; a small hanif minority kept monotheism alive." },
+      { label: "Moral/social problems", detail: "Drinking, gambling, tribal revenge, exploitation of the weak, limited rights for women, female infanticide." },
+      { label: "Political condition", detail: "No central government; tribal feuds; Makkah commercially and religiously significant." },
+      { label: "Positive qualities retained", detail: "Courage, hospitality, family/tribal loyalty, poetry, value placed on honesty in trade." },
+    ],
+    ao1Guidance: [
+      "Organise the answer under clear headings — religious, moral/social, political/economic — as the syllabus and standard revision materials do, rather than a single unstructured paragraph.",
+      "Be able to name specific practices (idol worship at the Ka'bah, wa'd al-banat, tribal feuds, trade caravans and seasonal markets) rather than only general statements like \"things were bad\".",
+    ],
+    ao2Guidance: [
+      "Explain why understanding pre-Islamic conditions helps a student appreciate the scale and nature of the reform Islam brought — each specific problem (idolatry, exploitation of the weak, lack of central authority) can be matched to a specific Islamic teaching that addressed it.",
+      "Discuss why a balanced assessment — acknowledging virtues like hospitality and courage alongside serious problems — is intellectually and religiously more accurate, and more highly rewarded, than a one-sided negative portrayal.",
+      "Reflect on how Makkah's dual role as a commercial hub and religious centre (via the Ka'bah) helps explain both the resistance the Prophet (pbuh) faced from those benefiting from the status quo, and the strategic importance of the city to the early mission.",
+    ],
+    commonMistakes: [
+      "Describing pre-Islamic Arabia as entirely without virtue — the syllabus and examiner expectations call for a balanced answer that also credits genuine positive qualities (courage, hospitality, honesty in trade).",
+      "Giving only vague statements (\"there was idol worship and injustice\") without specific, named examples.",
+      "Forgetting the hanifs, a specific and examinable detail showing that pure monotheism had not disappeared entirely from Arabia before the Prophet's (pbuh) mission.",
+    ],
+    examTip:
+      "Use the exam insight from standard revision practice: avoid describing pre-Islamic Arabia as completely without virtue. A strong, balanced answer acknowledges generosity, bravery, poetry and hospitality while clearly explaining that Islam corrected idolatry, injustice and moral disorder — this balance is specifically rewarded under AO2.",
+    relatedTopics: [
+      { paper: 1, section: "life-of-prophet-muhammad", slug: "first-revelation-event", title: "The First Revelation and the Start of the Mission" },
+      { paper: 1, section: "first-islamic-community", slug: "status-of-women", title: "Status and Rights of Women in Islam" },
+    ],
+  },
+  {
     slug: "first-revelation-event",
     paper: 1,
     section,

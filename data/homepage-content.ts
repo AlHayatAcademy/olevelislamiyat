@@ -100,4 +100,14 @@ export const faqs = [
     answer:
       "The Past Papers section indexes official exam sessions by paper and topic. In line with copyright policy, full past paper and mark scheme PDFs are not rehosted here — please refer to official Cambridge channels for original documents.",
   },
+  {
+    question: "What is the difference between O Level Islamiyat 2058 and IGCSE Islamiyat 0493?",
+    answer:
+      "Both are separate Cambridge syllabus codes covering closely related Islamiyat content — O Level 2058 and IGCSE 0493. Check the Syllabus and Exam Pattern pages for the specific paper structure of each.",
+  },
+  {
+    question: "How many questions do I have to answer in each paper?",
+    answer:
+      "Each paper (Paper 1 and Paper 2) has five questions; candidates must answer Question 1, Question 2, and two others from the remaining three. See the Exam Pattern page for full detail.",
+  },
 ];

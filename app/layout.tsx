@@ -15,10 +15,44 @@ export const metadata: Metadata = {
   description: siteConfig.tagline,
 };
 
+const educationalOrgSchema = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: siteConfig.institution.name,
+  legalName: siteConfig.institution.legalName,
+  url: siteConfig.domain,
+  logo: `${siteConfig.domain}/favicon.ico`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: siteConfig.institution.location.split(",")[0]?.trim(),
+    addressCountry: "PK",
+  },
+  email: siteConfig.contact.email,
+  telephone: siteConfig.contact.phone,
+  founder: {
+    "@type": "Person",
+    name: siteConfig.institution.founder,
+  },
+  sameAs: [
+    siteConfig.links.personalSite,
+    siteConfig.links.instituteSite,
+    siteConfig.links.youtube,
+    ...siteConfig.socialLinks.map((s) => s.href),
+  ].filter(Boolean),
+  department: {
+    "@type": "EducationalOrganization",
+    name: siteConfig.institution.educationDivision,
+  },
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${manrope.variable} ${inter.variable} ${notoNaskhArabic.variable}`}>
       <body className="min-h-screen flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(educationalOrgSchema) }}
+        />
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>

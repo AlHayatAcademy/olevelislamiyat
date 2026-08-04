@@ -115,4 +115,111 @@ export const paper2CaliphsTopics: Topic[] = [
       { paper: 1, section: "history-of-the-quran", slug: "compilation-under-abu-bakr", title: "Compilation Under Abu Bakr" },
     ],
   },
+  {
+    slug: "uthman",
+    paper: 2,
+    section,
+    title: "Uthman ibn Affan (RA)",
+    standing: "The third caliph (23-35 AH / 644-656 CE), chosen by a six-member shura council, remembered for standardising the Qur'anic text and for a caliphate that ended in civil unrest and his assassination.",
+    learningObjectives: [
+      "Describe how Uthman (RA) was chosen as the third caliph.",
+      "Explain his major achievements, especially the standardisation of the Qur'an.",
+      "Explain the causes of unrest during the later part of his caliphate and the circumstances of his death.",
+      "Evaluate his importance as a leader.",
+    ],
+    keyTerms: [
+      { term: "Shura council", meaning: "The six-member consultative council appointed by Umar (RA) before his death, tasked with choosing the next caliph from among themselves." },
+      { term: "Mus'haf", meaning: "A standard written copy of the Qur'an; Uthman (RA) is remembered for having standard copies (mesahif) produced and distributed to major centres of the growing Muslim state." },
+      { term: "Dhun-Nurayn", meaning: "\"Possessor of the two lights\" — a title given to Uthman (RA) for having married two of the Prophet's (pbuh) daughters in succession." },
+    ],
+    explanation: [
+      "Before his death, Umar (RA) appointed a shura council of six senior companions and instructed them to choose the next caliph from among themselves. After discussion, the council narrowed the choice to Uthman (RA) and Ali (RA), and Uthman (RA) was selected and given the pledge of allegiance, becoming the third caliph.",
+      "Uthman's (RA) caliphate continued the territorial expansion of the Muslim state, extending Muslim governance further into regions including parts of North Africa, the Caucasus, and further into Persia and Khurasan, and saw the establishment of the first organised Muslim navy, which achieved a notable victory in the Battle of the Masts against Byzantine naval forces.",
+      "His most significant and lasting achievement was standardising the text of the Qur'an: as the Muslim state expanded across different regions with different Arabic dialects, variations in recitation began causing concern. Uthman (RA) had the earlier compiled copy (kept with Hafsah RA) used as the master reference, oversaw the production of a small number of standard written copies (mesahif) under the direction of Zayd ibn Thabit (RA) and other companions, sent these to major centres of the Muslim world, and ordered other, variant copies to be set aside — an act credited with preserving the uniformity of the Qur'anic text to the present day.",
+      "In the later part of his caliphate, discontent grew in some provinces, partly over complaints about the conduct of certain provincial governors (some of them his relatives) and disputes over the distribution of the growing state's wealth. Uthman (RA) was generally known for his mildness and reluctance to use harsh measures against critics, which some historians suggest allowed unrest to grow rather than being contained early.",
+      "This unrest culminated in a siege of his house in Madinah by a group of aggrieved rebels from several provinces; despite appeals from senior companions urging him to accept protection or take firmer action, Uthman (RA) refused to permit bloodshed to defend himself and was killed by the rebels in 35 AH (656 CE) while reading the Qur'an — an event that opened a period of serious division (fitnah) in the early Muslim community.",
+    ],
+    keyFacts: [
+      { label: "Reign", detail: "23-35 AH / 644-656 CE (approximately twelve years)." },
+      { label: "How he became caliph", detail: "Selected by the six-member shura council appointed by Umar (RA)." },
+      { label: "Title", detail: "Dhun-Nurayn (\"possessor of the two lights\") — married two of the Prophet's (pbuh) daughters in succession." },
+      { label: "Lasting achievement", detail: "Standardised the Qur'anic text into a small number of master copies (mesahif), preserving textual uniformity." },
+      { label: "Death", detail: "Killed in 35 AH by rebels besieging his house in Madinah, while reading the Qur'an." },
+    ],
+    ao1Guidance: [
+      "Be able to explain the shura council's decision process (narrowed to Uthman and Ali, then Uthman chosen) rather than saying only \"he was elected\".",
+      "Know the reason standardisation became necessary (regional recitation variation) and the basic method used (master copy, standard mesahif distributed, variants set aside).",
+      "Be able to describe the causes of unrest (complaints about governors, distribution of wealth) and the circumstances of his death (siege of his house, killed while reading the Qur'an, refusal to permit bloodshed in his own defence).",
+    ],
+    ao2Guidance: [
+      "Explain the enormous and lasting significance of Qur'anic standardisation for the unity of the Muslim Ummah — a single, agreed text prevented the kind of scriptural fragmentation into competing versions seen in some other religious traditions.",
+      "Discuss the significance of Uthman's (RA) mildness and refusal to permit bloodshed in his own defence — evaluate both the moral integrity this shows and the possible leadership cost of not acting more firmly against early signs of unrest.",
+      "Evaluate his caliphate as a whole: weigh his major religious achievement (Qur'anic standardisation) and continued territorial/naval expansion against the governance difficulties and unrest that marked its final years, and the tragic precedent set by a caliph's assassination by fellow Muslims.",
+    ],
+    commonMistakes: [
+      "Confusing the standardisation of the Qur'an under Uthman (RA) with the earlier compilation under Abu Bakr (RA) — Abu Bakr's (RA) effort produced the first complete written collection; Uthman's (RA) effort standardised that text into a single authorised version distributed across the state.",
+      "Describing his death only as \"he was killed\" without any explanation of the underlying causes of unrest — examiners expect the background to be explained, not just the outcome.",
+      "Overlooking that the shura council narrowed the choice to two candidates (Uthman and Ali) before Uthman was selected.",
+    ],
+    examTip:
+      "For 'importance as a leader' questions on Uthman (RA), balance the outstanding religious legacy of Qur'anic standardisation against the governance challenges of his later reign — a one-sided answer (only praise, or only criticism) will not access the full range of AO2 marks available for evaluation.",
+    relatedTopics: [
+      { paper: 2, section: "rightly-guided-caliphs", slug: "umar", title: "Umar ibn al-Khattab (RA)" },
+      { paper: 2, section: "rightly-guided-caliphs", slug: "ali", title: "Ali ibn Abi Talib (RA)" },
+      { paper: 1, section: "history-of-the-quran", slug: "standardisation-under-uthman", title: "Standardisation Under Uthman" },
+    ],
+  },
+  {
+    slug: "ali",
+    paper: 2,
+    section,
+    title: "Ali ibn Abi Talib (RA)",
+    standing: "The fourth caliph (35-40 AH / 656-661 CE), the Prophet's (pbuh) cousin and son-in-law, whose caliphate was dominated by internal conflict following Uthman's (RA) assassination.",
+    learningObjectives: [
+      "Describe how Ali (RA) was chosen as the fourth caliph, and the difficult circumstances he inherited.",
+      "Explain the major conflicts of his caliphate, including the Battle of the Camel and the Battle of Siffin.",
+      "Describe the circumstances of his death.",
+      "Evaluate his importance as a leader.",
+    ],
+    keyTerms: [
+      { term: "Battle of the Camel", meaning: "A conflict in 36 AH between Ali's (RA) forces and those led by Aisha (RA), Talhah (RA) and al-Zubayr (RA), who sought justice for Uthman's (RA) killing before wider agreement had been reached." },
+      { term: "Battle of Siffin", meaning: "A prolonged confrontation in 37 AH between Ali's (RA) forces and those of Mu'awiyah, the governor of Syria, ending inconclusively in an arbitration process." },
+      { term: "Khawarij", meaning: "A group that broke away from Ali's (RA) camp after rejecting the arbitration at Siffin; a member of this group later assassinated him." },
+    ],
+    explanation: [
+      "After Uthman's (RA) assassination, the people of Madinah pledged allegiance to Ali (RA), who was widely regarded, as the Prophet's (pbuh) cousin and son-in-law and one of the earliest converts to Islam, as a natural and respected choice for leadership. He accepted the caliphate at an exceptionally difficult moment, with the Muslim community already divided over how to respond to Uthman's (RA) killing.",
+      "Ali's (RA) caliphate was dominated from its early months by conflict connected to demands for justice for Uthman (RA). In 36 AH, forces led by Aisha (RA), Talhah (RA) and al-Zubayr (RA), seeking the punishment of those responsible for Uthman's (RA) death, clashed with Ali's (RA) forces at the Battle of the Camel; Ali (RA) prevailed, and afterwards treated Aisha (RA) with continued respect, arranging her safe return to Madinah.",
+      "A further and larger conflict arose with Mu'awiyah ibn Abi Sufyan, the governor of Syria and a relative of Uthman (RA), who also refused to recognise Ali's (RA) authority until Uthman's (RA) killers were brought to justice. The two sides met at the Battle of Siffin (37 AH); the fighting ended inconclusively when Mu'awiyah's forces called for arbitration, which Ali (RA) accepted, though the arbitration process ultimately failed to resolve the dispute and left Mu'awiyah in control of Syria.",
+      "A group within Ali's (RA) own camp rejected the arbitration on principle and broke away, becoming known as the Khawarij; Ali (RA) later fought and defeated a significant number of them at the Battle of Nahrawan after they turned to violence, but the movement survived in smaller numbers.",
+      "In 40 AH (661 CE), Ali (RA) was fatally attacked by a Khariji assassin, Abd al-Rahman ibn Muljam, while leading the Fajr prayer in Kufa, dying from his wounds shortly afterwards — bringing the period of the four Rightly Guided Caliphs to a close and leading, soon after, to Mu'awiyah's establishment of the Umayyad caliphate.",
+    ],
+    keyFacts: [
+      { label: "Reign", detail: "35-40 AH / 656-661 CE (approximately five years)." },
+      { label: "How he became caliph", detail: "Pledged allegiance by the people of Madinah after Uthman's (RA) assassination." },
+      { label: "Major conflicts", detail: "The Battle of the Camel (36 AH) against Aisha, Talhah and al-Zubayr (RA); the Battle of Siffin (37 AH) against Mu'awiyah, ending in arbitration." },
+      { label: "Khawarij", detail: "A breakaway group that rejected the Siffin arbitration; later defeated at Nahrawan." },
+      { label: "Death", detail: "Assassinated by a Khariji, Abd al-Rahman ibn Muljam, while leading Fajr prayer in Kufa, 40 AH." },
+    ],
+    ao1Guidance: [
+      "Be able to explain the underlying cause connecting both major battles of his caliphate — demands for justice over Uthman's (RA) assassination, which Ali (RA) had not yet been able to deliver amid the chaos he inherited.",
+      "Distinguish clearly between the Battle of the Camel (against Aisha, Talhah and al-Zubayr RA) and the Battle of Siffin (against Mu'awiyah) — these are separate conflicts with different opponents.",
+      "Know the origin of the Khawarij (breaking away after rejecting the Siffin arbitration) and their role in Ali's (RA) death.",
+    ],
+    ao2Guidance: [
+      "Explain the significance of the circumstances Ali (RA) inherited — evaluate how far the conflicts of his caliphate stemmed from the unresolved crisis of Uthman's (RA) assassination rather than from his own leadership choices.",
+      "Discuss the significance of Ali's (RA) willingness to accept arbitration at Siffin rather than pursue total military victory — consider both the argument that this reflected principled restraint and the argument that the outcome ultimately weakened his position.",
+      "Evaluate his overall importance as a leader: his closeness to the Prophet (pbuh), his scholarship and piety, and his effort to hold the community together during an unprecedented internal crisis, set against a caliphate that was ultimately unable to prevent lasting division in the Muslim community.",
+    ],
+    commonMistakes: [
+      "Confusing the Battle of the Camel with the Battle of Siffin, or confusing their respective opposing leaders.",
+      "Describing Ali's (RA) caliphate as a simple, stable continuation of the earlier three caliphates — the internal conflict that dominated it is a central, examinable feature that distinguishes it.",
+      "Getting the identity or motive of his assassin wrong — he was killed by a Khariji over the arbitration dispute, not by a supporter of Mu'awiyah directly.",
+    ],
+    examTip:
+      "For 'importance as a leader' questions on Ali (RA), acknowledge honestly that his caliphate is remembered as much for the crisis it faced as for its achievements — a mature, balanced evaluation of a difficult reign, rather than an uncritical account, is what AO2 marking rewards at this level.",
+    relatedTopics: [
+      { paper: 2, section: "rightly-guided-caliphs", slug: "uthman", title: "Uthman ibn Affan (RA)" },
+      { paper: 1, section: "first-islamic-community", slug: "four-caliphs-in-prophets-lifetime", title: "Abu Bakr, Umar, Uthman and Ali in the Prophet's (pbuh) Lifetime" },
+    ],
+  },
 ];
