@@ -59,7 +59,7 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
           <h1 className="mt-2 text-3xl font-bold font-heading text-text">{section.title}</h1>
           <p className="mt-3 text-text-muted">{section.description}</p>
 
-          <div className="mt-8 space-y-3">
+          <ul className="mt-8 space-y-3">
             {section.subtopics.map((subtopic) => {
               const hasContent = topicSlugs.has(subtopic.slug);
               const content = (
@@ -86,34 +86,37 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
                 </div>
               );
 
-              return hasContent ? (
-                <Link key={subtopic.slug} href={`/paper-${paper}/${section.slug}/${subtopic.slug}`}>
-                  {content}
-                </Link>
-              ) : (
-                <div key={subtopic.slug}>{content}</div>
+              return (
+                <li key={subtopic.slug}>
+                  {hasContent ? (
+                    <Link href={`/paper-${paper}/${section.slug}/${subtopic.slug}`}>{content}</Link>
+                  ) : (
+                    content
+                  )}
+                </li>
               );
             })}
-          </div>
+          </ul>
 
           {/* Browse other sections */}
           {otherSections.length > 0 && (
             <div className="mt-12">
               <h2 className="font-heading font-semibold text-text">Browse Other Sections</h2>
-              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <ul className="mt-3 grid gap-3 sm:grid-cols-3">
                 {otherSections.map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/paper-${paper}/${s.slug}`}
-                    className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3 text-sm shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:shadow-card"
-                  >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <BookOpen aria-hidden="true" size={16} />
-                    </span>
-                    <span className="font-medium text-text">{s.title}</span>
-                  </Link>
+                  <li key={s.slug}>
+                    <Link
+                      href={`/paper-${paper}/${s.slug}`}
+                      className="flex items-center gap-3 rounded-lg border border-border bg-surface p-3 text-sm shadow-soft transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:shadow-card"
+                    >
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <BookOpen aria-hidden="true" size={16} />
+                      </span>
+                      <span className="font-medium text-text">{s.title}</span>
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           )}
 

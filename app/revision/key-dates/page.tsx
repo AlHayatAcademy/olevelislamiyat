@@ -73,6 +73,7 @@ export default function KeyDatesPage() {
           <h2 className="font-heading text-xl font-semibold text-text">{label}</h2>
           <div className="mt-4 overflow-x-auto rounded-xl border border-border">
             <table className="w-full min-w-[560px] border-collapse text-sm">
+              <caption className="sr-only">Key dates — {label}</caption>
               <thead>
                 <tr className="border-b border-border bg-surface-soft text-left">
                   <th scope="col" className="px-4 py-3 font-heading font-semibold text-text">

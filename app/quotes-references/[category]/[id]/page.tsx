@@ -40,6 +40,7 @@ export default async function ReferenceDetailPage({ params }: PageProps) {
         { label: ref.type, href: `/quotes-references/${category}` },
         { label: ref.title, href: `/quotes-references/${category}/${ref.id}` },
       ]}
+      article
     >
       {ref.arabic && (
         <p dir="rtl" className="text-2xl leading-loose font-arabic">

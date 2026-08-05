@@ -61,20 +61,21 @@ export function TopicPage({ topic }: TopicPageProps) {
           { label: topic.title, href: `/paper-${topic.paper}/${topic.section}/${topic.slug}` },
         ]}
       />
-      <h1 className="mt-2 text-3xl font-bold font-heading text-text">{topic.title}</h1>
-      <p className="mt-3 text-text-muted">{topic.standing}</p>
+      <article>
+        <h1 className="mt-2 text-3xl font-bold font-heading text-text">{topic.title}</h1>
+        <p className="mt-3 text-text-muted">{topic.standing}</p>
 
-      {relatedQuestions.length > 0 && (
-        <Link
-          href={`/past-papers/topical/${topic.section}/${topic.slug}`}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
-        >
-          {relatedQuestions.length} related past-paper question{relatedQuestions.length === 1 ? "" : "s"} for this topic &rarr;
-        </Link>
-      )}
+        {relatedQuestions.length > 0 && (
+          <Link
+            href={`/past-papers/topical/${topic.section}/${topic.slug}`}
+            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+          >
+            {relatedQuestions.length} related past-paper question{relatedQuestions.length === 1 ? "" : "s"} for this topic &rarr;
+          </Link>
+        )}
 
-      <div className="mt-8 space-y-6">
-        <Section icon={Target} title="Learning objectives">
+        <div className="mt-8 space-y-6">
+          <Section icon={Target} title="Learning objectives">
           <ul className="list-disc list-inside space-y-1 text-text">
             {topic.learningObjectives.map((obj) => (
               <li key={obj}>{obj}</li>
@@ -163,7 +164,8 @@ export function TopicPage({ topic }: TopicPageProps) {
             </ul>
           </Section>
         )}
-      </div>
+        </div>
+      </article>
 
       <p className="mt-8 text-sm text-text-muted">
         <Link href={`/paper-${topic.paper}/${topic.section}`} className="text-primary hover:underline">

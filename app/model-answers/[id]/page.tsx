@@ -49,6 +49,7 @@ export default async function ModelAnswerDetailPage({ params }: PageProps) {
         { label: "Model Answers", href: "/model-answers" },
         { label: question.topicHint, href: `/model-answers/${answer.id}` },
       ]}
+      article
     >
       <div className="rounded-md border border-surface-soft p-4">
         <p className="text-xs uppercase tracking-wide text-text-muted mb-2">Question (original paraphrase)</p>

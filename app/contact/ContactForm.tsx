@@ -86,7 +86,7 @@ export function ContactForm() {
 
   if (state === "success") {
     return (
-      <div className="flex items-start gap-3 rounded-xl border border-success/40 bg-surface p-6 text-text">
+      <div role="status" className="flex items-start gap-3 rounded-xl border border-success/40 bg-surface p-6 text-text">
         <CheckCircle2 size={22} className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
         <div>
           <p className="font-semibold">Thank you — your enquiry has been sent.</p>
@@ -132,6 +132,7 @@ export function ContactForm() {
           name="name"
           type="text"
           required
+          autoComplete="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -148,6 +149,7 @@ export function ContactForm() {
           name="email"
           type="email"
           required
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -172,7 +174,7 @@ export function ContactForm() {
       </div>
 
       {state === "error" && errorMessage && (
-        <p className="flex items-start gap-2 text-sm text-error">
+        <p role="alert" className="flex items-start gap-2 text-sm text-error">
           <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
           {errorMessage}
         </p>
