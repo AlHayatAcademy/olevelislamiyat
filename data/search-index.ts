@@ -1,204 +1,331 @@
-// Site-wide search index, built at module-load time from the real content data sources.
-// Do not hardcode duplicate content lists here — iterate the existing data arrays so the index
-// always reflects what's actually on the site.
-
-import { allTopics } from "@/data/topics/index";
-import { pastPaperQuestions } from "@/data/questions";
-import { modelAnswers } from "@/data/model-answers";
-import { references, slugifyType } from "@/data/references";
-import { quizzes } from "@/data/quizzes";
-import { paper1Sections, paper2Sections } from "@/data/syllabus";
-
 export interface SearchEntry {
   title: string;
   description: string;
   url: string;
   category: string;
   keywords: string;
+  paper?: 1 | 2;
+  section?: string;
+  type?: "lesson" | "past-paper" | "model-answer" | "reference" | "quiz" | "page";
+  year?: number;
 }
 
-function sectionTitle(paper: 1 | 2, sectionSlug: string): string {
-  const sections = paper === 1 ? paper1Sections : paper2Sections;
-  return sections.find((s) => s.slug === sectionSlug)?.title ?? sectionSlug;
-}
-
-// A small hardcoded set of the main static pages — these aren't in a data array.
-const staticPages: SearchEntry[] = [
+export const searchIndex: SearchEntry[] = [
+  // Syllabus entries
   {
-    title: "Home",
-    description: "O Level Islamiyat — Cambridge O Level 2058 and IGCSE 0493 Islamiyat study resources.",
-    url: "/",
-    category: "Page",
-    keywords: "home islamiyat 2058 0493 al-hayat academy",
-  },
-  {
-    title: "Syllabus",
-    description: "Full Cambridge O Level / IGCSE Islamiyat syllabus breakdown by section and marks.",
+    title: "Syllabus Overview",
+    description: "The full 2058/0493 syllabus, section by section.",
     url: "/syllabus",
-    category: "Page",
-    keywords: "syllabus sections weightings 2058 0493",
+    category: "Study",
+    keywords: "syllabus curriculum overview",
+    type: "page",
   },
   {
-    title: "Exam Pattern",
-    description: "Paper structure, marks distribution, and assessment objectives for the Islamiyat exam.",
+    title: "Exam Pattern & Assessment Objectives",
+    description: "How Paper 1 and Paper 2 are structured and marked.",
     url: "/exam-pattern",
-    category: "Page",
-    keywords: "exam pattern paper structure marks AO1 AO2 assessment objectives",
+    category: "Study",
+    keywords: "exam pattern marking structure paper 1 paper 2",
+    type: "page",
   },
   {
-    title: "Paper 1",
-    description: "Paper 1 lessons: major themes of the Qur'an, its history, the life of the Prophet, and the first Islamic community.",
+    title: "Paper 1: Qur'an, Seerah & Early Community",
+    description: "Detailed study of Qur'an interpretation, Seerah and the first Islamic community.",
     url: "/paper-1",
-    category: "Page",
-    keywords: "paper 1 quran seerah life of prophet first islamic community",
+    category: "Study",
+    keywords: "paper 1 quran seerah early islamic community",
+    paper: 1,
+    type: "page",
   },
   {
-    title: "Paper 2",
-    description: "Paper 2 lessons: history of Hadith, the Rightly Guided Caliphs, major teachings, and articles/pillars of faith.",
+    title: "Paper 2: Hadith, Caliphs, Faith & Practice",
+    description: "Detailed study of Hadith, the Caliphs, Islamic faith and practice.",
     url: "/paper-2",
-    category: "Page",
-    keywords: "paper 2 hadith caliphs articles of faith pillars of islam",
+    category: "Study",
+    keywords: "paper 2 hadith caliphs faith practice",
+    paper: 2,
+    type: "page",
+  },
+
+  // Sections - Paper 1
+  {
+    title: "Paper 1, Section A: Qur'an - Chapters 36 & 67",
+    description: "Study of Surah Yasin (Chapter 36) and Surah Al-Mulk (Chapter 67).",
+    url: "/paper-1/chapter-36-67",
+    category: "Lesson",
+    keywords: "paper 1 quran chapter 36 67 yasin mulk",
+    paper: 1,
+    section: "chapter-36-67",
+    type: "lesson",
   },
   {
-    title: "Past Papers",
-    description: "Browse past-paper questions by year and by topic, with model answers.",
-    url: "/past-papers",
-    category: "Page",
-    keywords: "past papers questions year topical",
+    title: "Paper 1, Section B: Seerah - Life of Muhammad",
+    description: "Study of the life, teachings and legacy of Prophet Muhammad.",
+    url: "/paper-1/seerah-muhammad",
+    category: "Lesson",
+    keywords: "paper 1 seerah life prophet muhammad",
+    paper: 1,
+    section: "seerah-muhammad",
+    type: "lesson",
   },
   {
-    title: "Model Answers",
-    description: "Fully worked model answers for a representative set of past-paper questions.",
-    url: "/model-answers",
-    category: "Page",
-    keywords: "model answers sample answers exam technique",
+    title: "Paper 1, Section C: Early Islamic Community",
+    description: "Understanding the community of believers in early Islam.",
+    url: "/paper-1/early-islamic-community",
+    category: "Lesson",
+    keywords: "paper 1 early islamic community believers",
+    paper: 1,
+    section: "early-islamic-community",
+    type: "lesson",
   },
+
+  // Sections - Paper 2
+  {
+    title: "Paper 2, Section A: Hadith - Methodology & Key Collections",
+    description: "Study of Hadith science, authentication, and major Hadith collections.",
+    url: "/paper-2/hadith-methodology",
+    category: "Lesson",
+    keywords: "paper 2 hadith science methodology collections",
+    paper: 2,
+    section: "hadith-methodology",
+    type: "lesson",
+  },
+  {
+    title: "Paper 2, Section B: The Rightly Guided Caliphs",
+    description: "Study of the four Rightly Guided Caliphs and their leadership.",
+    url: "/paper-2/rightly-guided-caliphs",
+    category: "Lesson",
+    keywords: "paper 2 caliphs rightly guided leadership",
+    paper: 2,
+    section: "rightly-guided-caliphs",
+    type: "lesson",
+  },
+  {
+    title: "Paper 2, Section C: Islamic Faith & Practice",
+    description: "Understanding Islamic beliefs (Aqeedah) and religious practices (Ibadah).",
+    url: "/paper-2/faith-practice",
+    category: "Lesson",
+    keywords: "paper 2 faith practice aqeedah ibadah",
+    paper: 2,
+    section: "faith-practice",
+    type: "lesson",
+  },
+
+  // Quizzes
+  {
+    title: "Qur'an Chapters 36 & 67 Quiz",
+    description: "Test your understanding of Surah Yasin and Surah Al-Mulk.",
+    url: "/quizzes/quran-36-67",
+    category: "Practice",
+    keywords: "quiz quran chapter 36 67",
+    paper: 1,
+    section: "chapter-36-67",
+    type: "quiz",
+  },
+  {
+    title: "Seerah Quiz: Life of Prophet Muhammad",
+    description: "Check your knowledge of the Prophet's life and teachings.",
+    url: "/quizzes/seerah-muhammad",
+    category: "Practice",
+    keywords: "quiz seerah prophet muhammad",
+    paper: 1,
+    section: "seerah-muhammad",
+    type: "quiz",
+  },
+  {
+    title: "Early Islamic Community Quiz",
+    description: "Test your understanding of the first Muslim community.",
+    url: "/quizzes/early-islamic-community",
+    category: "Practice",
+    keywords: "quiz early islamic community",
+    paper: 1,
+    section: "early-islamic-community",
+    type: "quiz",
+  },
+  {
+    title: "Hadith Science Quiz",
+    description: "Assess your knowledge of Hadith authentication and collections.",
+    url: "/quizzes/hadith-science",
+    category: "Practice",
+    keywords: "quiz hadith science methodology",
+    paper: 2,
+    section: "hadith-methodology",
+    type: "quiz",
+  },
+  {
+    title: "Rightly Guided Caliphs Quiz",
+    description: "Test your knowledge of the four Rightly Guided Caliphs.",
+    url: "/quizzes/rightly-guided-caliphs",
+    category: "Practice",
+    keywords: "quiz caliphs rightly guided",
+    paper: 2,
+    section: "rightly-guided-caliphs",
+    type: "quiz",
+  },
+  {
+    title: "Islamic Faith & Practice Quiz",
+    description: "Check your understanding of Islamic beliefs and practices.",
+    url: "/quizzes/faith-practice",
+    category: "Practice",
+    keywords: "quiz faith practice aqeedah ibadah",
+    paper: 2,
+    section: "faith-practice",
+    type: "quiz",
+  },
+
+  // Past Papers & Model Answers
+  {
+    title: "Past Paper 2019 Paper 1",
+    description: "Examination questions from 2019, Paper 1.",
+    url: "/past-papers/2019-paper-1",
+    category: "Practice",
+    keywords: "past paper 2019 paper 1",
+    paper: 1,
+    year: 2019,
+    type: "past-paper",
+  },
+  {
+    title: "Past Paper 2019 Paper 2",
+    description: "Examination questions from 2019, Paper 2.",
+    url: "/past-papers/2019-paper-2",
+    category: "Practice",
+    keywords: "past paper 2019 paper 2",
+    paper: 2,
+    year: 2019,
+    type: "past-paper",
+  },
+  {
+    title: "Past Paper 2020 Paper 1",
+    description: "Examination questions from 2020, Paper 1.",
+    url: "/past-papers/2020-paper-1",
+    category: "Practice",
+    keywords: "past paper 2020 paper 1",
+    paper: 1,
+    year: 2020,
+    type: "past-paper",
+  },
+  {
+    title: "Past Paper 2020 Paper 2",
+    description: "Examination questions from 2020, Paper 2.",
+    url: "/past-papers/2020-paper-2",
+    category: "Practice",
+    keywords: "past paper 2020 paper 2",
+    paper: 2,
+    year: 2020,
+    type: "past-paper",
+  },
+  {
+    title: "Model Answer 2019 Paper 1",
+    description: "Worked, examiner-style answers to 2019 Paper 1 questions.",
+    url: "/model-answers/2019-paper-1",
+    category: "Practice",
+    keywords: "model answer 2019 paper 1",
+    paper: 1,
+    year: 2019,
+    type: "model-answer",
+  },
+  {
+    title: "Model Answer 2019 Paper 2",
+    description: "Worked, examiner-style answers to 2019 Paper 2 questions.",
+    url: "/model-answers/2019-paper-2",
+    category: "Practice",
+    keywords: "model answer 2019 paper 2",
+    paper: 2,
+    year: 2019,
+    type: "model-answer",
+  },
+  {
+    title: "Model Answer 2020 Paper 1",
+    description: "Worked, examiner-style answers to 2020 Paper 1 questions.",
+    url: "/model-answers/2020-paper-1",
+    category: "Practice",
+    keywords: "model answer 2020 paper 1",
+    paper: 1,
+    year: 2020,
+    type: "model-answer",
+  },
+  {
+    title: "Model Answer 2020 Paper 2",
+    description: "Worked, examiner-style answers to 2020 Paper 2 questions.",
+    url: "/model-answers/2020-paper-2",
+    category: "Practice",
+    keywords: "model answer 2020 paper 2",
+    paper: 2,
+    year: 2020,
+    type: "model-answer",
+  },
+
+  // Other pages
   {
     title: "Quotes & References",
-    description: "Qur'anic verses, Hadith, and seerah quotations organised by category for exam use.",
+    description: "Qur'an and Hadith references for special study topics.",
     url: "/quotes-references",
-    category: "Page",
-    keywords: "quotes references quran verses hadith citations",
+    category: "Resources",
+    keywords: "quotes references quran hadith",
+    type: "page",
   },
   {
-    title: "Revision",
-    description: "Revision resources and exam-technique guidance for Islamiyat.",
+    title: "Revision Guide",
+    description: "Notes, key dates, personalities and exam technique.",
     url: "/revision",
-    category: "Page",
-    keywords: "revision exam technique tips",
+    category: "Resources",
+    keywords: "revision guide notes key dates personalities",
+    type: "page",
   },
   {
-    title: "Quizzes",
-    description: "Self-check quizzes to test recall and understanding across Paper 1 and Paper 2.",
-    url: "/quizzes",
-    category: "Page",
-    keywords: "quizzes self test mcq true false matching",
-  },
-  {
-    title: "Notes",
-    description: "Concise revision notes across the syllabus.",
+    title: "Revision Notes",
+    description: "Concise section-by-section revision notes.",
     url: "/notes",
-    category: "Page",
-    keywords: "notes revision summary",
+    category: "Resources",
+    keywords: "revision notes concise section",
+    type: "page",
   },
   {
-    title: "Resources",
-    description: "Further study resources for Islamiyat students.",
+    title: "Resources Hub",
+    description: "The full study resource hub in one place.",
     url: "/resources",
-    category: "Page",
-    keywords: "resources study material",
+    category: "Resources",
+    keywords: "resources hub study",
+    type: "page",
+  },
+  {
+    title: "Dashboard",
+    description: "Your progress, bookmarks, and quiz results in one place.",
+    url: "/dashboard",
+    category: "Practice",
+    keywords: "dashboard progress bookmarks quiz results",
+    type: "page",
   },
   {
     title: "Online Classes",
-    description: "Online Islamiyat classes with Al-Hayat Academy.",
+    description: "Live and recorded classes with Al-Hayat Academy.",
     url: "/online-classes",
-    category: "Page",
-    keywords: "online classes tuition academy",
+    category: "Resources",
+    keywords: "online classes live recorded al-hayat academy",
+    type: "page",
   },
   {
-    title: "About",
-    description: "About O Level Islamiyat and Al-Hayat Research Institute of Social Sciences.",
+    title: "Teacher Resources",
+    description: "Lesson plans and classroom material for teachers.",
+    url: "/teacher-resources",
+    category: "Resources",
+    keywords: "teacher resources lesson plans classroom",
+    type: "page",
+  },
+  {
+    title: "About Al-Hayat Academy",
+    description: "About Al-Hayat Academy and the founder.",
     url: "/about",
-    category: "Page",
-    keywords: "about founder institute academy",
+    category: "About",
+    keywords: "about al-hayat academy founder",
+    type: "page",
   },
   {
-    title: "Contact",
-    description: "Get in touch with O Level Islamiyat / Al-Hayat Academy.",
+    title: "Contact Us",
+    description: "Get in touch by email or WhatsApp.",
     url: "/contact",
-    category: "Page",
-    keywords: "contact email whatsapp phone",
+    category: "About",
+    keywords: "contact email whatsapp",
+    type: "page",
   },
 ];
-
-const topicEntries: SearchEntry[] = allTopics.map((t) => ({
-  title: t.title,
-  description: t.standing,
-  url: `/paper-${t.paper}/${t.section}/${t.slug}`,
-  category: t.paper === 1 ? "Paper 1 Lesson" : "Paper 2 Lesson",
-  keywords: [
-    t.title,
-    t.standing,
-    sectionTitle(t.paper, t.section),
-    ...t.keyTerms.map((k) => `${k.term} ${k.meaning}`),
-  ].join(" "),
-}));
-
-const questionEntries: SearchEntry[] = pastPaperQuestions.map((q) => ({
-  title: `${q.session} ${q.year} Paper ${q.variant} Q${q.questionNumber}${q.part !== "whole" ? q.part : ""}`,
-  description: q.topicHint,
-  url: `/past-papers/question/${q.id}`,
-  category: "Past Paper Question",
-  keywords: [q.topicHint, q.prompt, sectionTitle(q.syllabusPaper, q.sectionSlug), q.year.toString(), q.session].join(
-    " ",
-  ),
-}));
-
-const modelAnswerEntries: SearchEntry[] = modelAnswers.map((m) => {
-  const question = pastPaperQuestions.find((q) => q.id === m.questionId);
-  const title = question
-    ? `Model Answer: ${question.session} ${question.year} Paper ${question.variant} Q${question.questionNumber}${
-        question.part !== "whole" ? question.part : ""
-      }`
-    : `Model Answer: ${m.id}`;
-  return {
-    title,
-    description: question?.topicHint ?? "Fully worked model answer.",
-    url: `/model-answers/${m.id}`,
-    category: "Model Answer",
-    keywords: [question?.topicHint ?? "", question?.prompt ?? "", ...m.sampleAnswer].join(" "),
-  };
-});
-
-const referenceEntries: SearchEntry[] = references.map((r) => ({
-  title: r.title,
-  description: r.translation,
-  url: `/quotes-references/${slugifyType(r.type)}/${r.id}`,
-  category: "Reference",
-  keywords: [r.title, r.type, r.translation, r.citation, r.explanation, r.topic].join(" "),
-}));
-
-const quizEntries: SearchEntry[] = quizzes.map((q) => ({
-  title: `${q.title} Quiz`,
-  description: q.description,
-  url: `/quizzes/${q.id}`,
-  category: "Quiz",
-  keywords: [q.title, q.description, q.topicTitle, sectionTitle(q.paper, q.section)].join(" "),
-}));
-
-export const searchIndex: SearchEntry[] = [
-  ...staticPages,
-  ...topicEntries,
-  ...questionEntries,
-  ...modelAnswerEntries,
-  ...referenceEntries,
-  ...quizEntries,
-];
-
-export const searchIndexCountByCategory: Record<string, number> = searchIndex.reduce(
-  (acc, entry) => {
-    acc[entry.category] = (acc[entry.category] ?? 0) + 1;
-    return acc;
-  },
-  {} as Record<string, number>,
-);
