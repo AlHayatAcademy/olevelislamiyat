@@ -1,34 +1,47 @@
-# O Level Islamiyat
+# Phase 3.3: Student Learning Features - Manual Apply Instructions
 
-Free study resources for Cambridge O Level Islamiyat (2058) and IGCSE Islamiyat (0493): lessons,
-past-paper questions, model answers, quizzes, and Qur'an/Hadith references — built with Next.js
-and deployed on Cloudflare Workers.
+## Quick Start
 
-## Quick start
-
+**Option 1: Apply Patch (Easiest)**
 ```bash
-npm install
-npm run dev
+cd /path/to/olevelislamiyat
+git apply phase-3-3.patch
+git add .
+git commit -m "Phase 3.3: Implement student learning features with localStorage"
+git push origin main
 ```
 
-Open `http://localhost:3000`.
+**Option 2: Manual File Copy**
+Copy files to your repo maintaining directory structure:
+- `app-dashboard-page.tsx` → `app/dashboard/page.tsx`
+- `components-BookmarkButton.tsx` → `components/BookmarkButton.tsx`
+- `components-ContinueLearningBanner.tsx` → `components/ContinueLearningBanner.tsx`
+- `components-DashboardClient.tsx` → `components/DashboardClient.tsx`
+- `components-RecordView.tsx` → `components/RecordView.tsx`
+- `components-SectionProgress.tsx` → `components/SectionProgress.tsx`
+- `lib-learner-store.ts` → `lib/learner-store.ts`
 
-## Documentation
+Then modify these existing files (apply changes shown in patch):
+- `app/page.tsx` - Add ContinueLearningBanner
+- `components/Header.tsx` - Add dashboard nav entry
+- `components/SectionHub.tsx` - Add SectionProgress
+- `components/TopicPage.tsx` - Add RecordView & BookmarkButton
+- `data/site-config.ts` - Add dashboard to primaryNav
 
-Start with [`docs/Architecture.md`](./docs/Architecture.md) for the big picture, then:
+## Verification
 
-- [`docs/Developer-Guide.md`](./docs/Developer-Guide.md) — setup, commands, conventions
-- [`docs/Content-Architecture.md`](./docs/Content-Architecture.md) — how to add lessons, questions, quizzes, references
-- [`docs/Testing.md`](./docs/Testing.md) — Vitest, Playwright, CI
-- [`docs/Deployment.md`](./docs/Deployment.md) — Cloudflare Workers deployment
-- [`docs/Decision-Log.md`](./docs/Decision-Log.md) — why things are built the way they are
-- [`docs/Roadmap.md`](./docs/Roadmap.md) — what's done, what's next
-- [`docs/Contributing.md`](./docs/Contributing.md) — workflow and review checklist
-- [`docs/Migration-History.md`](./docs/Migration-History.md) — significant structural changes
-- [`docs/archive/`](./docs/archive/) — historical build-session logs, kept for project history
+```bash
+npm test           # 61 unit tests
+npm run test:e2e   # 38 e2e tests
+npm run build      # Production build
+```
 
-## License / attribution
+## What's Included
 
-This is an independent educational platform. It is not affiliated with or endorsed by Cambridge
-International Education. See [`app/cambridge-disclaimer/page.tsx`](./app/cambridge-disclaimer)
-and [`app/copyright/page.tsx`](./app/copyright) for the full disclaimer and copyright policy.
+✅ 7 new files (learner store + 6 components)
+✅ 5 modified existing files
+✅ Dashboard 109kB (down from 242kB)
+✅ All tests passing
+✅ 666 lines added, 3 modified
+
+See patch file for exact changes.
