@@ -504,4 +504,55 @@ export const paper2ArticlesAndPillarsTopics: Topic[] = [
       { paper: 2, section, slug: "sawm", title: "Pillar of Islam: Sawm" },
     ],
   },
+  {
+    slug: "jihad-physical-mental-spiritual",
+    paper: 2,
+    section,
+    title: "Jihad: Its Physical, Mental and Spiritual Meanings",
+    standing: "Jihad as a broad Islamic concept of \"striving/struggle\" with three recognised dimensions — physical, mental/intellectual and spiritual — studied alongside the Articles of Faith and Pillars of Islam as the syllabus's fourth Paper 2 topic area.",
+    learningObjectives: [
+      "Define Jihad accurately as \"striving/struggle\" rather than as a synonym for warfare.",
+      "Explain the physical, mental and spiritual meanings of Jihad, each with a clear example.",
+      "Discuss why mainstream Islamic scholarship treats the internal, spiritual struggle as central to the concept, and why the term is often misunderstood.",
+    ],
+    keyTerms: [
+      { term: "Jihad", meaning: "\"Striving\" or \"struggle\" in the way of Allah — a broad Islamic concept covering physical, intellectual and spiritual effort, not a term meaning \"holy war\" or violence by itself." },
+      { term: "Jihad al-Nafs", meaning: "The struggle against one's own self — resisting temptation, sin and base desires — widely described in Islamic tradition as the greater or more demanding form of Jihad." },
+      { term: "Qital", meaning: "Armed fighting/combat — the specific Arabic term for physical warfare, which is a strictly regulated subset of the broader concept of Jihad, not identical to it." },
+    ],
+    explanation: [
+      "Jihad comes from the Arabic root meaning \"to strive\" or \"to struggle\", and in Islamic teaching it names a broad, three-part effort a Muslim is called to make throughout life, not a single act and certainly not a synonym for violence or extremism; this section studies it alongside the Six Articles of Faith and Five Pillars as the fourth area of Paper 2's syllabus content.",
+      "The spiritual meaning (sometimes called the greater Jihad) is the internal struggle against one's own base desires, temptation and sin — disciplining anger, resisting the pull toward wrongdoing, and working consistently to improve one's character and sincerity before Allah. Mainstream Islamic scholarship treats this inner struggle as foundational, since a person who cannot govern their own conduct cannot meaningfully strive for good in any other sense.",
+      "The mental/intellectual meaning covers the effort to seek knowledge, understand and articulate one's faith, and use reasoned argument to explain or defend Islamic belief — for example, studying religious knowledge, engaging thoughtfully with questions or criticism of the faith, and contributing constructively to one's community through education and honest, reasoned dialogue.",
+      "The physical meaning covers legitimate, strictly regulated struggle against real external threat or oppression — historically including defensive military effort when a Muslim community's safety was under attack, but also more broadly encompassing physical effort in good causes such as building institutions, sustaining a livelihood that supports the community, or enduring hardship for a righteous purpose. Where it does refer to armed conflict, classical Islamic scholarship applies strict conditions (a legitimate cause, proper authority, proportionality, protection of non-combatants) — it is not a general licence for violence, and mainstream Islamic teaching explicitly rejects the use of the term to justify terrorism or attacks on civilians.",
+      "Taken together, the three meanings show Jihad as primarily a concept of sustained ethical and spiritual effort — struggle against one's own faults, in pursuit of knowledge and understanding, and, only under strict and limited conditions, in physical self-defence — rather than as an endorsement of violence in general.",
+    ],
+    keyFacts: [
+      { label: "Core meaning", detail: "\"Striving/struggle\" in the way of Allah — not a synonym for warfare or violence." },
+      { label: "Spiritual Jihad", detail: "The inner struggle against one's own desires, temptation and sin; often described as the greater Jihad." },
+      { label: "Mental/intellectual Jihad", detail: "Seeking knowledge, reasoned understanding and articulation of the faith." },
+      { label: "Physical Jihad", detail: "Legitimate, strictly regulated effort or defensive struggle against real external threat or oppression, subject to conditions such as legitimate cause, proper authority and protection of non-combatants." },
+    ],
+    ao1Guidance: [
+      "Define Jihad precisely as \"striving/struggle\" at the start of any answer, before explaining its three dimensions — this avoids the common error of treating it as meaning only warfare.",
+      "Give a specific example for each of the three meanings (self-discipline for spiritual, seeking knowledge for mental, legitimate defensive effort for physical) rather than a single blended definition.",
+    ],
+    ao2Guidance: [
+      "Explain why the spiritual struggle against the self is widely regarded in Islamic scholarship as the more demanding and foundational form of Jihad — self-discipline underpins a person's ability to strive well in any other sense.",
+      "Discuss why understanding Jihad's broad, regulated meaning matters for correcting common misunderstandings that reduce it to violence — this is significant both academically and for how Islam is represented and understood more widely.",
+      "Evaluate why placing strict conditions on the physical dimension (legitimate cause, proper authority, protection of non-combatants) matters for distinguishing authentic Islamic teaching from its misuse to justify indiscriminate violence.",
+    ],
+    commonMistakes: [
+      "Defining Jihad only as \"holy war\" or equating it with terrorism or indiscriminate violence — this is a serious misrepresentation of the term's actual scope in Islamic teaching and scholarship.",
+      "Omitting the spiritual and mental meanings entirely and discussing only the physical dimension, which gives an unbalanced and inaccurate picture of the concept as the syllabus intends it.",
+      "Failing to mention the strict conditions classical scholarship places on any physical/armed dimension of Jihad.",
+    ],
+    examTip:
+      "Structure any answer on Jihad around its three named dimensions in order (spiritual, mental, physical), define each with a clear example, and explicitly state that the term does not mean indiscriminate violence — this directly matches how the syllabus frames the topic and avoids a common, serious misunderstanding.",
+    relatedTopics: [
+      { paper: 2, section, slug: "belief-in-resurrection", title: "Article of Faith: Belief in the Day of Resurrection" },
+      { paper: 2, section: "major-teachings-of-hadith", slug: "serving-the-cause-of-allah", title: "Individual Conduct: Serving the Cause of Allah" },
+      { paper: 2, section: "major-teachings-of-hadith", slug: "expanded-meanings-of-martyrdom", title: "Individual Conduct: Expanded Meanings of Martyrdom" },
+    ],
+  },
 ];

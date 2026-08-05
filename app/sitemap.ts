@@ -16,6 +16,7 @@ const staticRoutes = [
   "/past-papers",
   "/model-answers",
   "/quotes-references",
+  "/quotes-references/by-type",
   "/revision",
   "/quizzes",
   "/notes",
@@ -86,6 +87,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteConfig.domain}/quotes-references/${slugifyType(reference.type)}/${reference.id}`,
       lastModified: now,
     });
+  }
+  for (const section of [...paper1Sections, ...paper2Sections]) {
+    for (const sub of section.subtopics) {
+      entries.push({
+        url: `${siteConfig.domain}/quotes-references/topic/${section.slug}/${sub.slug}`,
+        lastModified: now,
+      });
+    }
   }
 
   for (const quiz of quizzes) {

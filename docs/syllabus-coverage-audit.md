@@ -22,7 +22,7 @@ Living document. Tracks how much of the official Cambridge O Level Islamiyat 205
 
 | Syllabus section | Source content available | Site route | Status |
 | --- | --- | --- | --- |
-| 1. Major themes of the Qur'an (God in Himself / God's relationship with creation / God's Messengers, 15 set passages) | `source/09-notes/P1/theme 1/2/3.png` (site founder's own notes, full 15-passage tables) + syllabus PDF | `/paper-1/major-themes-of-the-quran` | **9/9 subtopics live** (3 per theme — a representative selection of the syllabus's 15 total set passages, not all 15 individually; see gap note below): full lessons, verse text/translations flagged `[VERIFY]` |
+| 1. Major themes of the Qur'an (God in Himself / God's relationship with creation / God's Messengers, 15 set passages) | `source/09-notes/P1/theme 1/2/3.png` + syllabus PDF + web-verified Sahih International translations (this pass) | `/paper-1/major-themes-of-the-quran` | **15/15 subtopics live (complete)** — all 15 officially designated passages now have a full lesson, 5 per theme; see the Qur'an Passage Completion Pass below |
 | 2. History and importance of the Qur'an | `paper-1-content.docx`: "Preservation and Compilation", "Revelation of the Holy Qur'an", "Sources of Islamic Law" | `/paper-1/history-of-the-quran` | **5/5 subtopics live**: First Revelation, Modes of Revelation, Compilation Under Abu Bakr, Standardisation Under Uthman, Qur'an as Source of Law — full lessons |
 | 3. Life and importance of the Prophet Muhammad (pbuh) | `paper-1-content.docx` + `source/09-notes/P1/Arabia.png`: Arabia before Islam → Birth/upbringing → mission → opposition → Abyssinia → boycott → Year of Grief → Ta'if → Isra wal-Mi'raj → Pledges of Aqabah → Hijrah → life in Madinah → battles/treaties → Farewell Pilgrimage → demise | `/paper-1/life-of-prophet-muhammad` | **4/4 subtopics live**: Arabia Before Islam (new), First Revelation & Start of Mission, The Hijrah, The Farewell Pilgrimage & Sermon — full lessons. Section's official subtopic list is now complete; later Madinah-period battles/treaties remain a possible future expansion beyond the current 4 listed subtopics |
 | 4. The first Islamic community | General, well-established Seerah/companion-history knowledge (no dedicated note-image set for this section) | `/paper-1/first-islamic-community` | **6/6 subtopics live**: Mothers of the Faithful, Ten Blessed Companions, Emigrants & Helpers (new), Four Caliphs in the Prophet's (pbuh) lifetime (new), Scribes of Revelation, Status of Women — full lessons |
@@ -31,10 +31,10 @@ Living document. Tracks how much of the official Cambridge O Level Islamiyat 205
 
 | Syllabus section | Source content available | Site route | Status |
 | --- | --- | --- | --- |
-| 1. Major teachings in the Hadiths (individual conduct / community life, 2 groups) | `source/09-notes/P2/Teaching of Hadith Individual/communal/brotherhood.png` (site founder's own notes) + syllabus PDF; `paper-2-content.docx` still not used, see source-conflicts.md #1 | `/paper-2/major-teachings-of-hadith` | **8/8 subtopics live** (4 per group — a representative selection of the syllabus's 4 set passage-groups, not exhaustive individual-Hadith coverage; see gap note below): full lessons, exact Hadith wording flagged `[VERIFY]` |
+| 1. Major teachings in the Hadiths (individual conduct / community life; syllabus Appendix 2 prescribes 20 named Hadiths) | `source/09-notes/P2/Teaching of Hadith Individual/communal/brotherhood.png` + syllabus PDF + web-verified sunnah.com references (this pass) | `/paper-2/major-teachings-of-hadith` | **17 lessons live, all 20 official Hadiths accounted for (complete)** — see the Hadith Reconciliation Pass below for the full 20-item mapping table |
 | 2. History and importance of the Hadiths (isnad/matn, compilation stages, six Sunni collections) | Public syllabus scope + `source/09-notes/P2/*.png` + general Islamic-studies knowledge — `paper-2-content.docx` deliberately not used | `/paper-2/history-of-hadith` | **5/5 subtopics live**: Isnad & Matn, Classification & Authentication, Compilation Stages, Six Authentic Books, Importance of Hadith — full lessons, freshly authored |
 | 3. Rightly Guided Caliphs | Well-established Islamic history (note images + general knowledge; `paper-2-content.docx` not used) | `/paper-2/rightly-guided-caliphs` | **4/4 subtopics live**: Abu Bakr, Umar, Uthman (new), Ali (new) — all four Rightly Guided Caliphs now have full lessons. Section complete. |
-| 4. Articles of Faith & Pillars of Islam | Public syllabus scope + general, well-established Islamic-studies knowledge (no note-image set for this section) | `/paper-2/articles-of-faith-and-pillars` | **11/11 subtopics live**: all 6 Articles of Faith + all 5 Pillars of Islam — full lessons. Section complete. |
+| 4. Articles of Faith, Pillars of Islam & Jihad | Public syllabus scope + general, well-established Islamic-studies knowledge; Jihad lesson added this pass | `/paper-2/articles-of-faith-and-pillars` | **12/12 subtopics live**: all 6 Articles of Faith + all 5 Pillars of Islam + Jihad (physical/mental/spiritual meanings, new) — full lessons. Section complete. |
 
 ### Verification log (no fabricated facts) — updated Milestone 5
 
@@ -50,8 +50,60 @@ Living document. Tracks how much of the official Cambridge O Level Islamiyat 205
 
 - **All 8 official syllabus sections (4 per paper) now have full lesson content** — every section hub shows only "available" subtopics; none remain entirely "coming soon".
 - Paper 1: 24 lessons live. Paper 2: 28 lessons live. 52 lessons total, plus 8 section hub pages = 60 dynamic content routes (verified in the Next.js build output — see `docs/build-status.md`).
-- **Still an honest gap, not claimed as done**: the syllabus's Appendix 1 (15 set Qur'an passages) and Appendix 2 (4 set Hadith passage-groups) are covered by a strong *representative* selection (9 of the 15 Qur'an passages across all 3 themes; 8 Hadith teachings across both groups) rather than exhaustive passage-by-passage / Hadith-by-Hadith pages for every single prescribed item. A future pass could extend each theme/group from its current 3-4 representative lessons to full coverage of every syllabus-listed passage, if the user wants that level of completionism.
-- Every `[VERIFY: ...]` placeholder introduced needs a verified published Qur'an translation or authenticated Hadith collection lookup before the exact wording is filled in and the placeholder removed.
+- Every `[VERIFY: ...]` placeholder introduced needs a verified published Qur'an translation or authenticated Hadith collection lookup before the exact wording is filled in and the placeholder removed. (Resolved fully as of the Verification Pass logged in `docs/build-status.md`, prior to this session.)
+
+## Qur'an Passage Completion Pass (this session, 2026-08-04)
+
+Closed the honest gap noted above: the syllabus's Appendix 1 prescribes exactly 15 Qur'an passages (5 per theme). The site previously had 9; **6 new lessons** were added to `data/topics/paper1-major-themes.ts` for the missing passages, each with Sahih International translation web-verified against quran.com/corpus.quran.com search results (no fabricated verse text):
+
+| Ref | Slug | Theme |
+| --- | --- | --- |
+| Qur'an 41:37 | `fussilat-41-37` | 1: God in Himself |
+| Qur'an 42:4-5 | `al-shura-42-4-5` | 1: God in Himself |
+| Qur'an 2:21-22 | `al-baqarah-2-21-22` | 2: God and Creation |
+| Surah 114 (al-Nas), 1-6 | `al-nas-114` | 2: God and Creation |
+| Qur'an 6:75-79 (Ibrahim) | `ibrahim-al-anam-6-75-79` | 3: God's Messengers |
+| Surah 108 (al-Kawthar), 1-3 | `al-kawthar-108` | 3: God's Messengers |
+
+`data/syllabus.ts`'s `major-themes-of-the-quran` subtopics list was expanded to all 15, in the syllabus's own reference order. `relatedTopics` cross-links were added/updated on both the new and several existing lessons within each theme group. **Result: 15/15 official Qur'an passages now live**, no representative-selection gap remains.
+
+## Hadith Reconciliation Pass (this session, 2026-08-04)
+
+The syllabus's Appendix 2 prescribes exactly 20 named Hadiths (all attributed by the syllabus to Sahih al-Bukhari or Sahih Muslim, though some of the site's supporting/related citations for closely associated teachings draw on other authenticated collections — Abi Dawud, at-Tirmidhi — as sunnah.com itself cross-references). The site's existing 8 thematic lessons already covered several of the 20 closely; **6 new lessons were added** and **2 existing lessons were expanded in place** (preserving their content) to explicitly fold in official items that fit naturally alongside what was already there. Every official item is now accounted for:
+
+| # | Official Hadith (syllabus description) | Site coverage |
+| - | - | - |
+| 1 | Religion is sincerity | `sincerity-ikhlas` (existing) |
+| 2 | Love for your brother what you love for yourself | `rights-and-brotherhood` (existing) |
+| 3 | Speak good or remain silent; honour neighbour and guest | `social-ethical-responsibilities` (existing lesson expanded this pass, Bukhari 6018/Muslim 47) |
+| 4 | Obligatory worship; lawful/unlawful boundaries | `shahadah-and-worship` (existing) |
+| 5 | Daily charity via justice, help, good words, removing harm | `charity-and-sharing` (existing) |
+| 6 | Changing evil by hand, tongue, heart | `fighting-against-evil` (existing) |
+| 7 | Excellent believer strives with self and property | `serving-the-cause-of-allah` (existing) |
+| 8 | Expanded meanings of martyrdom | `expanded-meanings-of-martyrdom` (new, Bukhari 2829) |
+| 9 | Best food earned by one's own work | `honest-livelihood` (new, Bukhari 2072) |
+| 10 | Serving widows and the poor | `caring-for-the-vulnerable` (new, Bukhari 5353) |
+| 11 | Caring for an orphan | `caring-for-the-vulnerable` (new, Bukhari 6005, same lesson as #10) |
+| 12 | Be gentle, give glad tidings, do not alienate | `gentleness-in-guidance` (new, Bukhari 69/3038) |
+| 13 | The Qur'an and tethered camels | `retaining-the-quran` (new, Bukhari 5031-5033 / Muslim 789) |
+| 14 | Kindness in buying, selling, claiming dues | `kindness-in-commerce` (new, Bukhari 2076) |
+| 15 | Allah's mercy and mercy to people | `mercy-to-others` (new, Abi Dawud 4941 / Tirmidhi 1924) |
+| 16 | Believers like one person (solidarity) | `rights-and-brotherhood` (existing — covers the "one body"/"one structure" images, Bukhari 6011/481) |
+| 17 | Modesty produces good | `character-humility-and-sincerity` (new, Bukhari 6117/Muslim 37) |
+| 18 | Faith, pride, Paradise and Hell | `character-humility-and-sincerity` (new, Muslim 91, same lesson as #17/#20) |
+| 19 | The world as a prison for the believer | `worldly-restraint-and-the-hereafter` (new, Muslim 2956) |
+| 20 | Allah looks at hearts and deeds, not forms/possessions | `character-humility-and-sincerity` (new, Muslim 2564, same lesson as #17/#18) |
+
+`data/syllabus.ts`'s `major-teachings-of-hadith` subtopics list was expanded from 8 to 17 slugs, matching 17 lesson pages (8 existing + 9 new: `expanded-meanings-of-martyrdom`, `honest-livelihood`, `caring-for-the-vulnerable`, `gentleness-in-guidance`, `retaining-the-quran`, `kindness-in-commerce`, `mercy-to-others`, `character-humility-and-sincerity`, `worldly-restraint-and-the-hereafter`). **Result: 20/20 official Hadiths now accounted for**, across 17 lesson pages (2 lessons — `caring-for-the-vulnerable` and `character-humility-and-sincerity` — deliberately group 2-3 closely related official items each, as permitted, rather than being split into near-duplicate pages).
+
+## Jihad Topic Added (this session, 2026-08-04)
+
+The syllabus's fourth Paper 2 topic area (alongside the Articles of Faith and Pillars of Islam) also prescribes "Jihad — its physical, mental and spiritual meanings", which had zero content on the site. Added one new lesson, `jihad-physical-mental-spiritual`, to `data/topics/paper2-articles-and-pillars.ts` and to `data/syllabus.ts`'s `articles-of-faith-and-pillars` subtopics list. Treatment is deliberately the mainstream, non-inflammatory academic Islamic-studies framing used by exam boards: struggle against the self (spiritual/greater Jihad), intellectual/educational effort (mental Jihad), and strictly regulated struggle against external threat or oppression (physical Jihad, explicitly distinguished from indiscriminate violence or terrorism). No source document existed for this topic; content is drawn from general, well-established, uncontested Islamic-studies scholarship on the term's three recognised dimensions.
+
+## Study Material Placeholder + Past-Paper Cross-Link (this session, 2026-08-04)
+
+- `components/TopicPage.tsx` gained an honestly labelled "Study material" section on every lesson page ("Study material for this topic ... is being added ... check back soon"), placed just before "Related topics", ready for the site owner to later drop in real files/links without a redesign. No placeholder file links were fabricated.
+- The past-paper cross-link (`getQuestionsBySubtopic(topic.section, topic.slug)`, shown as a link banner near the top of each lesson page) is driven generically off `topic.section`/`topic.slug` and required no code change; it was verified to still function correctly for the new lessons — e.g. `major-themes-of-the-quran`/`fussilat-41-37` and `major-teachings-of-hadith`/`expanded-meanings-of-martyrdom` both call the function without error. Note: as documented in `docs/completeness-report.md`, **no** past-paper questions in either of these two syllabus sections currently carry a specific `subtopicSlug` (all are tagged "General/Whole-Section", since the exam format is "choose 2 of the 3/4 set passages") — this was already true for the original 9 Qur'an and 8 Hadith lessons before this pass, so the new lessons show the same, pre-existing, honest behaviour rather than a regression.
 
 ## 0493 (IGCSE) parallel syllabus
 

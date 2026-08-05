@@ -23,8 +23,8 @@ smaller polish items noted below — nothing broken, nothing fabricated.
 | 2 | Design system, branding, header/footer/nav | Done | Brand palette, illustrations, mega-menu, mobile slide-in, all verified working |
 | 3 | Homepage + reusable components | Done | Hero, TrustBar (real stats only), feature tiles, FAQ |
 | 4 | Syllabus hub, exam pattern, AO1/AO2 | Done | `/syllabus`, `/exam-pattern`, `/exam-technique` pages present and linked |
-| 5 | Paper 1 structure & pages | Done | All 4 sections, all 24 subtopics have a real lesson (verified 1:1, zero missing, zero orphaned) |
-| 6 | Paper 2 structure & pages | Done | All 4 sections, all 28 subtopics have a real lesson (verified 1:1) |
+| 5 | Paper 1 structure & pages | Done | All 4 sections, all 30 subtopics have a real lesson (verified 1:1, zero missing, zero orphaned) — Major Themes of the Qur'an expanded to all 15 official passages this pass |
+| 6 | Paper 2 structure & pages | Done | All 4 sections, all 38 subtopics have a real lesson (verified 1:1) — Major Teachings of Hadith expanded to account for all 20 official Hadiths, and a new Jihad lesson added, this pass |
 | 7 | Past Papers (year-wise + topical) | Done | 351 verbatim questions, 2021-2025, 39/40 paper instances (1 gap logged, not faked); year-wise + topical + subtopic drill-down all working |
 | 8 | Model Answers | **Partially done — by design** | 10 exist; site owner is authoring the rest separately and will hand them back |
 | 9 | Quotes/References Bank | Done | 29 entries, all cross-links verified valid, all category + detail pages render |

@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   PenSquare,
   Link2,
+  FolderOpen,
 } from "lucide-react";
 import type { Topic } from "@/data/topics";
 import { getSection } from "@/data/syllabus";
@@ -136,6 +137,14 @@ export function TopicPage({ topic }: TopicPageProps) {
 
         <Section icon={PenSquare} title="Exam tip">
           <p className="text-text">{topic.examTip}</p>
+        </Section>
+
+        <Section icon={FolderOpen} title="Study material">
+          <p className="text-text-muted">
+            Study material for this topic — notes, worksheets and slides — is being added and will
+            appear here. Check back soon, or use the AO1/AO2 guidance and past-paper questions
+            above in the meantime.
+          </p>
         </Section>
 
         {topic.relatedTopics.length > 0 && (

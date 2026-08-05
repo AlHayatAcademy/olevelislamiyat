@@ -101,6 +101,100 @@ export const paper1MajorThemesTopics: Topic[] = [
     relatedTopics: [
       { paper: 1, section, slug: "ayat-al-kursi", title: "Theme 1 (God in Himself): Ayat al-Kursi — Qur'an 2:255" },
       { paper: 1, section, slug: "al-ikhlas-112", title: "Theme 1 (God in Himself): Surah al-Ikhlas — Qur'an 112:1-4" },
+      { paper: 1, section, slug: "fussilat-41-37", title: "Theme 1 (God in Himself): Qur'an 41:37" },
+      { paper: 1, section, slug: "al-shura-42-4-5", title: "Theme 1 (God in Himself): Qur'an 42:4-5" },
+    ],
+  },
+  {
+    slug: "fussilat-41-37",
+    paper: 1,
+    section,
+    title: "Theme 1 (God in Himself): Qur'an 41:37",
+    standing: "A verse instructing that the sun and moon — signs of Allah — must never themselves be worshipped; only their Creator deserves worship.",
+    learningObjectives: [
+      "State the reference and main instruction of this passage.",
+      "Explain why the sun and moon are described as signs (ayat) of Allah rather than objects of worship.",
+      "Explain how this passage reinforces Tawhid by name.",
+    ],
+    keyTerms: [
+      { term: "Ayah (pl. Ayat)", meaning: "A sign — used in this verse for the night, day, sun and moon as pointers to Allah's power, not as things worthy of worship in themselves." },
+      { term: "Sujud", meaning: "Prostration — the act of worship this verse forbids directing at the sun or moon and commands directing at Allah alone." },
+    ],
+    explanation: [
+      "Qur'an 41:37 is set under Theme 1, God in Himself, because it draws a direct line between the signs Allah has placed in creation and the worship that is due to Him alone, explicitly forbidding worship of two things ancient peoples commonly venerated: the sun and the moon.",
+      "Sahih International translation: \"And of His signs are the night and day and the sun and moon. Do not prostrate to the sun or to the moon, but prostrate to Allah, who created them, if it should be Him that you worship.\" — the verse names the night, the day, the sun and the moon as signs (ayat) of Allah's power and design, then issues a direct command not to prostrate to the sun or the moon.",
+      "The verse closes by redirecting worship to \"Allah, who created them\" — making the logical point that the created sign can never deserve the worship owed only to the One who created it.",
+      "This passage was especially relevant in a historical context where sun and moon worship was practised by various pre-Islamic and other communities, and it uses the everyday, observable cycle of night and day as evidence pointing toward the Creator rather than the created things themselves.",
+    ],
+    keyFacts: [
+      { label: "Reference", detail: "Qur'an 41:37 (Surah Fussilat)." },
+      { label: "Signs named", detail: "The night, the day, the sun and the moon." },
+      { label: "Core instruction", detail: "Do not prostrate to the sun or moon; prostrate to Allah, their Creator." },
+    ],
+    ao1Guidance: [
+      "Name all four signs given in the verse (night, day, sun, moon), not only the sun and moon that are the focus of the prohibition.",
+      "State the reasoning given precisely: worship is redirected to Allah specifically because He is the one \"who created them\".",
+    ],
+    ao2Guidance: [
+      "Explain the significance of using created, visible things (sun, moon) as \"signs\" rather than treating them as divine — this models a general method the Qur'an uses to draw attention to God's power through nature.",
+      "Discuss why explicitly naming and prohibiting sun/moon worship, rather than leaving Tawhid only implicit, matters for correcting specific practices in the surrounding culture.",
+    ],
+    commonMistakes: [
+      "Treating this verse as only about prayer posture — sujud here specifically means the act of worship, and the point is about who deserves it, not physical technique.",
+      "Omitting \"night and day\" from the list of signs and mentioning only the sun and moon.",
+    ],
+    examTip:
+      "When two passages both reject false objects of worship (this one and Qur'an 6:101-103), briefly note what each rejects specifically — this passage targets sun/moon worship using the \"signs vs. Creator\" logic, which is a distinct angle from the \"no son, no partner\" reasoning of 6:101-103.",
+    relatedTopics: [
+      { paper: 1, section, slug: "ayat-al-kursi", title: "Theme 1 (God in Himself): Ayat al-Kursi — Qur'an 2:255" },
+      { paper: 1, section, slug: "al-anam-6-101-103", title: "Theme 1 (God in Himself): Qur'an 6:101-103" },
+      { paper: 1, section, slug: "al-shura-42-4-5", title: "Theme 1 (God in Himself): Qur'an 42:4-5" },
+    ],
+  },
+  {
+    slug: "al-shura-42-4-5",
+    paper: 1,
+    section,
+    title: "Theme 1 (God in Himself): Qur'an 42:4-5",
+    standing: "A passage affirming Allah's total ownership of the heavens and earth, His transcendence, and the angels' constant glorification and intercession for humanity.",
+    learningObjectives: [
+      "State the reference and content of this passage.",
+      "Explain what the passage teaches about Allah's ownership and transcendence.",
+      "Explain the role given to the angels in this passage.",
+    ],
+    keyTerms: [
+      { term: "Al-'Ali al-'Azim", meaning: "\"The Most High, the Most Great\" — two of Allah's names occurring in this passage." },
+      { term: "Tasbih", meaning: "Glorification of Allah — what the angels are described as doing continually in this passage." },
+    ],
+    explanation: [
+      "Qur'an 42:4-5 is set under Theme 1, God in Himself, because it affirms Allah's absolute ownership of everything that exists and describes His majesty as so vast that even the heavens are pictured as almost breaking apart in awe of it.",
+      "Sahih International translation (42:4): \"To Him belongs whatever is in the heavens and whatever is in the earth, and He is the Most High, the Most Great.\" — the passage states plainly that everything in the heavens and the earth belongs to Allah, and names Him as al-'Ali (the Most High) and al-'Azim (the Most Great).",
+      "Sahih International translation (42:5): \"The heavens almost break from above them, and the angels exalt [Allah] with praise of their Lord and ask forgiveness for those on earth. Unquestionably, it is Allah who is the Forgiving, the Merciful.\" — the heavens are described as almost breaking apart from above, out of the sheer weight of Allah's majesty, while the angels are shown continually glorifying Allah and asking forgiveness on behalf of people on earth.",
+      "The passage closes by naming Allah as the Forgiving, the Merciful, balancing the earlier picture of overwhelming greatness with reassurance that this same transcendent God is also merciful and ready to forgive.",
+    ],
+    keyFacts: [
+      { label: "Reference", detail: "Qur'an 42:4-5 (Surah al-Shura)." },
+      { label: "Core theme", detail: "Allah's total ownership of the heavens and earth; His transcendent majesty; the angels' glorification and intercession for forgiveness." },
+      { label: "Names of Allah used", detail: "The Most High (al-'Ali), the Most Great (al-'Azim), the Forgiving, the Merciful." },
+    ],
+    ao1Guidance: [
+      "State both verses' content separately: ownership/transcendence (42:4) and the heavens/angels image plus forgiveness (42:5).",
+      "Name the specific angelic activity described: exalting Allah in praise, and asking forgiveness for people on earth.",
+    ],
+    ao2Guidance: [
+      "Explain the significance of pairing overwhelming majesty (heavens almost breaking) with mercy and forgiveness in the same short passage — it presents a balanced picture of Allah as awe-inspiring yet approachable.",
+      "Discuss why angels being shown asking forgiveness for humanity is significant for a believer's sense of being supported by unseen worship taking place on their behalf.",
+    ],
+    commonMistakes: [
+      "Quoting only the ownership statement (42:4) and omitting the image of the heavens and the angels' role in 42:5, which is equally examinable.",
+      "Missing the closing pairing of Forgiving and Merciful, which balances the passage's earlier emphasis on majesty.",
+    ],
+    examTip:
+      "This passage works well alongside Ayat al-Kursi in an answer on Allah's transcendence and mercy together — both name similar attributes (the Most High, the Most Great) and can be cross-referenced for a stronger AO2 point about consistency across the Qur'an's teaching on Tawhid.",
+    relatedTopics: [
+      { paper: 1, section, slug: "ayat-al-kursi", title: "Theme 1 (God in Himself): Ayat al-Kursi — Qur'an 2:255" },
+      { paper: 1, section, slug: "fussilat-41-37", title: "Theme 1 (God in Himself): Qur'an 41:37" },
+      { paper: 2, section: "articles-of-faith-and-pillars", slug: "belief-in-angels", title: "Article of Faith: Belief in Angels" },
     ],
   },
   {
@@ -190,7 +284,53 @@ export const paper1MajorThemesTopics: Topic[] = [
       "Al-Fatiha connects naturally to Paper 2's Pillars of Islam (Salah) content — cross-reference this connection briefly if relevant to strengthen an AO2 answer on the surah's ongoing importance in Muslim life.",
     relatedTopics: [
       { paper: 1, section, slug: "al-alaq-96-1-5", title: "Theme 2 (God and Creation): Qur'an 96:1-5" },
+      { paper: 1, section, slug: "al-baqarah-2-21-22", title: "Theme 2 (God and Creation): Qur'an 2:21-22" },
       { paper: 2, section: "articles-of-faith-and-pillars", slug: "salah", title: "Pillar of Islam: Salah" },
+    ],
+  },
+  {
+    slug: "al-baqarah-2-21-22",
+    paper: 1,
+    section,
+    title: "Theme 2 (God and Creation): Qur'an 2:21-22",
+    standing: "A command to worship the Lord who created humanity and provided the earth, sky and rain — grounding worship directly in Allah's provision for creation.",
+    learningObjectives: [
+      "State the reference and main instruction of this passage.",
+      "Explain the specific evidence of Allah's provision that the passage lists.",
+      "Explain why the passage links worship directly to gratitude for creation and provision.",
+    ],
+    keyTerms: [
+      { term: "Firash", meaning: "\"A bed/carpet [spread out]\" — the image used in the passage for how Allah made the earth habitable for humanity." },
+      { term: "Andàd", meaning: "\"Equals/partners\" — what the passage instructs must not be attributed to Allah, given the evidence of His sole provision." },
+    ],
+    explanation: [
+      "Qur'an 2:21-22 is set under Theme 2, God's relationship with the created world, because it moves directly from evidence of Allah's care for creation to an instruction to worship Him alone on that basis.",
+      "Sahih International translation (2:21): \"O mankind, worship your Lord, who created you and those before you, that you may become righteous.\" — the passage opens with a direct address to all humanity, commanding worship of the Lord who created both present and earlier generations, with righteousness given as the purpose of that worship.",
+      "Sahih International translation (2:22): \"[He] who made for you the earth a bed [spread out] and the sky a ceiling and sent down rain from the sky and brought forth thereby fruits as provision for you. So do not set up rivals to Allah while you know [He has no equal].\" — Allah is described as the one who made the earth a spread-out bed, the sky a ceiling, and who sends down rain that produces fruits as provision for humanity.",
+      "The passage concludes with a direct instruction not to set up rivals (equals) to Allah, given that the evidence just listed already shows there is no equal to Him in providing for creation — making the logical link between provision and exclusive worship explicit.",
+    ],
+    keyFacts: [
+      { label: "Reference", detail: "Qur'an 2:21-22 (Surah al-Baqarah)." },
+      { label: "Evidence listed", detail: "Creation of humanity and earlier generations; the earth as a spread-out bed; the sky as a ceiling; rain producing fruits as provision." },
+      { label: "Core instruction", detail: "Worship Allah alone; do not set up rivals/equals to Him." },
+    ],
+    ao1Guidance: [
+      "List all four pieces of evidence given (creation of people, the earth as a bed, the sky as a ceiling, rain producing fruit) rather than a vague summary of \"nature\".",
+      "State the purpose given for worship: \"that you may become righteous\" (la'allakum tattaqun).",
+    ],
+    ao2Guidance: [
+      "Explain the significance of moving from observable provision (rain, fruit, the earth's habitability) to a command to worship — the passage builds its case for Tawhid on evidence a person can see around them every day, not abstract argument alone.",
+      "Discuss why addressing \"mankind\" generally, not only believers, matters for the passage's universal claim about who deserves worship.",
+    ],
+    commonMistakes: [
+      "Treating this passage as only about creation of the natural world and missing that its main instruction is a command to worship.",
+      "Omitting the closing warning against setting up rivals to Allah, which is the passage's logical conclusion.",
+    ],
+    examTip:
+      "This passage pairs well with Qur'an 96:1-5 for an answer on 'God's relationship with creation' — both move from observable evidence (provision; knowledge) to a conclusion about Allah's care for humanity, giving a strong comparative AO2 point.",
+    relatedTopics: [
+      { paper: 1, section, slug: "al-alaq-96-1-5", title: "Theme 2 (God and Creation): Qur'an 96:1-5" },
+      { paper: 1, section, slug: "al-nas-114", title: "Theme 2 (God and Creation): Surah al-Nas — Qur'an 114:1-6" },
     ],
   },
   {
@@ -280,7 +420,53 @@ export const paper1MajorThemesTopics: Topic[] = [
       "When a passage links two ideas (here: the created world and the Last Day), explicitly state both in your answer — examiners are checking that you can place a passage under the correct set theme with reasoning, not just recall its content.",
     relatedTopics: [
       { paper: 1, section, slug: "al-alaq-96-1-5", title: "Theme 2 (God and Creation): Qur'an 96:1-5" },
+      { paper: 1, section, slug: "al-nas-114", title: "Theme 2 (God and Creation): Surah al-Nas — Qur'an 114:1-6" },
       { paper: 2, section: "articles-of-faith-and-pillars", slug: "belief-in-resurrection", title: "Article of Faith: Belief in the Day of Resurrection" },
+    ],
+  },
+  {
+    slug: "al-nas-114",
+    paper: 1,
+    section,
+    title: "Theme 2 (God and Creation): Surah al-Nas — Qur'an 114:1-6",
+    standing: "The Qur'an's closing surah: a prayer for Allah's protection, as Lord, King and God of mankind, from the whispered evil that assails the human heart.",
+    learningObjectives: [
+      "State the reference and structure of Surah al-Nas.",
+      "Explain the three titles given to Allah in the surah and the danger it seeks protection from.",
+      "Explain why this surah is grouped under God's relationship with the created world.",
+    ],
+    keyTerms: [
+      { term: "Rabb, Malik, Ilah", meaning: "Lord, King and God — the three titles of Allah invoked in this surah, each stressing a different aspect of His authority over mankind." },
+      { term: "Waswas al-Khannas", meaning: "\"The retreating whisperer\" — the source of evil suggestion the surah seeks refuge from, understood as Satan's whispering into the human heart." },
+    ],
+    explanation: [
+      "Surah al-Nas (Qur'an 114:1-6), the final surah of the Qur'an, is set under Theme 2, God's relationship with the created world, because it presents Allah directly as the protector of human beings — mankind — from a real, ongoing internal danger.",
+      "Sahih International translation: \"Say, 'I seek refuge in the Lord of mankind, the King of mankind, the God of mankind, from the evil of the retreating whisperer - who whispers [evil] into the breasts of mankind - from among the jinn and mankind.'\" — the worshipper is instructed to seek refuge in Allah using three titles in sequence: Lord (Rabb), King (Malik) and God (Ilah) of mankind, from the evil of a whisperer that retreats after whispering into human hearts, whether that whisperer comes from among the jinn or from other human beings.",
+      "The surah's structure moves from naming Allah's authority over people, to identifying the specific danger (whispered suggestion to evil), to naming its two possible sources (jinn and humans) — giving the worshipper a precise, repeatable form of protection against inner temptation.",
+      "Because it addresses an internal, everyday spiritual struggle rather than an external threat, this surah shows Allah's care for creation extending to the ongoing protection of the human heart and mind, not only to physical provision.",
+    ],
+    keyFacts: [
+      { label: "Reference", detail: "Qur'an 114:1-6 (Surah al-Nas, \"Mankind\") — the Qur'an's final surah." },
+      { label: "Three titles of Allah invoked", detail: "Lord (Rabb), King (Malik), God (Ilah) of mankind." },
+      { label: "Danger named", detail: "The evil of the retreating whisperer, who whispers into human hearts, from among the jinn or mankind." },
+    ],
+    ao1Guidance: [
+      "State the three titles of Allah in the correct order (Lord, King, God) — this sequence is a specific, examinable detail.",
+      "Name both possible sources of the whispered evil (jinn and mankind), not only Satan/jinn.",
+    ],
+    ao2Guidance: [
+      "Explain the significance of seeking refuge from an internal danger (whispered suggestion) rather than only external threats — it shows the Qur'an's concern for the believer's inner spiritual life, not only physical safety.",
+      "Discuss why naming three distinct titles of Allah (Lord, King, God) rather than just one strengthens the sense of complete divine authority being invoked for protection.",
+    ],
+    commonMistakes: [
+      "Assuming the whisperer can only be Satan/jinn — the surah explicitly names \"jinn and mankind\" as possible sources of harmful whispering.",
+      "Confusing this surah with Surah al-Falaq (113), the companion surah also seeking refuge, but from different, mostly external, evils.",
+    ],
+    examTip:
+      "If asked to compare passages on Allah's relationship with creation, note that al-Nas addresses an internal/spiritual danger, while passages like al-Zilzal address external/cosmic events — this distinction demonstrates a well-organised understanding of the theme's range.",
+    relatedTopics: [
+      { paper: 1, section, slug: "al-zilzal-99-1-8", title: "Theme 2 (God and Creation): Surah al-Zilzal — Qur'an 99:1-8" },
+      { paper: 1, section, slug: "al-baqarah-2-21-22", title: "Theme 2 (God and Creation): Qur'an 2:21-22" },
     ],
   },
   {
@@ -327,6 +513,53 @@ export const paper1MajorThemesTopics: Topic[] = [
     relatedTopics: [
       { paper: 1, section, slug: "isa-al-maidah-5-110", title: "Theme 3 (God and His Messengers): Isa — Qur'an 5:110" },
       { paper: 1, section, slug: "muhammad-al-duha-93", title: "Theme 3 (God and His Messengers): Muhammad (pbuh) — Qur'an 93:1-11" },
+      { paper: 1, section, slug: "ibrahim-al-anam-6-75-79", title: "Theme 3 (God and His Messengers): Ibrahim — Qur'an 6:75-79" },
+    ],
+  },
+  {
+    slug: "ibrahim-al-anam-6-75-79",
+    paper: 1,
+    section,
+    title: "Theme 3 (God and His Messengers): Ibrahim — Qur'an 6:75-79",
+    standing: "Allah showing Ibrahim (Abraham) the realm of the heavens and earth as he reasons his way, through a star, the moon and the sun, to pure Tawhid.",
+    learningObjectives: [
+      "State the reference and outline of the passage about Ibrahim (AS).",
+      "Explain the reasoning process the passage attributes to Ibrahim (AS) as he rejects the star, moon and sun as gods.",
+      "Explain why this passage is grouped under God's relationship with His Messengers.",
+    ],
+    keyTerms: [
+      { term: "Malakut", meaning: "The realm/dominion — what Allah is described as showing Ibrahim (AS) of the heavens and earth so that he would be firm in faith." },
+      { term: "Hanif", meaning: "One who inclines sincerely toward true monotheism, away from false worship — used elsewhere in the Qur'an to describe Ibrahim (AS)." },
+    ],
+    explanation: [
+      "Qur'an 6:75-79 is set under Theme 3, God's relationship with His Messengers, because it shows Allah personally granting Ibrahim (AS) insight into creation so that he would reach certain faith, before Ibrahim (AS) is shown reasoning publicly, step by step, toward the worship of the one true Creator.",
+      "Sahih International translation (6:75): \"And thus did We show Abraham the realm of the heavens and the earth that he would be among the certain [in faith].\" — Allah grants Ibrahim (AS) insight into the created order specifically so that his faith would become firm and certain.",
+      "The passage then narrates Ibrahim (AS) observing a star at night and calling it \"my lord\", only to reject it once it sets, saying he does not like what disappears (6:76); he does the same with the moon (6:77) and then the sun, which he calls \"greater\", only to reject it too once it sets, declaring himself free from what his people associate with Allah (6:78).",
+      "Sahih International translation (6:79): \"Indeed, I have turned my face toward He who created the heavens and the earth, inclining toward truth, and I am not of those who associate others with Allah.\" — Ibrahim (AS) concludes by turning his face toward the Creator of the heavens and earth alone, declaring himself free of shirk (associating partners with Allah).",
+      "This passage's method — testing and rejecting created things one by one because they are impermanent (they set/disappear) before affirming the one Creator who does not — provides a rational, step-by-step model of reasoning toward Tawhid, distinct from Adam's story (knowledge and repentance) and Isa's (AS) story (miracles by Allah's permission).",
+    ],
+    keyFacts: [
+      { label: "Reference", detail: "Qur'an 6:75-79 (Surah al-An'am)." },
+      { label: "Sequence of reasoning", detail: "Star rejected (sets) → moon rejected (sets) → sun rejected (sets) → the Creator of the heavens and earth affirmed as the one true God." },
+      { label: "Core theme", detail: "Rational rejection of impermanent, created things as gods; affirmation of Tawhid through direct reasoning." },
+    ],
+    ao1Guidance: [
+      "Give the sequence of all three celestial bodies (star, moon, sun) in order, with the reasoning given for rejecting each (they set/disappear).",
+      "State the purpose given in 6:75 for Allah showing Ibrahim (AS) the realm of the heavens and earth: so that he would be among those with certain faith.",
+    ],
+    ao2Guidance: [
+      "Explain the significance of Ibrahim's (AS) reasoning being based on impermanence (what disappears cannot be a reliable god) — it offers a rational, observable basis for Tawhid rather than only a stated command.",
+      "Discuss why this passage's method of public, step-by-step reasoning may have been particularly persuasive to a community that worshipped celestial bodies, compared with a simple direct declaration of monotheism.",
+    ],
+    commonMistakes: [
+      "Reversing the order of the three celestial bodies (the correct order is star, then moon, then sun).",
+      "Treating Ibrahim's (AS) statements (\"this is my lord\") as sincere belief in those objects, rather than as a reasoned rhetorical process leading to their rejection.",
+    ],
+    examTip:
+      "When this passage is compared with other Messenger passages in an exam question, highlight its distinctive reasoning method (testing and rejecting impermanent things) as the feature that sets it apart from Adam's knowledge/repentance narrative and Isa's (AS) miracles narrative.",
+    relatedTopics: [
+      { paper: 1, section, slug: "adam-al-baqarah-2-30-37", title: "Theme 3 (God and His Messengers): Adam — Qur'an 2:30-37" },
+      { paper: 1, section, slug: "fussilat-41-37", title: "Theme 1 (God in Himself): Qur'an 41:37" },
     ],
   },
   {
@@ -416,6 +649,52 @@ export const paper1MajorThemesTopics: Topic[] = [
       "This passage connects naturally to the Prophet's (pbuh) own biography (the fatrat al-wahy after the first revelation) — a strong answer briefly notes this historical link before explaining the passage's content and theme.",
     relatedTopics: [
       { paper: 1, section: "history-of-the-quran", slug: "first-revelation", title: "The First Revelation" },
+      { paper: 1, section, slug: "adam-al-baqarah-2-30-37", title: "Theme 3 (God and His Messengers): Adam — Qur'an 2:30-37" },
+      { paper: 1, section, slug: "al-kawthar-108", title: "Theme 3 (God and His Messengers): Muhammad (pbuh) — Surah al-Kawthar, Qur'an 108:1-3" },
+    ],
+  },
+  {
+    slug: "al-kawthar-108",
+    paper: 1,
+    section,
+    title: "Theme 3 (God and His Messengers): Muhammad (pbuh) — Surah al-Kawthar, Qur'an 108:1-3",
+    standing: "The Qur'an's shortest surah: Allah's promise of abundance to the Prophet (pbuh), an instruction to pray and sacrifice for Him alone, and reassurance about his enemies.",
+    learningObjectives: [
+      "State the reference and structure of Surah al-Kawthar.",
+      "Explain what the surah promises the Prophet (pbuh) and what it instructs him to do in response.",
+      "Explain the surah's traditional historical context and why it is grouped under God's relationship with His Messengers.",
+    ],
+    keyTerms: [
+      { term: "Al-Kawthar", meaning: "\"Abundance\"/a river in Paradise — the gift named in the surah's opening verse, granted to the Prophet (pbuh)." },
+      { term: "Nahr", meaning: "Sacrifice — the act the Prophet (pbuh) is instructed to perform for Allah alone, paired with prayer in the surah's second verse." },
+    ],
+    explanation: [
+      "Surah al-Kawthar (Qur'an 108:1-3), the shortest surah in the Qur'an, is set under Theme 3, God's relationship with His Messengers, because it is a direct address from Allah to Prophet Muhammad (pbuh), granting him a gift and reassuring him in the face of opposition and mockery from his enemies.",
+      "Sahih International translation: \"Indeed, We have granted you, [O Muhammad], al-Kawthar. So pray to your Lord and sacrifice [to Him alone]. Indeed, your enemy is the one cut off.\" — Allah announces that He has granted the Prophet (pbuh) al-Kawthar (understood as abundance, and traditionally as a river or fountain in Paradise), instructs him to pray and sacrifice for Allah alone in response, and declares that it is his enemy, not he, who is truly \"cut off\" (deprived of good).",
+      "Traditionally, this surah is understood to have been revealed to comfort the Prophet (pbuh) after mockery from his opponents, including taunts about the deaths of his infant sons — with Allah's promise of lasting abundance answering the specific insult directly by promising the Prophet (pbuh) what his enemies claimed he lacked.",
+      "As with Surah al-Duha, the pattern here is one of divine reassurance paired with a call to worship: the Prophet's (pbuh) response to being granted abundance is prayer and sacrifice directed to Allah alone, modelling gratitude expressed through worship rather than retaliation against his critics.",
+    ],
+    keyFacts: [
+      { label: "Reference", detail: "Qur'an 108:1-3 (Surah al-Kawthar) — the shortest surah in the Qur'an." },
+      { label: "Core theme", detail: "Allah grants the Prophet (pbuh) abundance (al-Kawthar); instructs him to pray and sacrifice for Allah alone; declares his enemy the one truly deprived." },
+      { label: "Traditional context", detail: "Understood to answer mockery from the Prophet's (pbuh) opponents, reassuring him of lasting good in response to taunts." },
+    ],
+    ao1Guidance: [
+      "State all three verses' content in sequence: the gift of al-Kawthar, the instruction to pray and sacrifice, and the statement about the enemy being cut off.",
+      "Note that this is the shortest surah in the Qur'an — a frequently tested structural fact.",
+    ],
+    ao2Guidance: [
+      "Explain the significance of pairing a promise of abundance with a call to worship (prayer and sacrifice) rather than a call to celebration alone — gratitude is directed back to Allah, not treated as an end in itself.",
+      "Discuss why reassuring a Messenger facing personal mockery and loss, as this surah does, matters for showing that Allah's support for His Messengers includes emotional and social vindication, not only practical guidance.",
+    ],
+    commonMistakes: [
+      "Omitting the historical context (comfort after mockery/loss) when asked why this surah was revealed.",
+      "Missing that the response instructed is worship (prayer and sacrifice), not merely a general command to be grateful.",
+    ],
+    examTip:
+      "Surah al-Kawthar pairs naturally with Surah al-Duha in an answer on Allah's care for the Prophet (pbuh) in adversity — both are short Makkan surahs offering personal reassurance followed by a practical instruction, which makes a strong comparative point.",
+    relatedTopics: [
+      { paper: 1, section, slug: "muhammad-al-duha-93", title: "Theme 3 (God and His Messengers): Muhammad (pbuh) — Qur'an 93:1-11" },
       { paper: 1, section, slug: "adam-al-baqarah-2-30-37", title: "Theme 3 (God and His Messengers): Adam — Qur'an 2:30-37" },
     ],
   },

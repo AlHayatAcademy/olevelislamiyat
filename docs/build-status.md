@@ -1,5 +1,114 @@
 # Build Status
 
+## Syllabus Completion Pass — 15/15 Qur'an passages, 20/20 Hadiths, Jihad added (this session, 2026-08-04)
+
+Closed the three remaining honest gaps logged in `docs/syllabus-coverage-audit.md`: the Qur'an Major Themes section had 9 of 15 official passages, Major Teachings of Hadith covered the 20 official Hadiths only loosely via 8 thematic groupings, and Jihad (the syllabus's own fourth topic under Paper 2's Articles of Faith/Pillars area) had no content at all. Full detail (mapping tables, per-item sourcing) is in `docs/syllabus-coverage-audit.md`; this section is the condensed verification log in the same format as the "Verification Pass" section below.
+
+### Qur'an passages added (Sahih International translation, verified via web search against quran.com/corpus.quran.com)
+
+- Qur'an 41:37 (Fussilat) — full verse quoted, `fussilat-41-37`.
+- Qur'an 42:4-5 (al-Shura) — both verses quoted, `al-shura-42-4-5`.
+- Qur'an 2:21-22 (al-Baqarah) — both verses quoted, `al-baqarah-2-21-22`.
+- Surah 114 (al-Nas), verses 1-6 — full surah quoted, `al-nas-114`.
+- Qur'an 6:75-79 (al-An'am, Ibrahim/Abraham) — verses 75, 76-78 (star/moon/sun) and 79 quoted, `ibrahim-al-anam-6-75-79`.
+- Surah 108 (al-Kawthar), verses 1-3 — full surah quoted, `al-kawthar-108`.
+
+### Hadiths added or newly cited (collection + exact number confirmed via sunnah.com/web search)
+
+- Five kinds of martyrdom (plague, abdominal disease, drowning, collapsing building, battle) — Sahih al-Bukhari 2829.
+- Best food is that earned by one's own hands' work; Dawud (AS) example — Sahih al-Bukhari 2072.
+- One who looks after a widow/the poor is like a mujahid or a devoted night-worshipper — Sahih al-Bukhari 5353.
+- "I and the one who looks after an orphan..." (two joined fingers) — Sahih al-Bukhari 6005.
+- "Make things easy... give glad tidings and do not repel people..." — Sahih al-Bukhari 69 (related version Sahih al-Bukhari 3038).
+- Qur'an memoriser like the owner of a tethered camel — Sahih al-Bukhari 5031 (related versions 5032, 5033; also Sahih Muslim 789).
+- "May Allah's mercy be on him who is lenient in buying, selling and demanding back his money" — Sahih al-Bukhari 2076.
+- "Those who are merciful are shown mercy by the Most Merciful..." — Sunan Abi Dawud 4941 / Jami' at-Tirmidhi 1924.
+- "Haya (modesty) does not bring anything except good" — Sahih al-Bukhari 6117 / Sahih Muslim 37.
+- A mustard seed's weight of pride bars a person from Paradise — Sahih Muslim 91.
+- "Allah does not look at your bodies or your wealth, but looks at your hearts and your deeds" — Sahih Muslim 2564.
+- "This world is a prison for the believer and a paradise for the disbeliever" — Sahih Muslim 2956 (confirmed authentic/Sahih, not a fabricated tradition, via direct web-search cross-check before use).
+- "Whoever believes in Allah and the Last Day should not harm his neighbour... should honour his guest... should speak good or remain silent" — Sahih al-Bukhari 6018 / Sahih Muslim 47 (added to the existing `social-ethical-responsibilities` lesson, expanding rather than replacing its prior content).
+
+### Jihad topic (new)
+
+- `jihad-physical-mental-spiritual` added to `data/topics/paper2-articles-and-pillars.ts` and `data/syllabus.ts`. No specific Hadith/Qur'an citation was fabricated for this topic; content is the standard, non-inflammatory academic Islamic-studies treatment of Jihad's three dimensions (spiritual/greater Jihad against the self, mental/intellectual effort, and strictly regulated physical struggle against external threat — explicitly distinguished from terrorism/indiscriminate violence), consistent with how Cambridge and other exam boards present this topic.
+
+### QA command output (this pass, exact output)
+
+```
+$ npm run lint
+> eslint .
+(no output — exit 0)
+
+$ npm run typecheck
+> tsc --noEmit
+(no output — exit 0)
+
+$ npm run build
+> next build
+   ✓ Compiled successfully
+   ✓ Generating static pages (192/192)
+(exit 0)
+
+$ npx opennextjs-cloudflare build
+...
+OpenNext build complete.
+(exit 0, `.open-next/worker.js` generated)
+```
+
+---
+
+## Quotes/References Syllabus Outline Navigator (this session, 2026-08-04)
+
+Scope: `/quotes-references` restructured, on request, from a flat reference-type listing into a
+full navigable syllabus outline, while keeping the original type-based browsing intact as a
+second tab.
+
+### What changed
+- `app/quotes-references/page.tsx` (rebuilt) — now the primary view: `h1` page title → `h2` Paper
+  1 / Paper 2 → `h3` per section (all 8 syllabus sections, both papers) → one button per subtopic,
+  reusing the icon-badge/accent-rotation card style from `SectionHub.tsx`/the homepage tiles via
+  `lib/tile-accent.ts`. Every subtopic from `data/syllabus.ts` renders a button, including any
+  added mid-session by the concurrent syllabus-expansion work (new subtopics fall back to a
+  keyword-guessed icon rather than erroring — see below).
+- `app/quotes-references/by-type/page.tsx` (new) — the original flat "grouped by reference type"
+  view, moved here verbatim (content unchanged) so existing category browsing keeps working.
+- `components/QuotesReferencesTabs.tsx` (new, client) — "Browse by Topic" / "Browse by Type" tab
+  switch, modelled directly on the existing `PaperTabs.tsx` pattern: real links to real routes, no
+  client-side content swapping, so both views stay server-rendered.
+- `app/quotes-references/topic/[section]/[subtopic]/page.tsx` (new) — every syllabus subtopic's
+  landing page. Shows its matching reference entries directly if any exist; otherwise shows an
+  honestly-labelled "Quotes and references for this topic will be added soon" state with a link to
+  the real lesson page (`/paper-{n}/{section}/{subtopic}`) when that lesson exists yet — never a
+  dead/broken page, and no fabricated quote content.
+- `lib/quotes-references-topics.ts` (new) — per-subtopic Lucide icon assignments picked from each
+  topic's actual content (e.g. `Crown` for Ayat al-Kursi/the Throne Verse, `Swords` for "Fighting
+  Against Evil" and Ali ibn Abi Talib, `Coins` for Zakah, `Building2` for Hajj, `Clock` for Salah,
+  `Feather` for belief in Angels), plus a keyword-based fallback (`iconForSubtopic`) for any
+  subtopic slug not yet in the hand-picked map, and a hand-matched `subtopic slug → reference id[]`
+  table against the current 29-entry `data/references.ts` bank (the `topic` field there is free
+  text, not a slug, so exact matching isn't reliable — this table is the source of truth until the
+  bank grows and can be re-derived).
+- `app/sitemap.ts` — added `/quotes-references/by-type` and one entry per syllabus subtopic under
+  `/quotes-references/topic/{section}/{subtopic}`.
+- No changes to `data/references.ts` content, `data/syllabus.ts`, `data/topics/**`, or
+  `components/TopicPage.tsx` (out of scope / owned by a concurrent session).
+
+### Reference counts stay honest
+Every topic button always shows a real count ("0 references · coming soon" or "N references"),
+never hides the count or fakes a number — most of the ~50 syllabus subtopics currently show 0
+since the user is supplying quote content later.
+
+### QA
+- `npm run lint` → passed, zero errors.
+- `npm run typecheck` → passed, zero errors.
+- `npm run build` → see chat summary for the exact re-run result; a concurrent agent was actively
+  editing `data/syllabus.ts`/`data/topics/**` during this session and at least one build attempt
+  failed with a `.next`-cache read error (`ENOENT .next/server/pages-manifest.json`) unrelated to
+  this change — re-run after their edits settle.
+
+---
+
 ## UI/UX Polish Pass (this session, 2026-08-04)
 
 Scope: visual/interaction-only pass in response to user feedback that the site "did not look professional, needs best graphics, best navigation, every button must be working." No factual/textual content was changed; no new dependencies were added (no animation library — CSS transitions + Tailwind utilities + vanilla React state only, per the original minimal-bundle constraint).
@@ -782,3 +891,56 @@ Files touched: `data/site-config.ts`, `components/Header.tsx`, `components/Secti
 `app/past-papers/topical/page.tsx`, and breadcrumb additions to the 11 `PageShell` pages listed
 above. `data/model-answers.ts` was not touched. No files under `source/` or `.git` were touched;
 no commits made.
+
+## Quizzes Syllabus Outline Navigator (this session, 2026-08-04)
+
+Scope: `/quizzes` rebuilt, on request, from a flat "list of the 14 existing quizzes" page into a
+full navigable outline of the entire syllabus (Paper 1/Paper 2 → 8 sections → all subtopics), so
+every syllabus subtopic has a real, well-organized entry — not just the ones with a quiz today.
+
+### What changed
+- `app/quizzes/page.tsx` (rebuilt, server component, no new client-side interaction needed) —
+  proper heading hierarchy: `h1` "Quizzes" → `h2` per paper ("Paper 1"/"Paper 2") → `h3` per
+  syllabus section (all 8 sections, both papers, read from `data/syllabus.ts`) → one card per
+  subtopic underneath. Reuses the existing icon-badge/accent-rotation card style
+  (`lib/tile-accent.ts`, the same `tileAccentClasses` rotation already used on this page and on
+  `app/resources/page.tsx`) and the `Button` component for "Start Quiz" links — no parallel
+  styling system introduced.
+- A local `getQuizForTopic(paper, section, subtopic)` lookup (there was no existing
+  `getQuizByTopic` helper in `data/quizzes.ts` to reuse, so a small equivalent was written inline)
+  decides, per subtopic, whether a real quiz exists:
+  - **Quiz exists** → live card, same visual treatment as before (icon badge, question count,
+    description, "Start Quiz" button to `/quizzes/[id]`). All 14 existing quizzes remain fully
+    functional and are still the only cards that link to an actual quiz.
+  - **No quiz yet** → a visually distinct dashed-border, muted card carrying an honest "0
+    questions" badge and a "Quiz coming soon" pill (matching the established
+    coming-soon convention from `app/resources/page.tsx`/`components/SectionHub.tsx` — plain
+    badge, not styled as a clickable button), plus a "Read the lesson →" link through to the real
+    `/paper-{1|2}/{section}/{subtopic}` lesson page so the topic is never a dead end. No fabricated
+    quiz content was added to `data/quizzes.ts` (left untouched, read-only per scope) — the user
+    is supplying more quiz material later.
+- Per-subtopic Lucide icons (`subtopicIcons` map in the new page) were chosen to fit each topic's
+  actual content — e.g. `Crown` for Ayat al-Kursi (the Throne Verse) and for each of the four
+  Rightly Guided Caliphs, `Mountain` for the First Revelation (Cave of Hira), `Compass` for the
+  Hijrah, `Coins` for Zakah, `Clock` for Salah, `Moon` for Sawm, `Feather` for belief in Angels,
+  `Shield` for "Fighting Against Evil", `HeartHandshake` for "Rights of Others and Brotherhood" —
+  falling back to each section's already-established icon (matched to the `sectionIcons` arrays
+  already used on `/paper-1` and `/paper-2`, e.g. `BookOpen` for Major Themes of the Qur'an,
+  `MessageSquareQuote` for Major Teachings of the Hadiths) for any subtopic not explicitly mapped,
+  so the same section always reads with a consistent icon family across the site.
+- Page intro copy states the real total subtopic count (computed live from
+  `paper1Sections`/`paper2Sections`, not hardcoded) alongside the real live quiz count
+  (`quizzes.length`), and explicitly says most topics are marked "coming soon" for now.
+- No changes to `data/syllabus.ts`, `data/topics/**`, `components/TopicPage.tsx`, or
+  `app/quotes-references/**` (owned by concurrent sessions); `data/quizzes.ts` was read-only.
+
+### QA
+- `npm run lint` → `eslint .` — passed, zero errors/warnings.
+- `npm run typecheck` → `tsc --noEmit` — passed, zero errors.
+- `npm run build` → passed on a re-run after two earlier attempts hit a transient
+  `ENOENT .next/server/pages-manifest.json` error caused by a concurrent agent also building in
+  the same shared `.next` directory at the same time — unrelated to this change. Final clean run:
+  all routes generated successfully including `/quizzes` (247 B) and all 14 `/quizzes/[id]` SSG
+  paths, shared First Load JS 102 kB, no regressions.
+
+Files touched: `app/quizzes/page.tsx` only. `data/quizzes.ts` was read but not modified.
