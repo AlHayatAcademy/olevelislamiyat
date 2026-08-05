@@ -1,5 +1,44 @@
 # Build Status
 
+## Paper 1/2 Full Syllabus Outline Expansion (this session, 2026-08-05)
+
+Brought `/paper-1` and `/paper-2` up to the same standard already applied to `/quizzes` and
+`/quotes-references`: instead of only a 4-card grid linking one click deeper to each section hub,
+both top-level pages now render the full syllabus hierarchy inline — Paper (h1) → Section (h2,
+all 4, in order, with marks and description) → every subtopic as a real icon-badge button linking
+straight to its lesson at `/paper-{1|2}/[section]/[topic]`.
+
+- New shared helper `lib/subtopic-icons.ts` extracted from `app/quizzes/page.tsx`'s existing
+  per-subtopic Lucide icon map (`getSubtopicIcon(paper, sectionSlug, subtopicSlug)`, plus the
+  `paper1SectionIcons`/`paper2SectionIcons` fallback maps) so the icon-matching logic has one
+  source of truth instead of being duplicated a third time; `app/quizzes/page.tsx` now imports
+  from it too (behavior unchanged, verified by the same 14 quiz IDs still building).
+- Subtopic buttons reuse the accent-badge card pattern and `accentRotation`/`tileAccentClasses`
+  rotation already used on `/quotes-references` (green/gold/purple/blue/teal cycling per card),
+  each linking to the real lesson page, with a chevron reveal on hover.
+- Each section block keeps a "Section hub" link through to the existing `/paper-{1|2}/[section]`
+  page (unchanged, still functional) alongside a live lesson-count line
+  (`getTopicsForSection`) so "lessons coming soon" vs. "N lessons available" stays accurate.
+- Counts are computed live from `data/syllabus.ts`, not hardcoded: Paper 1 = 30 subtopics across
+  4 sections (15 + 5 + 4 + 6); Paper 2 = 38 subtopics across 4 sections (17 + 5 + 4 + 12).
+- All pre-existing content on both pages (intro paragraph, `PaperTabs`, "View Full Syllabus" /
+  "View Exam Pattern" buttons, FAQ section, FAQPage JSON-LD) was kept as-is; the outline is an
+  addition, not a replacement.
+- Did not touch `data/syllabus.ts`, `data/topics/**`, `components/SectionHub.tsx`,
+  `open-next.config.ts`, `wrangler.jsonc`, `next.config.ts`, or `middleware.ts` (owned by
+  concurrent sessions/read-only per scope).
+
+### QA
+- `npm run lint` → `eslint .` — passed, zero errors/warnings.
+- `npm run typecheck` → `tsc --noEmit` — passed, zero errors.
+- `npm run build` → passed cleanly; `/paper-1` and `/paper-2` both build as static routes (642 B
+  each), all existing `/paper-1/[section]`, `/paper-1/[section]/[topic]`, `/paper-2/[section]`,
+  `/paper-2/[section]/[topic]` SSG paths still generate, `/quizzes` and its 14 `/quizzes/[id]`
+  paths still generate unaffected by the icon-map extraction, shared First Load JS 102 kB.
+
+Files touched: `app/paper-1/page.tsx`, `app/paper-2/page.tsx`, `lib/subtopic-icons.ts` (new),
+`app/quizzes/page.tsx` (icon map extraction only, no behavior change).
+
 ## Syllabus Completion Pass — 15/15 Qur'an passages, 20/20 Hadiths, Jihad added (this session, 2026-08-04)
 
 Closed the three remaining honest gaps logged in `docs/syllabus-coverage-audit.md`: the Qur'an Major Themes section had 9 of 15 official passages, Major Teachings of Hadith covered the 20 official Hadiths only loosely via 8 thematic groupings, and Jihad (the syllabus's own fourth topic under Paper 2's Articles of Faith/Pillars area) had no content at all. Full detail (mapping tables, per-item sourcing) is in `docs/syllabus-coverage-audit.md`; this section is the condensed verification log in the same format as the "Verification Pass" section below.
