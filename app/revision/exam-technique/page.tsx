@@ -117,6 +117,22 @@ export default function ExamTechniquePage() {
           ))}
         </div>
       </section>
+
+      <section className="mt-10 rounded-xl border border-border bg-surface-soft p-6">
+        <h2 className="font-heading text-lg font-semibold text-text">
+          What does an A-grade answer actually look like?
+        </h2>
+        <p className="mt-2 text-text-muted">
+          This guide explains how to structure an answer that scores on both AO1 and AO2. For what
+          actually separates a Grade A response from a Grade C or Grade F response — in terms of
+          knowledge, understanding, and the ability to evaluate significance and support a personal
+          opinion — see the{" "}
+          <Link href="/grade-descriptions" className="text-primary underline">
+            grade descriptions guide
+          </Link>
+          .
+        </p>
+      </section>
     </div>
   );
 }

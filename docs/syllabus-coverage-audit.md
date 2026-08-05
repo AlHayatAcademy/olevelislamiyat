@@ -109,6 +109,23 @@ The syllabus's fourth Paper 2 topic area (alongside the Articles of Faith and Pi
 
 `cambridge-igcse-islamiyat-0493-2026-2027.pdf` extracted (30 pages) but not yet clause-diffed against 2058. Assumed structurally parallel per site copy ("O Level 2058 / IGCSE 0493"); full verification pending.
 
+## Official 2026-2027 IGCSE 0493 syllabus cross-check + Grade Descriptions added (this session, 2026-08-05)
+
+Read the full text of `cambridge-igcse-islamiyat-0493-2026-2027.pdf` directly for this pass. Findings:
+
+- **Exam pattern data confirmed correct**: `data/syllabus.ts`'s `examPattern` (2 papers, 1.5 hours, 50 marks each, AO1 68% / AO2 32%, "Question 1, Question 2, and two others") matches the official document exactly. No change needed.
+- **Gap found and fixed — Grade Descriptions**: the official syllabus's Section 8 ("Grade descriptions") — general descriptions of the standard expected at Grade A, Grade C and Grade F across (1) knowledge/organisation of content, (2) understanding of religious language/concepts/belief-practice links, (3) seeing significance and expressing a supported personal opinion — had zero presence anywhere on the site (`grep`-confirmed). Added a new page, `app/grade-descriptions/page.tsx`, written entirely in original wording (no verbatim Cambridge descriptor text), covering all three grades across all three dimensions, with an explicit AO1/AO2 mapping note at the end. Linked from `/exam-pattern`, `/revision/exam-technique`, and added as a tile on `/revision`; added to `app/sitemap.ts`.
+- **Combination-restriction fact added**: the official syllabus states 0493 cannot be combined with the same-title-same-level syllabus (O Level Islamiyat 2058) or with O Level Islamic Studies (2068) for certification purposes. This fact was previously absent from the site; added a brief, accurate paragraph to `/cambridge-disclaimer` under a new "Qualification combination rules" heading.
+- **Grading scale**: confirmed no page on the site states an incorrect grading scale for 0493 (IGCSE, A*-G) — none of the pages checked (`/syllabus`, `/exam-pattern`, `data/site-config.ts`) make any grading-scale claim at all, so there was nothing to contradict and nothing fabricated. No 2058-specific grading-scale claim exists anywhere either, consistent with the instruction not to guess it.
+- **Both-papers-required fact**: already correctly stated on `/syllabus` and `/exam-pattern` ("Both papers are required"/"both required for a grade"). No change needed.
+- **AO1/AO2 weighting**: re-grepped every page referencing AO1/AO2 — all consistently cite 68%/32% or defer to the dedicated pages that do; no contradicting percentage found anywhere.
+
+### Qur'an passage / Hadith grouping spot-check (this session, 2026-08-05)
+
+Spot-checked all 15 Qur'an lessons in `data/topics/paper1-major-themes.ts` against the official three-group appendix structure ("Allah in Himself" / "Allah's relationship with the created world" / "Allah's Messengers"): all 15 titles and references (2:255, 6:101-103, 41:37, 42:4-5, 112:1-4 under Theme 1; 1:1-7, 2:21-22, 96:1-5, 99:1-8, 114:1-6 under Theme 2; 2:30-37, 6:75-79, 5:110, 93:1-11, 108:1-3 under Theme 3) match the official grouping and references exactly — no miscategorisation found, no fix needed.
+
+Spot-checked 8+ Hadith lessons in `data/topics/paper2-major-teachings-hadith.ts` across the "Individual Conduct" / "Community Life" split: confirmed the "believers are like a single body/structure" Hadith (Bukhari 6011/481) is correctly filed under `rights-and-brotherhood`, titled "Community Life: Rights of Others and Muslim Brotherhood" — not miscategorised as individual conduct. All other checked lessons (charity/sharing, social responsibilities, enjoining good/forbidding evil, caring for the vulnerable, kindness in commerce, mercy to others — all "Community Life"; belief/worship, sincerity, fighting evil, serving the cause of Allah, martyrdom, honest livelihood, retaining the Qur'an, humility/sincerity — all "Individual Conduct") are sensibly and consistently grouped. No fix needed.
+
 ## Milestone 1 conclusion
 
 Syllabus hierarchy and exam pattern are fully and accurately captured. Paper 1 detailed content is available from a usable source and partially structured; Paper 2 detailed content is blocked on the copyright question in `source-conflicts.md`. No topic content has been hardcoded into the app beyond the syllabus-derived structure and pattern already summarised here — page bodies use explicitly labelled placeholders where full content is pending.

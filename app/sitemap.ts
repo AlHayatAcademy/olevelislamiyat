@@ -11,6 +11,7 @@ const staticRoutes = [
   "/",
   "/syllabus",
   "/exam-pattern",
+  "/grade-descriptions",
   "/paper-1",
   "/paper-2",
   "/past-papers",

@@ -56,6 +56,16 @@ export default function CambridgeDisclaimerPage() {
         source, and treat this site as a supporting study aid rather than a replacement for it.
       </p>
 
+      <h2 className="mt-8 text-xl font-heading font-bold text-primary">Qualification combination rules</h2>
+      <p>
+        Cambridge does not permit a candidate to combine {siteConfig.qualifications.igcse.code} with
+        another syllabus of the same title at the same level — for example, a candidate cannot be
+        awarded both {siteConfig.qualifications.igcse.code} and Cambridge O Level Islamiyat{" "}
+        {siteConfig.qualifications.oLevel.code} in the same series, nor combine it with Cambridge O
+        Level Islamic Studies (2068). Always check the current syllabus document or your school/exam
+        centre for the definitive combination rules for your entry.
+      </p>
+
       <h2 className="mt-8 text-xl font-heading font-bold text-primary">Who runs this site</h2>
       <p>
         {siteConfig.siteName} is a project of {siteConfig.institution.educationDivision}, the

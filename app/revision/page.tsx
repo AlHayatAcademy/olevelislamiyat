@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenText, CalendarClock, Users, Target, AlertTriangle, GraduationCap } from "lucide-react";
+import { ArrowRight, BookOpenText, CalendarClock, Users, Target, AlertTriangle, GraduationCap, Award } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/Button";
@@ -67,6 +67,13 @@ const hubLinks: HubLink[] = [
     description: "Every common-mistake warning from across the lessons, collected in one browsable page.",
     icon: AlertTriangle,
     accent: "gold",
+  },
+  {
+    href: "/grade-descriptions",
+    title: "Grade Descriptions",
+    description: "What separates a Grade A, Grade C and Grade F answer, across knowledge, understanding and evaluation.",
+    icon: Award,
+    accent: "purple",
   },
 ];
 

@@ -62,6 +62,10 @@ export default function ExamPatternPage() {
         <Link href="/revision/exam-technique" className="text-primary underline">
           the AO1/AO2 exam technique guide
         </Link>
+        . For what actually separates a Grade A answer from a Grade C or F answer, see{" "}
+        <Link href="/grade-descriptions" className="text-primary underline">
+          the grade descriptions guide
+        </Link>
         .
       </p>
 
