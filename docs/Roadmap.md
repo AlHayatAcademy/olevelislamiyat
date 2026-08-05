@@ -31,13 +31,30 @@ before feature development (accounts, progress tracking, etc.) begins.
       (`brandColors` in `tailwind.config.ts`)
 - [ ] i18n architecture groundwork (Urdu/Arabic, RTL) — only worth doing once actually planned
 
-## Known open issues (found via testing, not yet fixed)
+## Known open issues
 
-- **Soft-404 on unknown topic slugs**: `/paper-1/<valid-section>/<invalid-slug>` renders the
-  "Page Not Found" UI but responds HTTP 200, not 404 — documented and asserted (as current
-  behavior) in `e2e/topic-pages.spec.ts`, with the likely cause noted in a comment there. Real fix
-  is a routing/behavior change, intentionally out of scope for the docs/testing/a11y passes that
-  found it.
+- ~~Soft-404 on unknown topic slugs~~ — **fixed** in Phase 3.1: turned out to affect all 13
+  fully-enumerable dynamic routes, not just topic pages; fixed with `export const dynamicParams =
+  false` on each. See [Decision-Log.md](./Decision-Log.md) and
+  [Migration-History.md](./Migration-History.md).
+
+## Phase 3 — Product development
+
+Full product audit and phase sequencing agreed with the site owner; tracked here as it progresses.
+
+- [x] **3.1** — Fix the soft-404 routing bug (see above)
+- [x] **3.2 (design only)** — [Content-System-Design.md](./Content-System-Design.md): evaluated
+      whether to migrate off TypeScript content arrays. **Recommendation: not yet** — current
+      system has headroom; revisit only when the triggers in that doc's §7 are met. One
+      cheap follow-up recommended: add optional `tags`/`difficulty` fields to existing content
+      types to unblock 3.3/3.6 later.
+- [ ] **3.3** — Student learning features (Continue Learning, Bookmarks, Recently Viewed,
+      per-section progress, Learning Dashboard) — localStorage-based, designed for a later
+      account-backed migration. In progress.
+- [ ] **3.4** — Advanced search (typo tolerance, filters by paper/topic/year/type)
+- [ ] **3.5** — AI features (scoped narrowly — see the Product Audit's caution on content-integrity
+      risk before generating vs. evaluating)
+- [ ] **3.6** — Personalization data model (folded into 3.3's design, not a separate later phase)
 
 ## Before Phase 3 (feature development)
 

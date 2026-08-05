@@ -3,6 +3,11 @@
 Where educational content lives, how it's organized, and how to add more of it. This is the doc
 to read before authoring new lessons, questions, quizzes, or references.
 
+> Looking for the proposal to scale this to thousands of items, flashcards, glossary entries, and
+> more? See [Content-System-Design.md](./Content-System-Design.md) — a design-only document
+> (nothing in it is implemented yet). Current recommendation: no migration needed yet; this
+> document describes the system as it actually works today.
+
 ## Where content lives
 
 All content is typed TypeScript data — no CMS, no database, no MDX. Every content item is a
