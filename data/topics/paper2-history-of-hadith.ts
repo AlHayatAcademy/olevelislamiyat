@@ -125,13 +125,14 @@ export const paper2HistoryOfHadithTopics: Topic[] = [
       "Several companions kept private booklets known as Sahifah. Abu Hurairah (RA), who narrated the largest number of Hadith of any companion, is reported to have written many down, and his student is recorded as recalling that Abu Hurairah kept a written record of everything he narrated. Abdullah ibn Abbas (RA) similarly wrote extensively, and his surviving written material is described in early sources as filling a substantial load; Anas ibn Malik (RA), who served the Prophet (pbuh) for around ten years, and Abdullah ibn Amr (RA) also compiled their own written records.",
       "In the first century after the Hijrah, as Islam spread rapidly and new generations of Muslims further removed from the Companions needed reliable access to the Prophet's (pbuh) teaching, the Umayyad caliph Umar ibn Abd al-Aziz took the historic step of formally directing scholars to compile Hadith into organised books, out of concern that unwritten material could be lost as the Companions themselves grew fewer.",
       "Among the Tabi'un scholars who responded to this directive, Muhammad ibn Shihab al-Zuhri is particularly notable: he compiled material including a work known as al-Maghazi, and copies of his compiled Hadith were distributed by the caliph's instruction to different regions of the Muslim world. Other Tabi'un scholars, including Abu Bakr ibn Hazm and Qasim ibn Muhammad ibn Abi Bakr, carried out similar compilation work in this period.",
-      "In the following generation, the Tab'a Tabi'in built further on this foundation with even more systematic scholarship: Imam Malik ibn Anas compiled al-Muwatta', a carefully selected collection organised by subject, and Imam Ahmad ibn Hanbal compiled the Musnad, an extensive collection arranged by the companion who narrated each Hadith. These works represent a maturing science of Hadith compilation that set the stage for the six major authenticated collections that followed.",
+      "In the following generation, the Tab'a Tabi'in built further on this foundation with even more systematic scholarship, producing two distinct types of large collection. Musannaf works, such as the Musannaf of Abd al-Razzaq al-San'ani and the Musannaf of Ibn Abi Shaybah, organised Hadith by subject or chapter (e.g. prayer, fasting, transactions), making them easier to consult for a specific legal question. Musnad works, most notably Imam Ahmad ibn Hanbal's Musnad, instead organised Hadith by the companion who narrated each one, regardless of subject. Imam Malik ibn Anas's al-Muwatta' — an early, carefully selected subject-based collection that also incorporated legal opinion — is often regarded as a forerunner of the musannaf style. These works represent a maturing science of Hadith compilation that set the stage for the six major authenticated collections that followed.",
     ],
     keyFacts: [
       { label: "Companion who narrated the most Hadith", detail: "Abu Hurairah (RA)." },
       { label: "Caliph who ordered formal compilation", detail: "Umar ibn Abd al-Aziz." },
       { label: "Leading Tabi'un compiler", detail: "Muhammad ibn Shihab al-Zuhri (compiled al-Maghazi, among other material)." },
-      { label: "Tab'a Tabi'in compilers", detail: "Imam Malik ibn Anas (al-Muwatta') and Imam Ahmad ibn Hanbal (Musnad Ahmad)." },
+      { label: "Tab'a Tabi'in compilers", detail: "Imam Malik ibn Anas (al-Muwatta'), Imam Ahmad ibn Hanbal (Musnad Ahmad), and musannaf compilers such as Abd al-Razzaq al-San'ani and Ibn Abi Shaybah." },
+      { label: "Musannaf vs Musnad", detail: "Musannaf collections are organised by subject/chapter; Musnad collections are organised by the narrating companion." },
       { label: "Three generational stages", detail: "Companions (memorisation and private Sahifah) → Tabi'un (organised compilation under caliphal direction) → Tab'a Tabi'in (large, systematic collections)." },
     ],
     ao1Guidance: [
@@ -146,6 +147,7 @@ export const paper2HistoryOfHadithTopics: Topic[] = [
       "Assuming Hadith were entirely unwritten until the six authentic books were compiled — a considerable amount of material was already recorded by Companions in private Sahifah generations earlier.",
       "Forgetting to name Umar ibn Abd al-Aziz as the caliph who initiated formal, organised compilation.",
       "Treating Imam Malik's al-Muwatta' or Imam Ahmad's Musnad as one of the 'six authentic books' — they belong to an earlier and separate stage of compilation, distinct from the Sihah Sittah.",
+      "Confusing musannaf (subject-organised) and musnad (narrator-organised) as the same type of collection — they are organised on different principles.",
     ],
     examTip:
       "Draw yourself a simple three-box timeline (Companions → Tabi'un → Tab'a Tabi'in) with one name and one fact in each box — reproducing this structure quickly in the exam prevents the generations and their scholars from blurring together under time pressure.",
@@ -206,6 +208,60 @@ export const paper2HistoryOfHadithTopics: Topic[] = [
     relatedTopics: [
       { paper: 2, section: "history-of-hadith", slug: "compilation-stages", title: "Stages of Compilation: Companions to Tabi'un" },
       { paper: 2, section: "history-of-hadith", slug: "authentication-of-hadith", title: "Classification and Authentication of Hadith" },
+    ],
+  },
+  {
+    slug: "four-shia-hadith-collections",
+    paper: 2,
+    section,
+    title: "The Four Shi'a Hadith Collections (Kutub al-Arba'ah)",
+    standing: "The four Hadith collections regarded as most authoritative within Twelver Shi'a scholarship, compiled in parallel with the Sunni Sihah Sittah.",
+    learningObjectives: [
+      "Name the four Shi'a Hadith collections (Kutub al-Arba'ah) and their compilers.",
+      "State a distinguishing feature of each collection.",
+      "Explain how the Shi'a approach to Hadith authentication relates to and differs from the Sunni approach.",
+    ],
+    keyTerms: [
+      { term: "Kutub al-Arba'ah", meaning: "\"The Four Books\" — the collective name for the four Hadith collections regarded as most authoritative in Twelver Shi'a scholarship." },
+      { term: "Ahl al-Bayt", meaning: "\"The People of the House\" — the Prophet's (pbuh) family; Shi'a Hadith scholarship places particular weight on reports transmitted through this family, especially the line of Imams." },
+    ],
+    explanation: [
+      "Alongside the six Sunni collections (the Sihah Sittah), Shi'a Islam developed its own tradition of Hadith compilation and authentication, producing four collections — compiled mainly in the tenth and eleventh centuries CE — which came to be known collectively as the Kutub al-Arba'ah, the Four Books, and which hold a status within Twelver Shi'a scholarship broadly comparable to that of the six Sunni collections.",
+      "Al-Kafi, compiled by Muhammad ibn Ya'qub al-Kulayni, is regarded as the earliest and most authoritative of the four; it is organised into sections covering belief (Usul), practical law (Furu') and miscellaneous topics (Rawdah), and places particular weight on reports transmitted through the Prophet's (pbuh) family and the Imams.",
+      "Man La Yahduruhu al-Faqih, compiled by Muhammad ibn Babawayh (commonly known as al-Shaykh al-Saduq), is a practically focused legal reference intended, as its title (\"For Him Who Has No Jurist Present\") suggests, to guide ordinary believers on matters of worship and daily conduct when a scholar was not available to consult.",
+      "Tahdhib al-Ahkam and Al-Istibsar were both compiled by Muhammad ibn al-Hasan al-Tusi (Shaykh al-Tusi). Tahdhib al-Ahkam is the larger of the two, organised to expand on and clarify legal rulings, while Al-Istibsar is a shorter, more focused work specifically addressing Hadith that appear to conflict with one another and explaining how Shi'a jurists reconcile or prioritise between them.",
+      "As with the Sunni tradition, Shi'a scholars developed their own criteria for authenticating a Hadith, examining the reliability and character of narrators and the soundness of the chain of transmission; a report's status in Shi'a scholarship also depends on whether it is transmitted through the Ahl al-Bayt and the recognised line of Imams, reflecting the distinct doctrinal basis (the Imamate) discussed in Paper 1's First Islamic Community section.",
+      "The existence of parallel Sunni and Shi'a Hadith traditions, each built on rigorous if differently structured methods of transmission and authentication, is presented here descriptively, as part of the syllabus's required content on the history of Hadith, without asserting the superior reliability of either tradition.",
+    ],
+    keyFacts: [
+      { label: "Collective name", detail: "Kutub al-Arba'ah — \"The Four Books\"." },
+      { label: "1. Al-Kafi", detail: "Compiled by Muhammad ibn Ya'qub al-Kulayni; the earliest and most authoritative of the four." },
+      { label: "2. Man La Yahduruhu al-Faqih", detail: "Compiled by Ibn Babawayh (al-Shaykh al-Saduq); a practical legal reference for everyday worship and conduct." },
+      { label: "3. Tahdhib al-Ahkam", detail: "Compiled by Shaykh al-Tusi; a larger work expanding and clarifying legal rulings." },
+      { label: "4. Al-Istibsar", detail: "Compiled by Shaykh al-Tusi; a shorter work reconciling apparently conflicting Hadith." },
+      { label: "Period of compilation", detail: "Mainly the tenth and eleventh centuries CE." },
+      { label: "Distinctive emphasis", detail: "Particular weight given to reports transmitted through the Ahl al-Bayt and the line of Imams." },
+    ],
+    ao1Guidance: [
+      "Be able to name all four books and their compiler(s) — note that the same scholar, al-Tusi, compiled two of the four.",
+      "Learn one distinguishing feature per book, matching the level of detail expected for the Sunni six authentic books.",
+    ],
+    ao2Guidance: [
+      "Explain why the syllabus requires knowledge of both the Sunni and Shi'a Hadith traditions — a full understanding of the history of Hadith includes how both major branches of the Muslim world approached preservation and authentication.",
+      "Discuss, with academic neutrality, how the emphasis on transmission through the Ahl al-Bayt in the Shi'a tradition connects to the doctrine of the Imamate, showing how theology and Hadith methodology relate to one another.",
+      "Compare, without asserting which is correct, the shared underlying concern of both traditions — verifying who transmitted a report and whether its content is sound — even where their specific criteria and preferred narrators differ.",
+    ],
+    commonMistakes: [
+      "Assuming the Sihah Sittah are the only significant Hadith collections in Islam — the Kutub al-Arba'ah hold comparable authority within Shi'a scholarship.",
+      "Mixing up which two books were compiled by al-Tusi (Tahdhib al-Ahkam and Al-Istibsar) versus the other two compilers.",
+      "Treating this topic as a comparison of which tradition is \"more correct\" rather than describing each accurately and neutrally, as the syllabus requires.",
+    ],
+    examTip:
+      "If a question asks for \"the main compilers of Hadith and their activities\" without specifying Sunni or Shi'a, a strong answer briefly covers both traditions — naming al-Bukhari or al-Kulayni alongside a one-line description of their method shows breadth examiners reward.",
+    relatedTopics: [
+      { paper: 2, section: "history-of-hadith", slug: "six-authentic-books", title: "The Six Authentic Books (Sihah Sittah)" },
+      { paper: 2, section: "history-of-hadith", slug: "authentication-of-hadith", title: "Classification and Authentication of Hadith" },
+      { paper: 1, section: "first-islamic-community", slug: "descendants-and-shia-imamate", title: "The Prophet's (pbuh) Descendants and the Shi'a Imamate" },
     ],
   },
   {

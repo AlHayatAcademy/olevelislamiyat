@@ -1,5 +1,38 @@
 # Build Status
 
+## Three-section syllabus gap-fill: Qur'an revelation span, descendants/Imamate, Shi'a Hadith (this session, 2026-08-05)
+
+Owner asked to confirm "every single topic has been added". Manual audit against the official
+syllabus's own content description (not just subtopic counts) found 3 genuine content gaps and
+added 3 new lessons + 1 expanded existing lesson:
+
+- `data/topics/paper1-history-of-quran.ts`: added `revelation-over-23-years` (Makkan/Madinan
+  gradual revelation, 610-632 CE — the syllabus's own dating, not previously covered by any of the
+  5 existing lessons).
+- `data/topics/paper1-first-islamic-community.ts`: added `descendants-and-shia-imamate` (the
+  Prophet's (pbuh) children, grandchildren through Fatimah/Ali, and the Shi'a Imamate doctrine as
+  comparative belief — explicit syllabus content, previously entirely absent).
+- `data/topics/paper2-history-of-hadith.ts`: added `four-shia-hadith-collections` (Kutub al-Arba'ah
+  — explicit syllabus content alongside the six Sunni books, previously entirely absent); also
+  expanded `compilation-stages`' explanation/keyFacts/commonMistakes to name musannaf-type
+  collections (Abd al-Razzaq al-San'ani, Ibn Abi Shaybah) distinctly from the already-covered
+  musnad type, since the syllabus names both "musnad and musannaf collections" and only musnad was
+  previously named.
+- `data/syllabus.ts`: added the 3 new subtopic slugs to their sections' `subtopics` arrays.
+- Full detail, gap analysis and verification log: `docs/completeness-report.md` and
+  `docs/syllabus-coverage-audit.md`.
+
+Did not touch `data/model-answers.ts` or any `app/` route file (outline pages read subtopics live
+from `data/syllabus.ts`).
+
+### QA
+- `npm run lint` → passed, zero errors/warnings.
+- `npm run typecheck` → passed, zero errors.
+- `npm run build` → passed cleanly after removing a stale `.wrangler` sqlite lock file left over
+  from a prior interrupted run (unrelated to these code changes) — all routes generate.
+- 1:1 coverage re-verified mechanically: 99 subtopics in `data/syllabus.ts`, 99 lessons in
+  `data/topics/`, zero missing, zero orphaned (up from 96/96 before this pass).
+
 ## Paper 1/2 Full Syllabus Outline Expansion (this session, 2026-08-05)
 
 Brought `/paper-1` and `/paper-2` up to the same standard already applied to `/quizzes` and

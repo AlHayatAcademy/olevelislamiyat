@@ -56,6 +56,7 @@ export const paper1Sections: SyllabusSection[] = [
     subtopics: [
       { slug: "first-revelation", title: "The First Revelation" },
       { slug: "modes-of-revelation", title: "Different Modes of Revelation" },
+      { slug: "revelation-over-23-years", title: "Revelation Over 23 Years: Makkan and Madinan Periods" },
       { slug: "compilation-under-abu-bakr", title: "Compilation Under Abu Bakr" },
       { slug: "standardisation-under-uthman", title: "Standardisation Under Uthman" },
       { slug: "quran-as-source-of-law", title: "The Qur'an as a Source of Islamic Law" },
@@ -117,6 +118,7 @@ export const paper1Sections: SyllabusSection[] = [
       { slug: "ten-blessed-companions", title: "The Ten Blessed Companions" },
       { slug: "emigrants-and-helpers", title: "The Muhajirun (Emigrants) and Ansar (Helpers)" },
       { slug: "four-caliphs-in-prophets-lifetime", title: "Abu Bakr, Umar, Uthman and Ali in the Prophet's (pbuh) Lifetime" },
+      { slug: "descendants-and-shia-imamate", title: "The Prophet's (pbuh) Descendants and the Shi'a Imamate" },
       { slug: "scribes-of-revelation", title: "Scribes of the Divine Revelation" },
       { slug: "status-of-women", title: "Status and Rights of Women in Islam" },
     ],
@@ -165,6 +167,7 @@ export const paper2Sections: SyllabusSection[] = [
       { slug: "authentication-of-hadith", title: "Classification and Authentication of Hadith" },
       { slug: "compilation-stages", title: "Stages of Compilation: Companions to Tabi'un" },
       { slug: "six-authentic-books", title: "The Six Authentic Books (Sihah Sittah)" },
+      { slug: "four-shia-hadith-collections", title: "The Four Shi'a Hadith Collections (Kutub al-Arba'ah)" },
       { slug: "importance-of-hadith", title: "The Importance of Hadith as a Source of Guidance" },
     ],
   },

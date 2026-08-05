@@ -114,6 +114,61 @@ export const paper1HistoryOfQuranTopics: Topic[] = [
     ],
   },
   {
+    slug: "revelation-over-23-years",
+    paper: 1,
+    section,
+    title: "Revelation Over 23 Years: Makkan and Madinan Periods",
+    standing: "The Qur'an was not revealed all at once but gradually over roughly 23 years (610-632 CE), in two distinct phases with different themes and styles.",
+    learningObjectives: [
+      "Explain that the Qur'an was revealed gradually, in stages, rather than all at once.",
+      "Distinguish the Makkan period of revelation from the Madinan period.",
+      "Describe the typical difference in subject matter and style between Makkan and Madinan verses.",
+      "Explain why this gradual, two-phase pattern of revelation mattered for the early Muslim community.",
+    ],
+    keyTerms: [
+      { term: "Makki (Makkan)", meaning: "A verse or surah revealed before the Hijrah, while the Prophet (pbuh) was in Makkah (roughly 610-622 CE)." },
+      { term: "Madani (Madinan)", meaning: "A verse or surah revealed after the Hijrah, while the Prophet (pbuh) was in Madinah (622-632 CE)." },
+      { term: "Tanjim", meaning: "The gradual, piecemeal revelation of the Qur'an over the course of the Prophet's (pbuh) mission, rather than as a single, complete text." },
+    ],
+    explanation: [
+      "The Qur'an was revealed neither in one moment nor as a finished book handed down complete; it came down gradually, verse by verse and passage by passage, over approximately 23 years — beginning with the first revelation in the Cave of Hira around 610 CE and continuing until shortly before the Prophet's (pbuh) death in 632 CE.",
+      "Scholars divide this period into two broad phases, corresponding to where the Prophet (pbuh) was based: the Makkan period, covering roughly the first thirteen years of the mission (610-622 CE) before the Hijrah, and the Madinan period, covering the final ten years (622-632 CE) after the migration to Madinah.",
+      "Makkan revelations are generally shorter, employ more rhythmic and emphatic language, and concentrate on foundational belief: the oneness of Allah (tawhid), the reality of prophethood, the Day of Judgement and resurrection, warnings about earlier nations that rejected their prophets, and the moral reform of the individual — reflecting the needs of a small, often persecuted community still establishing its core faith.",
+      "Madinan revelations tend to be longer and more measured in style, addressing the practical needs of a growing, organised community: detailed legal rulings on worship, marriage, inheritance and commerce, guidance on warfare and treaties, relations with other faith communities such as the Jews and Christians of Madinah, and the regulation of social and political life now that Muslims had their own state.",
+      "This gradual pattern of revelation (tanjim) meant that guidance could respond directly to real events and questions as they arose in the community's life, made the Qur'an easier for the Prophet (pbuh) and his companions to memorise and absorb than a single complete revelation would have been, and allowed belief, character and law to be built up in a logical order — belief and moral foundation first in Makkah, then detailed legislation once a functioning Muslim society existed in Madinah.",
+      "Knowing whether a passage is Makkan or Madinan also matters for correctly understanding its context and application, since scholars of tafsir (Qur'anic exegesis) and Islamic law regularly draw on this distinction when interpreting a verse or determining how later, more detailed Madinan rulings relate to earlier, more general Makkan guidance.",
+    ],
+    keyFacts: [
+      { label: "Total span of revelation", detail: "Approximately 23 years, from around 610 CE to 632 CE." },
+      { label: "Makkan period", detail: "Roughly 610-622 CE (before the Hijrah); around thirteen years." },
+      { label: "Madinan period", detail: "622-632 CE (after the Hijrah); around ten years." },
+      { label: "Typical Makkan themes", detail: "Tawhid, prophethood, the Hereafter, stories of earlier nations, individual moral reform." },
+      { label: "Typical Madinan themes", detail: "Detailed law and worship, social and political organisation, treaties, relations with other communities." },
+      { label: "Term for gradual revelation", detail: "Tanjim." },
+    ],
+    ao1Guidance: [
+      "State the approximate length and the two-phase division (Makkan/Madinan) with approximate dates, not just \"it took a long time\".",
+      "Be able to give at least two typical themes for each period, showing you understand the difference is thematic, not just chronological.",
+    ],
+    ao2Guidance: [
+      "Explain why gradual revelation suited the practical needs of a community still forming — belief could be firmly established before the more demanding social and legal obligations of Madinah were introduced.",
+      "Discuss why this staged approach is regarded as evidence of wisdom and mercy in how guidance was delivered, easing gradual change in belief and practice rather than imposing everything at once.",
+      "Consider why the Makkan-Madinan distinction remains a genuinely useful tool for scholars interpreting the Qur'an today, not simply a historical curiosity.",
+    ],
+    commonMistakes: [
+      "Assuming the Qur'an was revealed as a single, complete text — it was revealed gradually over 23 years in response to events and needs as they arose.",
+      "Treating the Makkan/Madinan distinction only as geography (\"revealed in Makkah\" vs \"revealed in Madinah\") without linking it to the corresponding difference in themes and legal content.",
+      "Confusing this topic with the compilation of the Qur'an into a single collection, which happened after the Prophet's (pbuh) death and is a separate topic.",
+    ],
+    examTip:
+      "If a question asks about \"the revelation of the Qur'an\", always mention both the gradual nature of revelation over 23 years and the Makkan/Madinan distinction — these are two separate, both frequently examined points that are easy to conflate into one vague sentence.",
+    relatedTopics: [
+      { paper: 1, section: "history-of-the-quran", slug: "first-revelation", title: "The First Revelation" },
+      { paper: 1, section: "history-of-the-quran", slug: "modes-of-revelation", title: "Different Modes of Revelation" },
+      { paper: 1, section: "life-of-prophet-muhammad", slug: "hijrah", title: "The Hijrah: Migration to Madinah" },
+    ],
+  },
+  {
     slug: "compilation-under-abu-bakr",
     paper: 1,
     section,

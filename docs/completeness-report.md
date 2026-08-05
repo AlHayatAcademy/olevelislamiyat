@@ -103,6 +103,75 @@ references):
 - Prophet's (pbuh) death: 12 Rabi' al-Awwal, 11 AH, commonly dated 8 June 632 CE; Abu Bakr's (RA) address citing Qur'an 3:144; Saqifah selection of Abu Bakr (RA) as first caliph — standard, widely-attested sequence.
 - Seal of the Prophets: Qur'an 33:40 as the direct textual basis — quoted accurately.
 
+## Three-section gap-fill pass (this session, 2026-08-05)
+
+Following the Life of the Prophet expansion, the owner asked for a full check that "every single
+topic" was on the site. A manual audit against the official Cambridge syllabus's own content
+description (not just subtopic counts) found three sections where required content was genuinely
+missing, and one place where content was already adequate on closer reading:
+
+1. **Paper 1, History and Importance of the Qur'an** — the syllabus requires coverage of revelation
+   "between 610 and 632" (i.e. the gradual, 23-year, two-phase Makkan/Madinan process), which none
+   of the existing 5 lessons covered (they cover the *first* revelation and its *modes*, not the
+   *span and phases* of revelation as a whole). Added a new lesson, `revelation-over-23-years`
+   ("Revelation Over 23 Years: Makkan and Madinan Periods"). By contrast, `quran-as-source-of-law`
+   was checked closely against the syllabus's Ijma/Qiyas requirement and found to already
+   substantively cover both (named terms, definitions, examples, hierarchy) — no gap there, no new
+   lesson needed. Umar's role in prompting compilation and Zayd ibn Thabit as compiler were also
+   already fully covered in `compilation-under-abu-bakr`. Section now has 6/6 subtopics (up from 5).
+2. **Paper 1, The First Islamic Community** — the syllabus explicitly requires "his descendants,
+   including his children, grandchildren and the direct line recognised among Shi'a Muslims as
+   Imams", which had no lesson at all. Added `descendants-and-shia-imamate`, covering the Prophet's
+   (pbuh) seven children, his grandsons Hasan (RA) and Husayn (RA) through Fatimah (RA) and Ali
+   (RA), and the Twelver Shi'a Imamate doctrine — written descriptively ("Shi'a Muslims believe...")
+   as a matter of comparative belief, not asserted as fact either way, consistent with how the site
+   treats denominational content elsewhere. Section now has 7/7 subtopics (up from 6).
+3. **Paper 2, History and Importance of the Hadiths** — the syllabus explicitly requires "the four
+   collections of Shi'a Hadiths" alongside the six Sunni collections; only the six Sunni books
+   (`six-authentic-books`) existed. Added `four-shia-hadith-collections`, covering the Kutub
+   al-Arba'ah (Al-Kafi, Man La Yahduruhu al-Faqih, Tahdhib al-Ahkam, Al-Istibsar) with the same
+   academic-neutrality approach. Also expanded the existing `compilation-stages` lesson (rather than
+   adding a near-duplicate) to explicitly name musannaf-type collections (subject-organised, e.g.
+   Musannaf Abd al-Razzaq, Musannaf Ibn Abi Shaybah) alongside the already-covered musnad type,
+   since "musnad and musannaf collections" is separately named in the syllabus and only musnad was
+   previously covered by name. Section now has 6/6 subtopics (up from 5).
+
+`data/syllabus.ts` updated with the three new subtopic slugs in their respective sections'
+`subtopics` arrays, in syllabus order. Cross-links added both ways: the new descendants/Imamate
+lesson links to `mothers-of-the-faithful`, `four-caliphs-in-prophets-lifetime`, `ali` (Paper 2
+Rightly Guided Caliphs) and the new Shi'a Hadith lesson; the new Shi'a Hadith collections lesson
+links back to `six-authentic-books`, `authentication-of-hadith` and the descendants/Imamate lesson.
+
+Total subtopics/lessons across the site: **99** (up from 96), verified 1:1 mechanically (every
+subtopic slug in `data/syllabus.ts` has exactly one matching lesson in `data/topics/`, zero
+missing, zero orphaned — see verification script output in this pass). Paper 1 now has 60
+subtopics (Major Themes 15, History of Qur'an 6, Life of Prophet 32, First Islamic Community 7);
+Paper 2 has 39 subtopics (Major Teachings 17, History of Hadith 6, Rightly Guided Caliphs 4,
+Articles/Pillars 12).
+`data/model-answers.ts` was not touched; no `app/` route files were touched — all consuming pages
+read the subtopic list live from `data/syllabus.ts`.
+
+**Verification log** (facts checked via web search against reliable sources before writing, no
+fabrication):
+- The Prophet's (pbuh) seven children — sons Qasim, Abdullah (also called Tayyib/Tahir), Ibrahim;
+  daughters Zaynab, Ruqayyah, Umm Kulthum, Fatimah (RA); six from Khadijah (RA), Ibrahim from
+  Mariyah al-Qibtiyyah (RA); all three sons died in infancy/childhood; only Fatimah (RA) left
+  descendants — consistent across standard Islamic-studies references (islamqa.info, islamweb.net,
+  Wikipedia cross-check).
+- The Twelve Imams of Twelver Shi'ism and the line of succession (Ali → Hasan → Husayn → Ali
+  Zayn al-Abidin → Muhammad al-Baqir → Ja'far al-Sadiq → Musa al-Kazim → Ali al-Rida → Muhammad
+  al-Jawad → Ali al-Hadi → Hasan al-Askari → Muhammad al-Mahdi, believed by Twelvers to be in
+  occultation) — confirmed via multiple sources including al-islam.org (a Shi'a primary source) and
+  Wikipedia's Twelver Shi'ism overview.
+- The Four Books (Kutub al-Arba'ah) of Twelver Shi'a Hadith and their compilers — Al-Kafi
+  (al-Kulayni), Man La Yahduruhu al-Faqih (Ibn Babawayh/al-Shaykh al-Saduq), Tahdhib al-Ahkam and
+  Al-Istibsar (both by al-Tusi) — confirmed via al-islam.org, WikiShia, and an academic source
+  (Islamic Law and Society journal article on the Four Books' formation).
+- Musannaf vs musnad as distinct classical Hadith-collection organising principles (subject-based
+  vs narrator-based), with Musannaf Abd al-Razzaq al-San'ani and Musannaf Ibn Abi Shaybah as
+  standard named examples of the musannaf type — standard, uncontested classification in Hadith
+  sciences literature.
+
 ## What "complete" means here
 
 Every route the site currently claims to have (via its own data files, nav config, and sitemap) now actually exists, builds, and cross-references correctly — there is no dangling link, no orphaned content, no silently-stale sitemap, and no fabricated data anywhere in the checks above. The one substantive open item (model answers beyond the initial 10) is a deliberate, communicated handoff to the site owner, not an oversight.
