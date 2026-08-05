@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PageShell } from "@/components/PageShell";
-import { canonical } from "@/lib/seo";
+import { canonical, faqSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata = {
   title: "Islamiyat 2058 / 0493 Exam Pattern",
@@ -23,15 +24,6 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
 
 export default function ExamPatternPage() {
   return (
@@ -40,10 +32,7 @@ export default function ExamPatternPage() {
       description="How Cambridge O Level Islamiyat 2058 / IGCSE 0493 is assessed."
       breadcrumbs={[{ label: "Exam Pattern", href: "/exam-pattern" }]}
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema(faqs)} />
       <ul className="list-disc list-inside space-y-1">
         <li>Two written papers, both required for a grade; answered in English</li>
         <li>Paper 1 and Paper 2: 1½ hours each, 50 marks each</li>

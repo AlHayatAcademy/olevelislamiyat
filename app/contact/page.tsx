@@ -3,7 +3,8 @@ import { Button } from "@/components/Button";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { siteConfig } from "@/data/site-config";
 import { ContactForm } from "./ContactForm";
-import { canonical } from "@/lib/seo";
+import { canonical, faqSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata = {
   title: "Contact",
@@ -31,23 +32,11 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
 
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema(faqs)} />
       <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
       <h1 className="text-3xl font-bold font-heading text-text">Contact</h1>
       <p className="mt-3 text-text-muted">

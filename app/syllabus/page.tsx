@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PageShell } from "@/components/PageShell";
-import { canonical } from "@/lib/seo";
+import { canonical, faqSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata = {
   title: "Islamiyat 2058 / 0493 Syllabus",
@@ -24,15 +25,6 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
 
 export default function SyllabusPage() {
   return (
@@ -41,10 +33,7 @@ export default function SyllabusPage() {
       description="Full breakdown of the Cambridge O Level Islamiyat (2058) and IGCSE Islamiyat (0493) syllabus content."
       breadcrumbs={[{ label: "Syllabus", href: "/syllabus" }]}
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema(faqs)} />
       <p>
         Both papers are answered in English. Each paper is 1½ hours long and worth 50 marks, with
         five questions of which candidates must answer Question 1, Question 2 and two others.

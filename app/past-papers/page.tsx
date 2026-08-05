@@ -6,7 +6,8 @@ import { PastPapersYearList, type YearStat } from "@/components/PastPapersYearLi
 import { pastPaperQuestions, availableYears, getQuestionsByYear } from "@/data/questions";
 import { paper1Sections, paper2Sections } from "@/data/syllabus";
 import { siteConfig } from "@/data/site-config";
-import { canonical } from "@/lib/seo";
+import { canonical, faqSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata = {
   title: "Islamiyat Past Papers (Topical & Yearly)",
@@ -29,15 +30,6 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
 
 export default function PastPapersPage() {
   const allSections = [...paper1Sections, ...paper2Sections];
@@ -58,10 +50,7 @@ export default function PastPapersPage() {
       description="Cambridge O Level Islamiyat 2058 past exam sessions, organised by paper and topic."
       breadcrumbs={[{ label: "Past Papers", href: "/past-papers" }]}
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema(faqs)} />
       <p>
         Sessions on file: May/June and Oct/Nov, 2021–2025 (10 sessions, 40 question papers, 40 mark
         schemes). Below is a growing, hand-curated index of {pastPaperQuestions.length} questions,

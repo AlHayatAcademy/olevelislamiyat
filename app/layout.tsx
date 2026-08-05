@@ -4,6 +4,7 @@ import { siteConfig } from "@/data/site-config";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { JsonLd } from "@/components/JsonLd";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -61,10 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${manrope.variable} ${inter.variable} ${notoNaskhArabic.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(educationalOrgSchema) }}
-        />
+        <JsonLd data={educationalOrgSchema} />
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>

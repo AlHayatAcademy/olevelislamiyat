@@ -16,7 +16,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { tileAccentClasses } from "@/lib/tile-accent";
 import type { TileAccent } from "@/data/homepage-content";
 import { getSubtopicIcon } from "@/lib/subtopic-icons";
-import { canonical } from "@/lib/seo";
+import { canonical, faqSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 const sectionIcons = [MessageSquareQuote, ScrollText, Crown, ListChecks];
 const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal", "coral", "amber", "rose"];
@@ -43,15 +44,6 @@ const faqs = [
   },
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
 
 const totalSubtopics = paper2Sections.reduce((n, s) => n + s.subtopics.length, 0);
 
@@ -60,10 +52,7 @@ export default function Paper2Page() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema(faqs)} />
       <Breadcrumbs items={[{ label: "Paper 2", href: "/paper-2" }]} />
       <h1 className="mt-4 text-3xl font-bold font-heading text-text">Paper 2</h1>
       <p className="mt-3 text-text-muted">

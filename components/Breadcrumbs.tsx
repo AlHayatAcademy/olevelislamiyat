@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/data/site-config";
+import { JsonLd } from "@/components/JsonLd";
 
 export interface BreadcrumbItem {
   label: string;
@@ -31,10 +32,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <JsonLd data={breadcrumbSchema} />
       <nav aria-label="Breadcrumb" className="text-sm text-text-muted">
         <ol className="flex flex-wrap items-center gap-1">
           {trail.map((item, index) => {

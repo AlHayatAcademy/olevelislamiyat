@@ -9,7 +9,8 @@ import { StudyBadgeIllustration } from "@/components/illustrations/StudyBadgeIll
 import { siteConfig } from "@/data/site-config";
 import { features, examPatternSummary, faqs } from "@/data/homepage-content";
 import { tileAccentClasses } from "@/lib/tile-accent";
-import { canonical } from "@/lib/seo";
+import { canonical, faqSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata = {
   title: `${siteConfig.siteName} — Cambridge O Level 2058 / IGCSE 0493`,
@@ -18,23 +19,10 @@ export const metadata = {
   ...canonical("/"),
 };
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.question,
-    acceptedAnswer: { "@type": "Answer", text: f.answer },
-  })),
-};
-
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <JsonLd data={faqSchema(faqs.map((f) => ({ q: f.question, a: f.answer })))} />
       <Hero />
 
       {/* Feature cards */}
