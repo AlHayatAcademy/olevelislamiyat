@@ -22,6 +22,10 @@ export function generateStaticParams() {
   ]);
 }
 
+// The full set of valid (section, subtopic) pairs is always known at build time - reject
+// anything else with a real 404 instead of an on-demand-rendered "soft 404" (200 status).
+export const dynamicParams = false;
+
 function resolve(sectionSlug: string, subtopicSlug: string) {
   const section = allSections.find((s) => s.slug === sectionSlug);
   if (!section) return null;

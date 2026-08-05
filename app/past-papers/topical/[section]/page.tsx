@@ -16,6 +16,11 @@ export function generateStaticParams() {
   return allSections.map((s) => ({ section: s.slug }));
 }
 
+// The full set of valid sections is always known at build time - reject anything else with a
+// real 404 instead of falling back to on-demand rendering (which previously produced a "soft
+// 404": the not-found UI rendered correctly, but with an HTTP 200 status).
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: PageProps) {
   const { section: sectionSlug } = await params;
   const section = allSections.find((s) => s.slug === sectionSlug);

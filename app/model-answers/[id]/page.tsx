@@ -13,6 +13,10 @@ export function generateStaticParams() {
   return modelAnswers.map((a) => ({ id: a.id }));
 }
 
+// The full set of valid model-answer ids is always known at build time - reject anything else
+// with a real 404 instead of an on-demand-rendered "soft 404" (200 status).
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const answer = modelAnswers.find((a) => a.id === id);

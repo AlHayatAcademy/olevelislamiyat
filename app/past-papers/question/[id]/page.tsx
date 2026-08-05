@@ -25,6 +25,10 @@ export function generateStaticParams() {
   return pastPaperQuestions.map((q) => ({ id: q.id }));
 }
 
+// The full set of valid question ids is always known at build time - reject anything else with
+// a real 404 instead of an on-demand-rendered "soft 404" (200 status).
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const question = getQuestionById(id);

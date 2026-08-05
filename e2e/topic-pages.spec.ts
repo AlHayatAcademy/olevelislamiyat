@@ -25,17 +25,19 @@ test.describe("Topic pages", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Paper 2" })).toBeVisible();
   });
 
-  test("an unknown topic slug renders the not-found page", async ({ page }) => {
-    // KNOWN GAP (found by this test suite, not fixed here per task scope): this currently
-    // responds 200 instead of 404 - a "soft 404". generateStaticParams pre-renders only real
-    // topics; Next serves an on-demand ISR fallback for the rest, and the notFound() call
-    // inside it doesn't propagate a 404 status the way it does for a non-dynamic route (see
-    // e2e/navigation.spec.ts's "genuinely missing route" test, which does get a real 404).
-    // Flagged for a future fix (e.g. `export const dynamicParams = false` on this route, or an
-    // explicit 404 Response) rather than changed here, since this task is test-infrastructure
-    // only and must not alter application behavior.
+  test("an unknown topic slug correctly 404s", async ({ page }) => {
+    // Previously a "soft 404": generateStaticParams pre-renders only real topics, and without
+    // `dynamicParams = false` Next served an on-demand fallback render for anything else, whose
+    // notFound() call rendered the right UI but didn't propagate a 404 status. Fixed by adding
+    // `export const dynamicParams = false` to every fully-enumerable dynamic route (see
+    // docs/Decision-Log.md and docs/Migration-History.md).
     const response = await page.goto("/paper-1/major-themes-of-the-quran/not-a-real-topic");
-    expect(response?.status()).toBe(200);
+    expect(response?.status()).toBe(404);
     await expect(page.getByText("Page Not Found")).toBeVisible();
+  });
+
+  test("an unknown section 404s", async ({ page }) => {
+    const response = await page.goto("/paper-1/not-a-real-section");
+    expect(response?.status()).toBe(404);
   });
 });

@@ -12,6 +12,10 @@ export function generateStaticParams() {
   return referenceTypes.map((type) => ({ category: slugifyType(type) }));
 }
 
+// The full set of valid categories is always known at build time - reject anything else with a
+// real 404 instead of an on-demand-rendered "soft 404" (200 status).
+export const dynamicParams = false;
+
 function findType(categorySlug: string) {
   return referenceTypes.find((t) => slugifyType(t) === categorySlug);
 }
