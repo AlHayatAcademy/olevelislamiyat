@@ -66,14 +66,14 @@ const hubLinks: HubLink[] = [
     title: "Common Mistakes",
     description: "Every common-mistake warning from across the lessons, collected in one browsable page.",
     icon: AlertTriangle,
-    accent: "gold",
+    accent: "coral",
   },
   {
     href: "/grade-descriptions",
     title: "Grade Descriptions",
     description: "What separates a Grade A, Grade C and Grade F answer, across knowledge, understanding and evaluation.",
     icon: Award,
-    accent: "purple",
+    accent: "rose",
   },
 ];
 

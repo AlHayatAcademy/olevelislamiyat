@@ -16,7 +16,7 @@ export const metadata = {
   ...canonical("/quizzes"),
 };
 
-const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal"];
+const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal", "coral", "amber", "rose"];
 
 function getQuizForTopic(paper: 1 | 2, sectionSlug: string, subtopicSlug: string): Quiz | undefined {
   return quizzes.find(
@@ -59,10 +59,11 @@ function PaperOutline({ paper, sections }: { paper: 1 | 2; sections: SyllabusSec
                 accentIndex += 1;
 
                 if (quiz) {
+                  const paperBorder = paper === 1 ? "border-l-tile-green" : "border-l-tile-blue";
                   return (
                     <div
                       key={subtopic.slug}
-                      className="group flex flex-col rounded-xl border border-border bg-surface p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-card-hover"
+                      className={`group flex flex-col rounded-xl border border-border ${paperBorder} border-l-4 bg-surface p-5 shadow-soft transition-all duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-card-hover`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <span

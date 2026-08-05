@@ -14,6 +14,7 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
   const topicSlugs = new Set(topics.map((t) => t.slug));
   const sectionsForPaper = paper === 1 ? paper1Sections : paper2Sections;
   const otherSections = sectionsForPaper.filter((s) => s.slug !== section.slug);
+  const paperAccentText = paper === 1 ? "text-tile-green" : "text-tile-blue";
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -52,7 +53,7 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
 
         {/* Main content */}
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-secondary">
+          <p className={`text-sm font-semibold uppercase tracking-wide ${paperAccentText}`}>
             Paper {paper} &middot; Section {section.number} &middot; {section.marks} marks
           </p>
           <h1 className="mt-2 text-3xl font-bold font-heading text-text">{section.title}</h1>

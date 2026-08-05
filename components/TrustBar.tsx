@@ -1,7 +1,19 @@
 import Link from "next/link";
 import { Mail, Phone, MessageCircle, Youtube } from "lucide-react";
-import { trustBadges } from "@/data/homepage-content";
+import { trustBadges, type TileAccent } from "@/data/homepage-content";
 import { siteConfig } from "@/data/site-config";
+
+const badgeAccentRotation: TileAccent[] = ["gold", "coral", "teal", "amber", "rose"];
+const badgeAccentClasses: Record<TileAccent, string> = {
+  green: "bg-tile-green/20 text-tile-green",
+  gold: "bg-tile-gold/20 text-tile-gold",
+  purple: "bg-tile-purple/20 text-tile-purple",
+  blue: "bg-tile-blue/20 text-tile-blue",
+  teal: "bg-tile-teal/20 text-tile-teal",
+  coral: "bg-tile-coral/20 text-tile-coral",
+  amber: "bg-tile-amber/20 text-tile-amber",
+  rose: "bg-tile-rose/20 text-tile-rose",
+};
 
 const socialIcons: Record<string, typeof Youtube> = {
   YouTube: Youtube,
@@ -20,9 +32,11 @@ export function TrustBar() {
     <section className="bg-primary-dark text-white">
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {trustBadges.map((b) => (
+          {trustBadges.map((b, i) => (
             <div key={b.label} className="flex items-center gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
+              <span
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${badgeAccentClasses[badgeAccentRotation[i % badgeAccentRotation.length]]}`}
+              >
                 <b.icon aria-hidden="true" size={20} />
               </span>
               <p className="text-sm font-medium text-white/90">{b.label}</p>

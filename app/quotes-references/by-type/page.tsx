@@ -13,7 +13,7 @@ export const metadata = {
   ...canonical("/quotes-references/by-type"),
 };
 
-const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal", "green"];
+const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal", "coral", "amber", "rose"];
 
 export default function QuotesReferencesByTypePage() {
   return (

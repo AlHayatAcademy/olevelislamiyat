@@ -1048,3 +1048,74 @@ of new lessons and a verification log citing the specific facts checked.
 
 Files touched: `data/topics/paper1-life-of-prophet.ts`, `data/syllabus.ts`,
 `docs/completeness-report.md`. `data/model-answers.ts` and all `app/` files were not touched.
+
+## Vibrant Color System Pass (2026-08-05)
+
+Visual/styling-only pass in response to user feedback that the site still read as
+"competent but restrained" after several prior design passes, and needed to feel more
+colorful, vibrant, and energetic for teenage students while staying professional and
+on-brand. No content files (`data/model-answers.ts`, `data/topics/**`) were touched.
+
+### Palette expansion
+`tailwind.config.ts` `colors.tile` grew from 5 to 8 harmonious accent colors, all tuned to
+sit comfortably against the dark green (#123C2C) / gold (#C89B3C) brand core and the cream
+background (#FAF8F2):
+
+- `tile.green` `#247A52` (existing)
+- `tile.gold` `#C89B3C` (existing)
+- `tile.purple` `#6B5B95` (existing)
+- `tile.blue` `#2E6C8E` (existing)
+- `tile.teal` `#1E7D75` (existing)
+- `tile.coral` `#C1553A` (new — warm terracotta, reads energetic without clashing with gold)
+- `tile.amber` `#B8791A` (new — deeper/more orange than gold, gives a distinct third warm tone)
+- `tile.rose` `#A83E5C` (new — muted plum-rose, pairs with purple for a cooler accent pair)
+
+`lib/tile-accent.ts` badge classes were also bumped from `bg-tile-x/10` to
+`bg-tile-x/15 text-tile-x ring-1 ring-inset ring-tile-x/20` for every accent (existing and
+new) — a subtle ring plus higher-opacity fill gives icon badges more visual weight/definition
+at rest, not just on hover. `data/homepage-content.ts` `TileAccent` type now includes
+`"coral" | "amber" | "rose"`.
+
+### Where the new colors got applied
+- **Homepage** (`app/page.tsx` via `data/homepage-content.ts` `features`): Quizzes tile
+  recolored gold→coral, Progress Tracking tile recolored gold→amber, so the 7 feature tiles
+  now cycle through 6 distinct accents instead of repeating green/gold twice each.
+- **Paper 1 / Paper 2 outline pages** (`app/paper-1/page.tsx`, `app/paper-2/page.tsx`) and
+  **Quizzes** (`app/quizzes/page.tsx`) and **Quotes & References** (`app/quotes-references/page.tsx`,
+  `app/quotes-references/by-type/page.tsx`): each page's local `accentRotation` array expanded
+  from 5 to all 8 tile colors, so subtopic/category badge grids that used to repeat a 5-color
+  cycle now show far more variety before repeating.
+- **Revision Centre** (`app/revision/page.tsx`): Common Mistakes recolored gold→coral, Grade
+  Descriptions recolored purple→rose, so all 7 hub cards are now visually distinct.
+- **Paper identity color-coding**: Paper 1 section-icon badges (`app/paper-1/page.tsx`) now use
+  `tile-green`, Paper 2 (`app/paper-2/page.tsx`) now use `tile-blue`, instead of both defaulting
+  to flat `bg-primary/10`. `components/SectionHub.tsx`'s "Paper N · Section X" eyebrow text now
+  colors green for Paper 1 / blue for Paper 2 (previously always gold). Quiz cards in
+  `app/quizzes/page.tsx` gained a 4px left border in the matching paper color (green/blue) so a
+  quiz card's paper is now visually obvious before reading any text — quiz cards were previously
+  uniform beige regardless of paper.
+- **Trust bar** (`components/TrustBar.tsx`): the 5 stat badges previously all used flat
+  `bg-accent/15 text-accent` gold icons; they now rotate through gold/coral/teal/amber/rose so
+  the band reads as more than a single-color strip.
+
+### What was deliberately left alone
+Brand primary (dark green) and secondary/accent (gold) remain the dominant colors for buttons,
+headers, hero, and CTAs — the new palette is a supporting accent system for categorization
+(badges, card differentiation, paper identity), not a replacement of the core identity. No new
+dependencies, no animation libraries, no figurative imagery. Focus-visible rings and
+`motion-reduce` handling in `components/Button.tsx` were untouched.
+
+### QA (run 2026-08-05)
+- `npm run lint` → clean, zero errors/warnings.
+- `npm run typecheck` → clean, zero errors.
+- `npm run build` → passed, all routes/SSG paths generated successfully (same route set as
+  before this pass — no new routes).
+- `npx opennextjs-cloudflare build` → `OpenNext build complete`, worker bundle generated
+  successfully at `.open-next/worker.js`.
+
+Files touched: `tailwind.config.ts`, `lib/tile-accent.ts`, `data/homepage-content.ts`,
+`components/TrustBar.tsx`, `components/SectionHub.tsx`, `app/page.tsx` (via data file only),
+`app/paper-1/page.tsx`, `app/paper-2/page.tsx`, `app/quizzes/page.tsx`,
+`app/revision/page.tsx`, `app/quotes-references/page.tsx`,
+`app/quotes-references/by-type/page.tsx`, `docs/build-status.md`. `data/model-answers.ts` and
+`data/topics/**` were not touched.

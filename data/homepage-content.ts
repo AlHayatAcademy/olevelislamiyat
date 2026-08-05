@@ -14,7 +14,7 @@ import { paper1Sections, paper2Sections } from "@/data/syllabus";
 import { allTopics } from "@/data/topics";
 import { quizzes } from "@/data/quizzes";
 
-export type TileAccent = "green" | "gold" | "purple" | "blue" | "teal";
+export type TileAccent = "green" | "gold" | "purple" | "blue" | "teal" | "coral" | "amber" | "rose";
 
 export const features: { icon: typeof BookMarked; title: string; description: string; accent: TileAccent }[] = [
   {
@@ -51,13 +51,13 @@ export const features: { icon: typeof BookMarked; title: string; description: st
     icon: Puzzle,
     title: "Quizzes",
     description: "Self-check quizzes to test recall and understanding as you study.",
-    accent: "green",
+    accent: "coral",
   },
   {
     icon: TrendingUp,
     title: "Progress Tracking",
     description: "Track which topics you have covered as you work through each paper.",
-    accent: "gold",
+    accent: "amber",
   },
 ];
 

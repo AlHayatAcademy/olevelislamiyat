@@ -19,7 +19,7 @@ import { getSubtopicIcon } from "@/lib/subtopic-icons";
 import { canonical } from "@/lib/seo";
 
 const sectionIcons = [BookOpen, ScrollText, Users, Landmark];
-const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal"];
+const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal", "coral", "amber", "rose"];
 
 export const metadata = {
   title: "Islamiyat Paper 1 Notes (Qur'an & Seerah)",
@@ -110,7 +110,7 @@ export default function Paper1Page() {
               <div key={section.slug} id={section.slug}>
                 <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-3">
                   <div className="flex items-start gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-tile-green/15 text-tile-green ring-1 ring-inset ring-tile-green/20">
                       <SectionIcon aria-hidden="true" size={22} />
                     </span>
                     <div>

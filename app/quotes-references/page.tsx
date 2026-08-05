@@ -15,7 +15,7 @@ export const metadata = {
   ...canonical("/quotes-references"),
 };
 
-const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal"];
+const accentRotation: TileAccent[] = ["green", "gold", "purple", "blue", "teal", "coral", "amber", "rose"];
 
 function SectionBlock({ section, accentIndex }: { section: SyllabusSection; accentIndex: number }) {
   const accent = tileAccentClasses[accentRotation[accentIndex % accentRotation.length]];
