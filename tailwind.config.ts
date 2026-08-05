@@ -1,17 +1,24 @@
 import type { Config } from "tailwindcss";
 
+// Single source of truth for the two brand colors also needed outside Tailwind's own
+// generated CSS (e.g. app/manifest.ts), so they don't drift out of sync with the theme below.
+export const brandColors = {
+  primary: "#123C2C",
+  background: "#FAF8F2",
+};
+
 const config: Config = {
-  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./content/**/*.{ts,tsx,mdx}"],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#123C2C",
+          DEFAULT: brandColors.primary,
           dark: "#0B2A1E",
         },
         secondary: "#C89B3C",
         accent: "#E6C875",
-        background: "#FAF8F2",
+        background: brandColors.background,
         surface: {
           DEFAULT: "#FFFFFF",
           soft: "#F3F0E8",
@@ -57,10 +64,6 @@ const config: Config = {
         "fade-in": {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
-        },
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
         },
       },
       animation: {
