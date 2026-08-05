@@ -1,5 +1,39 @@
 import { NextResponse } from "next/server";
 
+// Best-effort, in-memory rate limit keyed by client IP. This only protects a single Worker
+// isolate — Cloudflare can route requests to many isolates/PoPs, so a determined abuser
+// spread across edge locations won't be fully caught by this alone. It's still a real
+// deterrent against basic repeat-submission bots/spam, and needs no new Cloudflare bindings.
+// A stronger guarantee would need Cloudflare's own Rate Limiting rules (dashboard-configured)
+// or a KV/Durable Object-backed counter — out of scope here.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const requestLog = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (requestLog.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  timestamps.push(now);
+  requestLog.set(ip, timestamps);
+
+  // Bound memory: drop IPs with no recent activity once the map grows large.
+  if (requestLog.size > 5000) {
+    for (const [key, times] of requestLog) {
+      if (times.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) requestLog.delete(key);
+    }
+  }
+
+  return timestamps.length > RATE_LIMIT_MAX_REQUESTS;
+}
+
+function getClientIp(request: Request): string {
+  return (
+    request.headers.get("cf-connecting-ip") ??
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown"
+  );
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VALID_CATEGORIES = [
   "online-class",
@@ -58,6 +92,14 @@ async function deliverEnquiry(payload: ContactPayload): Promise<void> {
 }
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Please try again in a few minutes." },
+      { status: 429 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
