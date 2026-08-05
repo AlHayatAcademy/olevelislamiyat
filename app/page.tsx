@@ -1,5 +1,6 @@
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Hero } from "@/components/Hero";
+import { ContinueLearningBanner } from "@/components/ContinueLearningBanner";
 import { Button } from "@/components/Button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { GeometricPattern } from "@/components/GeometricPattern";
@@ -24,6 +25,7 @@ export default function HomePage() {
     <>
       <JsonLd data={faqSchema(faqs.map((f) => ({ q: f.question, a: f.answer })))} />
       <Hero />
+      <ContinueLearningBanner />
 
       {/* Feature cards */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:py-20">

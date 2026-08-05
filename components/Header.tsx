@@ -22,6 +22,7 @@ import {
   X,
   ChevronDown,
   Search,
+  LayoutDashboard,
 } from "lucide-react";
 import { siteConfig } from "@/data/site-config";
 import { SearchModal } from "@/components/SearchModal";
@@ -38,6 +39,7 @@ const navIcons: Record<string, NavIcon> = {
   "/quotes-references": MessageSquareQuote,
   "/revision": GraduationCap,
   "/quizzes": Puzzle,
+  "/dashboard": LayoutDashboard,
   "/notes": StickyNote,
   "/resources": LibraryBig,
   "/online-classes": Users,
@@ -56,6 +58,7 @@ const navDescriptions: Record<string, string> = {
   "/quotes-references": "Qur'an and Hadith references for special study.",
   "/revision": "Notes, key dates, personalities and exam technique.",
   "/quizzes": "Self-check quizzes with instant feedback.",
+  "/dashboard": "Your progress, bookmarks, and quiz results in one place.",
   "/notes": "Concise section-by-section revision notes.",
   "/resources": "The full study resource hub in one place.",
   "/online-classes": "Live and recorded classes with Al-Hayat Academy.",
@@ -71,7 +74,7 @@ const navGroups = [
   },
   {
     label: "Practice",
-    hrefs: ["/past-papers", "/model-answers", "/quizzes", "/quotes-references"],
+    hrefs: ["/past-papers", "/model-answers", "/quizzes", "/quotes-references", "/dashboard"],
   },
   {
     label: "Resources",

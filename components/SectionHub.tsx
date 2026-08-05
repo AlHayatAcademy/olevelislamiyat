@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, CircleDot, BookOpen } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { SectionProgress } from "@/components/SectionProgress";
 import { paper1Sections, paper2Sections, type SyllabusSection } from "@/data/syllabus";
 import type { Topic } from "@/data/topics";
 
@@ -58,6 +59,7 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
           </p>
           <h1 className="mt-2 text-3xl font-bold font-heading text-text">{section.title}</h1>
           <p className="mt-3 text-text-muted">{section.description}</p>
+          <SectionProgress paper={paper} section={section.slug} total={topics.length} />
 
           <ul className="mt-8 space-y-3">
             {section.subtopics.map((subtopic) => {

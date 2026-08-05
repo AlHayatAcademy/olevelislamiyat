@@ -60,6 +60,7 @@ export const siteConfig = {
     { label: "Quotes & References", href: "/quotes-references" },
     { label: "Revision", href: "/revision" },
     { label: "Quizzes", href: "/quizzes" },
+    { label: "Dashboard", href: "/dashboard" },
     { label: "Notes", href: "/notes" },
     { label: "Resources", href: "/resources" },
     { label: "Online Classes", href: "/online-classes" },

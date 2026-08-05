@@ -14,6 +14,9 @@ import type { Topic } from "@/data/topics";
 import { getSection } from "@/data/syllabus";
 import { getQuestionsBySubtopic } from "@/data/questions";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { RecordView } from "@/components/RecordView";
+import { BookmarkButton } from "@/components/BookmarkButton";
+import type { ContentRef } from "@/lib/learner-store";
 
 interface TopicPageProps {
   topic: Topic;
@@ -51,18 +54,31 @@ function Section({
 export function TopicPage({ topic }: TopicPageProps) {
   const section = getSection(topic.paper, topic.section);
   const relatedQuestions = getQuestionsBySubtopic(topic.section, topic.slug);
+  const url = `/paper-${topic.paper}/${topic.section}/${topic.slug}`;
+  const contentRef: ContentRef = {
+    type: "topic",
+    paper: topic.paper,
+    section: topic.section,
+    slug: topic.slug,
+    title: topic.title,
+    url,
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
+      <RecordView contentRef={contentRef} />
       <Breadcrumbs
         items={[
           { label: `Paper ${topic.paper}`, href: `/paper-${topic.paper}` },
           { label: section?.title ?? topic.section, href: `/paper-${topic.paper}/${topic.section}` },
-          { label: topic.title, href: `/paper-${topic.paper}/${topic.section}/${topic.slug}` },
+          { label: topic.title, href: url },
         ]}
       />
       <article>
-        <h1 className="mt-2 text-3xl font-bold font-heading text-text">{topic.title}</h1>
+        <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
+          <h1 className="text-3xl font-bold font-heading text-text">{topic.title}</h1>
+          <BookmarkButton contentRef={contentRef} className="shrink-0" />
+        </div>
         <p className="mt-3 text-text-muted">{topic.standing}</p>
 
         {relatedQuestions.length > 0 && (

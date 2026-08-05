@@ -1,0 +1,883 @@
+From 4d43c505667fd0f0e621c3e539884c1d853d32f2 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 5 Aug 2026 15:03:34 +0000
+Subject: [PATCH] Phase 3.3: Implement student learning features with
+ localStorage
+
+Add foundational learner personalization system supporting Continue Learning,
+Bookmarks, Recently Viewed history, Per-section Progress Tracking, and Dashboard.
+
+New components (all client-side minimal islands):
+- RecordView: invisible tracker component that records lesson views
+- BookmarkButton: toggleable bookmark button with visual state
+- SectionProgress: per-section progress bar showing N of M lessons viewed
+- ContinueLearningBanner: homepage banner showing last-visited lesson
+- DashboardClient: unified dashboard displaying progress, bookmarks, quiz results
+
+New backend:
+- lib/learner-store.ts: localStorage-backed learner profile with useSyncExternalStore
+  reactivity. Defines stable ContentRef keys (type:paper:section:slug) so future
+  account migration won't break progress history. Recently-viewed capped at 12 items.
+
+New server route:
+- app/dashboard/page.tsx: precomputes section totals server-side to minimize client
+  bundle (avoid importing full data/topics tree). Passes SectionTotal[] to client.
+
+Bundle optimization:
+- Dashboard route reduced from ~242kB to 109kB by moving data aggregation server-side
+- All routes now consistently ~106-109kB (previously dashboard was 2.3x heavier)
+
+Navigation:
+- Added Dashboard link to primary nav
+- Updated Header with LayoutDashboard icon and descriptions
+- Updated site-config primaryNav list
+
+Testing:
+- All 61 unit tests pass
+- All 38 e2e tests pass (including 13 dynamic-route 404 tests from Phase 3.1)
+- Lint clean, no type errors
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01PjAHsksER8C58ATRmTZYtK
+---
+ app/dashboard/page.tsx                |  49 ++++++
+ app/page.tsx                          |   2 +
+ components/BookmarkButton.tsx         |  48 ++++++
+ components/ContinueLearningBanner.tsx |  47 ++++++
+ components/DashboardClient.tsx        | 207 ++++++++++++++++++++++++
+ components/Header.tsx                 |   5 +-
+ components/RecordView.tsx             |  22 +++
+ components/SectionHub.tsx             |   2 +
+ components/SectionProgress.tsx        |  50 ++++++
+ components/TopicPage.tsx              |  20 ++-
+ data/site-config.ts                   |   1 +
+ lib/learner-store.ts                  | 216 ++++++++++++++++++++++++++
+ 12 files changed, 666 insertions(+), 3 deletions(-)
+ create mode 100644 app/dashboard/page.tsx
+ create mode 100644 components/BookmarkButton.tsx
+ create mode 100644 components/ContinueLearningBanner.tsx
+ create mode 100644 components/DashboardClient.tsx
+ create mode 100644 components/RecordView.tsx
+ create mode 100644 components/SectionProgress.tsx
+ create mode 100644 lib/learner-store.ts
+
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+new file mode 100644
+index 0000000..f1604f0
+--- /dev/null
++++ b/app/dashboard/page.tsx
+@@ -0,0 +1,49 @@
++import { Breadcrumbs } from "@/components/Breadcrumbs";
++import { DashboardClient, type SectionTotal } from "@/components/DashboardClient";
++import { paper1Sections, paper2Sections } from "@/data/syllabus";
++import { getTopicsForSection } from "@/data/topics";
++import { canonical } from "@/lib/seo";
++
++// Computed server-side so the client bundle doesn't need to import the full topics/syllabus
++// data (all 99 lessons' content) just to count how many lessons are in each section.
++const sectionTotals: SectionTotal[] = [
++  ...paper1Sections.map((s) => ({
++    paper: 1 as const,
++    slug: s.slug,
++    title: s.title,
++    total: getTopicsForSection(1, s.slug).length,
++  })),
++  ...paper2Sections.map((s) => ({
++    paper: 2 as const,
++    slug: s.slug,
++    title: s.title,
++    total: getTopicsForSection(2, s.slug).length,
++  })),
++];
++
++export const metadata = {
++  title: "Your Learning Dashboard",
++  description:
++    "Track your progress, bookmarks, quiz results, and continue where you left off across the Islamiyat syllabus.",
++  ...canonical("/dashboard"),
++  // Personalized, device-local content with nothing to index - empty for every crawler and
++  // every first-time visitor alike, so there's no public content here worth ranking.
++  robots: { index: false, follow: true },
++};
++
++export default function DashboardPage() {
++  return (
++    <div className="mx-auto max-w-5xl px-4 py-12">
++      <Breadcrumbs items={[{ label: "Dashboard", href: "/dashboard" }]} />
++      <h1 className="mt-2 text-3xl font-bold font-heading text-text">Your Learning Dashboard</h1>
++      <p className="mt-3 text-text-muted">
++        Everything is saved on this device only — bookmarks, progress, and quiz results are stored
++        in your browser, not on our servers.
++      </p>
++
++      <div className="mt-8">
++        <DashboardClient sections={sectionTotals} />
++      </div>
++    </div>
++  );
++}
+diff --git a/app/page.tsx b/app/page.tsx
+index 6c66824..91e5232 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -1,5 +1,6 @@
+ import { ArrowRight, ChevronDown } from "lucide-react";
+ import { Hero } from "@/components/Hero";
++import { ContinueLearningBanner } from "@/components/ContinueLearningBanner";
+ import { Button } from "@/components/Button";
+ import { ScrollReveal } from "@/components/ScrollReveal";
+ import { GeometricPattern } from "@/components/GeometricPattern";
+@@ -24,6 +25,7 @@ export default function HomePage() {
+     <>
+       <JsonLd data={faqSchema(faqs.map((f) => ({ q: f.question, a: f.answer })))} />
+       <Hero />
++      <ContinueLearningBanner />
+ 
+       {/* Feature cards */}
+       <section className="mx-auto max-w-7xl px-4 py-16 sm:py-20">
+diff --git a/components/BookmarkButton.tsx b/components/BookmarkButton.tsx
+new file mode 100644
+index 0000000..2bd148f
+--- /dev/null
++++ b/components/BookmarkButton.tsx
+@@ -0,0 +1,48 @@
++"use client";
++
++import { useState, useEffect } from "react";
++import { Bookmark } from "lucide-react";
++import { cn } from "@/lib/utils";
++import { toggleBookmark, isBookmarked, type ContentRef } from "@/lib/learner-store";
++
++interface BookmarkButtonProps {
++  contentRef: ContentRef;
++  className?: string;
++}
++
++/**
++ * Toggleable bookmark button. Starts in an unbookmarked state during SSR/first paint (localStorage
++ * isn't available on the server) and syncs to the real state on mount - a brief, harmless flash
++ * rather than a hydration mismatch, since the server-rendered markup and the initial client render
++ * are identical.
++ */
++export function BookmarkButton({ contentRef, className }: BookmarkButtonProps) {
++  const [bookmarked, setBookmarked] = useState(false);
++
++  useEffect(() => {
++    setBookmarked(isBookmarked(contentRef));
++    // eslint-disable-next-line react-hooks/exhaustive-deps
++  }, [contentRef.type, contentRef.paper, contentRef.section, contentRef.slug]);
++
++  function handleClick() {
++    setBookmarked(toggleBookmark(contentRef));
++  }
++
++  return (
++    <button
++      type="button"
++      onClick={handleClick}
++      aria-pressed={bookmarked}
++      className={cn(
++        "inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
++        bookmarked
++          ? "border-secondary bg-secondary/10 text-secondary hover:bg-secondary/15"
++          : "border-border text-text-muted hover:border-primary hover:text-primary",
++        className,
++      )}
++    >
++      <Bookmark size={16} aria-hidden="true" fill={bookmarked ? "currentColor" : "none"} />
++      {bookmarked ? "Bookmarked" : "Bookmark this lesson"}
++    </button>
++  );
++}
+diff --git a/components/ContinueLearningBanner.tsx b/components/ContinueLearningBanner.tsx
+new file mode 100644
+index 0000000..e13b26f
+--- /dev/null
++++ b/components/ContinueLearningBanner.tsx
+@@ -0,0 +1,47 @@
++"use client";
++
++import { useState, useEffect } from "react";
++import Link from "next/link";
++import { ArrowRight, BookOpen } from "lucide-react";
++import { getLastVisited, type RecentlyViewedEntry } from "@/lib/learner-store";
++
++/**
++ * "Continue Learning" banner - renders nothing for first-time visitors (no localStorage data
++ * yet) or during SSR, and appears after mount if the learner has a last-visited lesson. This
++ * avoids a hydration mismatch: server and first client render both produce nothing, and the
++ * banner appears a moment later once localStorage has been read - a deliberate, minor trade-off
++ * for a feature that fundamentally depends on client-only state.
++ */
++export function ContinueLearningBanner() {
++  const [lastVisited, setLastVisited] = useState<RecentlyViewedEntry | null>(null);
++
++  useEffect(() => {
++    setLastVisited(getLastVisited());
++  }, []);
++
++  if (!lastVisited) return null;
++
++  return (
++    <div className="mx-auto max-w-7xl px-4 pt-6">
++      <Link
++        href={lastVisited.url}
++        className="group flex items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 transition-colors hover:bg-primary/10"
++      >
++        <span className="flex items-center gap-3 text-sm">
++          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
++            <BookOpen size={18} aria-hidden="true" />
++          </span>
++          <span>
++            <span className="block font-semibold text-text">Continue learning</span>
++            <span className="block text-text-muted">{lastVisited.title}</span>
++          </span>
++        </span>
++        <ArrowRight
++          size={18}
++          className="shrink-0 text-primary transition-transform duration-200 group-hover:translate-x-1"
++          aria-hidden="true"
++        />
++      </Link>
++    </div>
++  );
++}
+diff --git a/components/DashboardClient.tsx b/components/DashboardClient.tsx
+new file mode 100644
+index 0000000..b113748
+--- /dev/null
++++ b/components/DashboardClient.tsx
+@@ -0,0 +1,207 @@
++"use client";
++
++import Link from "next/link";
++import { BookOpen, Bookmark, Clock, ListChecks, ArrowRight } from "lucide-react";
++import { useLearnerProfile, getViewedCountForSection, getQuizStatsSummary } from "@/lib/learner-store";
++
++export interface SectionTotal {
++  paper: 1 | 2;
++  slug: string;
++  title: string;
++  total: number;
++}
++
++function formatRelativeDate(iso: string): string {
++  const diffMs = Date.now() - new Date(iso).getTime();
++  const diffMins = Math.round(diffMs / 60000);
++  if (diffMins < 1) return "just now";
++  if (diffMins < 60) return `${diffMins}m ago`;
++  const diffHours = Math.round(diffMins / 60);
++  if (diffHours < 24) return `${diffHours}h ago`;
++  const diffDays = Math.round(diffHours / 24);
++  if (diffDays < 30) return `${diffDays}d ago`;
++  return new Date(iso).toLocaleDateString();
++}
++
++function SectionProgressRow({ paper, slug, title, total }: SectionTotal) {
++  const viewed = getViewedCountForSection(paper, slug);
++  const percent = total > 0 ? Math.round((viewed / total) * 100) : 0;
++
++  return (
++    <li>
++      <Link
++        href={`/paper-${paper}/${slug}`}
++        className="block rounded-lg border border-border bg-surface p-3 text-sm transition-colors hover:border-primary hover:bg-surface-soft"
++      >
++        <div className="flex items-center justify-between gap-3">
++          <span className="font-medium text-text">{title}</span>
++          <span className="shrink-0 text-xs text-text-muted">
++            {viewed}/{total}
++          </span>
++        </div>
++        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-soft">
++          <div className="h-full rounded-full bg-success transition-all duration-300" style={{ width: `${percent}%` }} />
++        </div>
++      </Link>
++    </li>
++  );
++}
++
++export function DashboardClient({ sections }: { sections: SectionTotal[] }) {
++  // Subscribes so the whole dashboard updates live if a bookmark/view changes elsewhere.
++  const profile = useLearnerProfile();
++  const quizStats = getQuizStatsSummary();
++
++  const hasAnyActivity =
++    profile.recentlyViewed.length > 0 || profile.bookmarks.length > 0 || quizStats.length > 0;
++
++  if (!hasAnyActivity) {
++    return (
++      <div className="rounded-xl border border-dashed border-border bg-surface-soft p-8 text-center">
++        <BookOpen className="mx-auto text-text-muted" size={32} aria-hidden="true" />
++        <p className="mt-4 font-heading text-lg font-semibold text-text">
++          Your dashboard is empty — for now
++        </p>
++        <p className="mt-2 text-sm text-text-muted">
++          Visit a lesson, bookmark a topic, or take a quiz, and your progress will start showing up
++          here automatically.
++        </p>
++        <div className="mt-6 flex flex-wrap justify-center gap-3">
++          <Link
++            href="/paper-1"
++            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
++          >
++            Start with Paper 1
++            <ArrowRight size={16} aria-hidden="true" />
++          </Link>
++          <Link
++            href="/quizzes"
++            className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text transition-colors hover:border-primary hover:text-primary"
++          >
++            Try a quiz
++          </Link>
++        </div>
++      </div>
++    );
++  }
++
++  return (
++    <div className="grid gap-8 lg:grid-cols-2">
++      {/* Continue learning */}
++      {profile.lastVisited && (
++        <section className="lg:col-span-2">
++          <h2 className="flex items-center gap-2 font-heading text-lg font-semibold text-text">
++            <BookOpen size={18} className="text-primary" aria-hidden="true" />
++            Continue learning
++          </h2>
++          <Link
++            href={profile.lastVisited.url}
++            className="mt-3 flex items-center justify-between gap-4 rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 transition-colors hover:bg-primary/10"
++          >
++            <span>
++              <span className="block font-semibold text-text">{profile.lastVisited.title}</span>
++              <span className="block text-sm text-text-muted">
++                Last viewed {formatRelativeDate(profile.lastVisited.viewedAt)}
++              </span>
++            </span>
++            <ArrowRight size={18} className="shrink-0 text-primary" aria-hidden="true" />
++          </Link>
++        </section>
++      )}
++
++      {/* Progress by section */}
++      <section>
++        <h2 className="flex items-center gap-2 font-heading text-lg font-semibold text-text">
++          <ListChecks size={18} className="text-primary" aria-hidden="true" />
++          Progress by section
++        </h2>
++        <ul className="mt-3 space-y-2">
++          {sections.map((s) => (
++            <SectionProgressRow key={`${s.paper}-${s.slug}`} {...s} />
++          ))}
++        </ul>
++      </section>
++
++      {/* Quiz stats */}
++      <section>
++        <h2 className="flex items-center gap-2 font-heading text-lg font-semibold text-text">
++          <ListChecks size={18} className="text-primary" aria-hidden="true" />
++          Quiz results
++        </h2>
++        {quizStats.length === 0 ? (
++          <p className="mt-3 text-sm text-text-muted">
++            No quizzes attempted yet.{" "}
++            <Link href="/quizzes" className="text-primary hover:underline">
++              Browse quizzes
++            </Link>
++            .
++          </p>
++        ) : (
++          <ul className="mt-3 space-y-2">
++            {quizStats.map((q) => (
++              <li
++                key={q.quizId}
++                className="flex items-center justify-between rounded-lg border border-border bg-surface p-3 text-sm"
++              >
++                <Link href={`/quizzes/${q.quizId}`} className="font-medium text-text hover:text-primary">
++                  {q.quizId.replace(/-/g, " ")}
++                </Link>
++                <span className="shrink-0 text-xs text-text-muted">
++                  Best {q.bestScorePercent}% &middot; {q.attempts} attempt{q.attempts === 1 ? "" : "s"}
++                </span>
++              </li>
++            ))}
++          </ul>
++        )}
++      </section>
++
++      {/* Bookmarks */}
++      <section>
++        <h2 className="flex items-center gap-2 font-heading text-lg font-semibold text-text">
++          <Bookmark size={18} className="text-primary" aria-hidden="true" />
++          Bookmarks
++        </h2>
++        {profile.bookmarks.length === 0 ? (
++          <p className="mt-3 text-sm text-text-muted">
++            No bookmarks yet — look for the &ldquo;Bookmark this lesson&rdquo; button on any lesson page.
++          </p>
++        ) : (
++          <ul className="mt-3 space-y-2">
++            {profile.bookmarks.map((b) => (
++              <li key={b.url}>
++                <Link
++                  href={b.url}
++                  className="block rounded-lg border border-border bg-surface p-3 text-sm font-medium text-text transition-colors hover:border-primary hover:text-primary"
++                >
++                  {b.title}
++                </Link>
++              </li>
++            ))}
++          </ul>
++        )}
++      </section>
++
++      {/* Recently viewed */}
++      <section>
++        <h2 className="flex items-center gap-2 font-heading text-lg font-semibold text-text">
++          <Clock size={18} className="text-primary" aria-hidden="true" />
++          Recently viewed
++        </h2>
++        {profile.recentlyViewed.length === 0 ? (
++          <p className="mt-3 text-sm text-text-muted">Nothing viewed yet.</p>
++        ) : (
++          <ul className="mt-3 space-y-2">
++            {profile.recentlyViewed.map((r) => (
++              <li key={r.url} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface p-3 text-sm">
++                <Link href={r.url} className="font-medium text-text hover:text-primary">
++                  {r.title}
++                </Link>
++                <span className="shrink-0 text-xs text-text-muted">{formatRelativeDate(r.viewedAt)}</span>
++              </li>
++            ))}
++          </ul>
++        )}
++      </section>
++    </div>
++  );
++}
+diff --git a/components/Header.tsx b/components/Header.tsx
+index 76c8d56..9ef881d 100644
+--- a/components/Header.tsx
++++ b/components/Header.tsx
+@@ -22,6 +22,7 @@ import {
+   X,
+   ChevronDown,
+   Search,
++  LayoutDashboard,
+ } from "lucide-react";
+ import { siteConfig } from "@/data/site-config";
+ import { SearchModal } from "@/components/SearchModal";
+@@ -38,6 +39,7 @@ const navIcons: Record<string, NavIcon> = {
+   "/quotes-references": MessageSquareQuote,
+   "/revision": GraduationCap,
+   "/quizzes": Puzzle,
++  "/dashboard": LayoutDashboard,
+   "/notes": StickyNote,
+   "/resources": LibraryBig,
+   "/online-classes": Users,
+@@ -56,6 +58,7 @@ const navDescriptions: Record<string, string> = {
+   "/quotes-references": "Qur'an and Hadith references for special study.",
+   "/revision": "Notes, key dates, personalities and exam technique.",
+   "/quizzes": "Self-check quizzes with instant feedback.",
++  "/dashboard": "Your progress, bookmarks, and quiz results in one place.",
+   "/notes": "Concise section-by-section revision notes.",
+   "/resources": "The full study resource hub in one place.",
+   "/online-classes": "Live and recorded classes with Al-Hayat Academy.",
+@@ -71,7 +74,7 @@ const navGroups = [
+   },
+   {
+     label: "Practice",
+-    hrefs: ["/past-papers", "/model-answers", "/quizzes", "/quotes-references"],
++    hrefs: ["/past-papers", "/model-answers", "/quizzes", "/quotes-references", "/dashboard"],
+   },
+   {
+     label: "Resources",
+diff --git a/components/RecordView.tsx b/components/RecordView.tsx
+new file mode 100644
+index 0000000..e38fbe6
+--- /dev/null
++++ b/components/RecordView.tsx
+@@ -0,0 +1,22 @@
++"use client";
++
++import { useEffect } from "react";
++import { recordView, type ContentRef } from "@/lib/learner-store";
++
++/**
++ * Invisible tracker: records a content view (for Recently Viewed / Continue Learning / progress)
++ * on mount. Rendered inside an otherwise server-rendered page so only this one small client
++ * component hydrates, not the whole page (see docs/Architecture.md#performance /
++ * Phase 3.7 - minimal client JS).
++ */
++export function RecordView({ contentRef }: { contentRef: ContentRef }) {
++  // Stringify to keep the effect's dependency stable across re-renders with an equivalent but
++  // new object reference (the caller constructs contentRef fresh on every render).
++  const key = JSON.stringify(contentRef);
++
++  useEffect(() => {
++    recordView(JSON.parse(key) as ContentRef);
++  }, [key]);
++
++  return null;
++}
+diff --git a/components/SectionHub.tsx b/components/SectionHub.tsx
+index 8dbc473..82c0921 100644
+--- a/components/SectionHub.tsx
++++ b/components/SectionHub.tsx
+@@ -1,6 +1,7 @@
+ import Link from "next/link";
+ import { ChevronRight, CircleDot, BookOpen } from "lucide-react";
+ import { Breadcrumbs } from "@/components/Breadcrumbs";
++import { SectionProgress } from "@/components/SectionProgress";
+ import { paper1Sections, paper2Sections, type SyllabusSection } from "@/data/syllabus";
+ import type { Topic } from "@/data/topics";
+ 
+@@ -58,6 +59,7 @@ export function SectionHub({ paper, section, topics }: SectionHubProps) {
+           </p>
+           <h1 className="mt-2 text-3xl font-bold font-heading text-text">{section.title}</h1>
+           <p className="mt-3 text-text-muted">{section.description}</p>
++          <SectionProgress paper={paper} section={section.slug} total={topics.length} />
+ 
+           <ul className="mt-8 space-y-3">
+             {section.subtopics.map((subtopic) => {
+diff --git a/components/SectionProgress.tsx b/components/SectionProgress.tsx
+new file mode 100644
+index 0000000..2e0bc66
+--- /dev/null
++++ b/components/SectionProgress.tsx
+@@ -0,0 +1,50 @@
++"use client";
++
++import { useLearnerProfile, getViewedCountForSection } from "@/lib/learner-store";
++
++interface SectionProgressProps {
++  paper: 1 | 2;
++  section: string;
++  total: number;
++}
++
++/**
++ * Small client island showing how many lessons in this section the learner has already viewed.
++ * Isolated to its own component (rather than making SectionHub a client component) so the rest
++ * of the section page stays server-rendered - see docs/Architecture.md, Phase 3.7 performance
++ * principle (minimal client JS).
++ */
++export function SectionProgress({ paper, section, total }: SectionProgressProps) {
++  // Subscribing via useLearnerProfile (rather than reading getViewedCountForSection once) means
++  // this updates live if the learner views a lesson in another tab, or immediately after
++  // RecordView fires on this same section's own topic pages.
++  useLearnerProfile();
++  const viewed = getViewedCountForSection(paper, section);
++
++  if (total === 0) return null;
++  const percent = Math.round((viewed / total) * 100);
++
++  return (
++    <div className="mt-4">
++      <div className="flex items-center justify-between text-xs font-medium text-text-muted">
++        <span>
++          {viewed} of {total} lessons viewed
++        </span>
++        <span>{percent}%</span>
++      </div>
++      <div
++        role="progressbar"
++        aria-valuenow={percent}
++        aria-valuemin={0}
++        aria-valuemax={100}
++        aria-label={`Section progress: ${viewed} of ${total} lessons viewed`}
++        className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-surface-soft"
++      >
++        <div
++          className="h-full rounded-full bg-success transition-all duration-300"
++          style={{ width: `${percent}%` }}
++        />
++      </div>
++    </div>
++  );
++}
+diff --git a/components/TopicPage.tsx b/components/TopicPage.tsx
+index 1096fc7..8b0bb7e 100644
+--- a/components/TopicPage.tsx
++++ b/components/TopicPage.tsx
+@@ -14,6 +14,9 @@ import type { Topic } from "@/data/topics";
+ import { getSection } from "@/data/syllabus";
+ import { getQuestionsBySubtopic } from "@/data/questions";
+ import { Breadcrumbs } from "@/components/Breadcrumbs";
++import { RecordView } from "@/components/RecordView";
++import { BookmarkButton } from "@/components/BookmarkButton";
++import type { ContentRef } from "@/lib/learner-store";
+ 
+ interface TopicPageProps {
+   topic: Topic;
+@@ -51,18 +54,31 @@ function Section({
+ export function TopicPage({ topic }: TopicPageProps) {
+   const section = getSection(topic.paper, topic.section);
+   const relatedQuestions = getQuestionsBySubtopic(topic.section, topic.slug);
++  const url = `/paper-${topic.paper}/${topic.section}/${topic.slug}`;
++  const contentRef: ContentRef = {
++    type: "topic",
++    paper: topic.paper,
++    section: topic.section,
++    slug: topic.slug,
++    title: topic.title,
++    url,
++  };
+ 
+   return (
+     <div className="mx-auto max-w-4xl px-4 py-12">
++      <RecordView contentRef={contentRef} />
+       <Breadcrumbs
+         items={[
+           { label: `Paper ${topic.paper}`, href: `/paper-${topic.paper}` },
+           { label: section?.title ?? topic.section, href: `/paper-${topic.paper}/${topic.section}` },
+-          { label: topic.title, href: `/paper-${topic.paper}/${topic.section}/${topic.slug}` },
++          { label: topic.title, href: url },
+         ]}
+       />
+       <article>
+-        <h1 className="mt-2 text-3xl font-bold font-heading text-text">{topic.title}</h1>
++        <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
++          <h1 className="text-3xl font-bold font-heading text-text">{topic.title}</h1>
++          <BookmarkButton contentRef={contentRef} className="shrink-0" />
++        </div>
+         <p className="mt-3 text-text-muted">{topic.standing}</p>
+ 
+         {relatedQuestions.length > 0 && (
+diff --git a/data/site-config.ts b/data/site-config.ts
+index 4a0cc92..cabe566 100644
+--- a/data/site-config.ts
++++ b/data/site-config.ts
+@@ -60,6 +60,7 @@ export const siteConfig = {
+     { label: "Quotes & References", href: "/quotes-references" },
+     { label: "Revision", href: "/revision" },
+     { label: "Quizzes", href: "/quizzes" },
++    { label: "Dashboard", href: "/dashboard" },
+     { label: "Notes", href: "/notes" },
+     { label: "Resources", href: "/resources" },
+     { label: "Online Classes", href: "/online-classes" },
+diff --git a/lib/learner-store.ts b/lib/learner-store.ts
+new file mode 100644
+index 0000000..1a40dc8
+--- /dev/null
++++ b/lib/learner-store.ts
+@@ -0,0 +1,216 @@
++"use client";
++
++// Client-side "learner profile" store: bookmarks, recently viewed, continue-learning, and
++// per-section progress. localStorage-backed for now, but the schema is designed to migrate to
++// an account-backed store later without breaking compatibility — see
++// docs/Content-System-Design.md's content-vs-learner-progress separation.
++//
++// Content is referenced by stable (type, paper, section, slug) fields only, never by array index
++// or any value that could change if content is re-authored or re-tagged - matching how the rest
++// of the site links content together (see data/topics, data/questions).
++
++import { useSyncExternalStore } from "react";
++
++const STORAGE_KEY = "olevelislamiyat:learner:v1";
++const RECENTLY_VIEWED_LIMIT = 12;
++
++// Must match the prefix Quiz.tsx's storageKey() writes to (components/Quiz.tsx). Not imported
++// directly since Quiz.tsx doesn't export it and quiz progress intentionally stays in its own
++// per-quiz keys (unchanged, pre-existing behavior) - this store only *reads* that data to build
++// dashboard summaries, it never writes to it.
++const QUIZ_STORAGE_PREFIX = "olevelislamiyat:quiz:";
++
++export type ContentType = "topic";
++
++export interface ContentRef {
++  type: ContentType;
++  paper: 1 | 2;
++  section: string;
++  slug: string;
++  title: string;
++  url: string;
++}
++
++export interface RecentlyViewedEntry extends ContentRef {
++  viewedAt: string; // ISO timestamp
++}
++
++export interface BookmarkEntry extends ContentRef {
++  bookmarkedAt: string; // ISO timestamp
++}
++
++export interface LearnerProfile {
++  version: 1;
++  recentlyViewed: RecentlyViewedEntry[]; // most-recent first, capped at RECENTLY_VIEWED_LIMIT
++  bookmarks: BookmarkEntry[];
++  viewedTopicKeys: string[]; // unique contentKey() values, for per-section progress
++  lastVisited: RecentlyViewedEntry | null; // drives "Continue Learning"
++}
++
++function emptyProfile(): LearnerProfile {
++  return { version: 1, recentlyViewed: [], bookmarks: [], viewedTopicKeys: [], lastVisited: null };
++}
++
++export function contentKey(ref: Pick<ContentRef, "type" | "paper" | "section" | "slug">): string {
++  return `${ref.type}:${ref.paper}:${ref.section}:${ref.slug}`;
++}
++
++function loadProfile(): LearnerProfile {
++  if (typeof window === "undefined") return emptyProfile();
++  try {
++    const raw = window.localStorage.getItem(STORAGE_KEY);
++    if (!raw) return emptyProfile();
++    const parsed = JSON.parse(raw) as Partial<LearnerProfile>;
++    // Defensive defaults, in case a future schema version adds fields - old data still loads.
++    return {
++      version: 1,
++      recentlyViewed: parsed.recentlyViewed ?? [],
++      bookmarks: parsed.bookmarks ?? [],
++      viewedTopicKeys: parsed.viewedTopicKeys ?? [],
++      lastVisited: parsed.lastVisited ?? null,
++    };
++  } catch {
++    return emptyProfile();
++  }
++}
++
++function saveProfile(profile: LearnerProfile) {
++  if (typeof window === "undefined") return;
++  try {
++    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
++    window.dispatchEvent(new Event("learner-store:change"));
++  } catch {
++    // localStorage unavailable (private browsing, quota) - fail silently, matching Quiz.tsx.
++  }
++}
++
++/** Record that a piece of content was viewed - updates recently-viewed, the viewed-set used for
++ * progress tracking, and "continue learning". Call once per page view (see RecordView.tsx). */
++export function recordView(ref: ContentRef) {
++  const profile = loadProfile();
++  const key = contentKey(ref);
++  const entry: RecentlyViewedEntry = { ...ref, viewedAt: new Date().toISOString() };
++
++  const recentlyViewed = [entry, ...profile.recentlyViewed.filter((e) => contentKey(e) !== key)].slice(
++    0,
++    RECENTLY_VIEWED_LIMIT,
++  );
++  const viewedTopicKeys = profile.viewedTopicKeys.includes(key)
++    ? profile.viewedTopicKeys
++    : [...profile.viewedTopicKeys, key];
++
++  saveProfile({ ...profile, recentlyViewed, viewedTopicKeys, lastVisited: entry });
++}
++
++/** Toggle a bookmark on/off. Returns the new bookmarked state. */
++export function toggleBookmark(ref: ContentRef): boolean {
++  const profile = loadProfile();
++  const key = contentKey(ref);
++  const exists = profile.bookmarks.some((b) => contentKey(b) === key);
++
++  const bookmarks = exists
++    ? profile.bookmarks.filter((b) => contentKey(b) !== key)
++    : [{ ...ref, bookmarkedAt: new Date().toISOString() }, ...profile.bookmarks];
++
++  saveProfile({ ...profile, bookmarks });
++  return !exists;
++}
++
++export function isBookmarked(ref: Pick<ContentRef, "type" | "paper" | "section" | "slug">): boolean {
++  const key = contentKey(ref);
++  return loadProfile().bookmarks.some((b) => contentKey(b) === key);
++}
++
++export function getBookmarks(): BookmarkEntry[] {
++  return loadProfile().bookmarks;
++}
++
++export function getRecentlyViewed(): RecentlyViewedEntry[] {
++  return loadProfile().recentlyViewed;
++}
++
++export function getLastVisited(): RecentlyViewedEntry | null {
++  return loadProfile().lastVisited;
++}
++
++/** Number of distinct topics viewed within a given paper/section, for progress bars. */
++export function getViewedCountForSection(paper: 1 | 2, section: string): number {
++  const prefix = `topic:${paper}:${section}:`;
++  return loadProfile().viewedTopicKeys.filter((k) => k.startsWith(prefix)).length;
++}
++
++export interface QuizStatSummary {
++  quizId: string;
++  bestScorePercent: number;
++  lastAttemptPercent: number;
++  attempts: number;
++}
++
++/** Reads every per-quiz progress record Quiz.tsx has written to localStorage, for the dashboard.
++ * Read-only - never writes to quiz keys, so Quiz.tsx's own storage format stays authoritative. */
++export function getQuizStatsSummary(): QuizStatSummary[] {
++  if (typeof window === "undefined") return [];
++  const results: QuizStatSummary[] = [];
++  try {
++    for (let i = 0; i < window.localStorage.length; i++) {
++      const key = window.localStorage.key(i);
++      if (!key || !key.startsWith(QUIZ_STORAGE_PREFIX)) continue;
++      const raw = window.localStorage.getItem(key);
++      if (!raw) continue;
++      const parsed = JSON.parse(raw) as {
++        bestScorePercent?: number;
++        lastAttemptPercent?: number;
++        attempts?: number;
++      };
++      if (typeof parsed.bestScorePercent !== "number" || typeof parsed.attempts !== "number") continue;
++      results.push({
++        quizId: key.slice(QUIZ_STORAGE_PREFIX.length),
++        bestScorePercent: parsed.bestScorePercent,
++        lastAttemptPercent: parsed.lastAttemptPercent ?? parsed.bestScorePercent,
++        attempts: parsed.attempts,
++      });
++    }
++  } catch {
++    return results;
++  }
++  return results;
++}
++
++// --- Reactive hook -----------------------------------------------------------------------
++// A cached read-through snapshot, so components can subscribe to changes made by *other*
++// components (e.g. a BookmarkButton toggling a bookmark updates a dashboard already on screen).
++// useSyncExternalStore requires getSnapshot to return a stable reference when nothing changed -
++// re-parsing JSON on every call would return a new object each time and cause an infinite
++// render loop, so the cache below only re-parses when the raw stored string actually changes.
++
++let cachedRaw: string | null | undefined;
++let cachedProfile: LearnerProfile = emptyProfile();
++
++function getSnapshot(): LearnerProfile {
++  if (typeof window === "undefined") return cachedProfile;
++  const raw = window.localStorage.getItem(STORAGE_KEY);
++  if (raw !== cachedRaw) {
++    cachedRaw = raw;
++    cachedProfile = loadProfile();
++  }
++  return cachedProfile;
++}
++
++function getServerSnapshot(): LearnerProfile {
++  return emptyProfile();
++}
++
++function subscribe(onStoreChange: () => void): () => void {
++  window.addEventListener("learner-store:change", onStoreChange);
++  window.addEventListener("storage", onStoreChange); // keep multiple open tabs in sync
++  return () => {
++    window.removeEventListener("learner-store:change", onStoreChange);
++    window.removeEventListener("storage", onStoreChange);
++  };
++}
++
++/** Reactive read of the learner profile - re-renders the calling component whenever any
++ * bookmark/view/etc. is recorded, including by a different component on the same page. */
++export function useLearnerProfile(): LearnerProfile {
++  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
++}
+-- 
+2.43.0
+
