@@ -64,6 +64,45 @@ Sitemap entry count went from ~209 to ~560 real URLs. Verified with a fresh `npm
 
 Cross-checked the full official 2026-2027 IGCSE 0493 syllabus PDF (`source/01-syllabus/cambridge-igcse-islamiyat-0493-2026-2027.pdf`) against the site. Exam-pattern data (papers, marks, AO1/AO2 68%/32%) confirmed already correct. Found one genuine content gap: the syllabus's "Grade descriptions" section (general standards expected at Grade A/C/F) had no equivalent anywhere on the site. Added `app/grade-descriptions/page.tsx` — original wording throughout, covering all three grades across knowledge/organisation, understanding, and significance/personal-opinion — linked from `/exam-pattern`, `/revision/exam-technique`, and `/revision`, and added to `app/sitemap.ts`. Also added a brief, accurate qualification-combination-restriction note to `/cambridge-disclaimer` (0493 cannot be combined with same-title-same-level 2058, or with O Level Islamic Studies 2068). Spot-checked 15/15 Qur'an lessons and 8+ Hadith lessons against the official grouping/appendix structure — all correctly categorised, no fixes needed. Full detail in `docs/syllabus-coverage-audit.md`. Re-ran `npm run lint`, `npm run typecheck`, `npm run build`, and `npx opennextjs-cloudflare build` after these changes — all pass clean.
 
+## Life of the Prophet (pbuh) section expanded (this session, 2026-08-05)
+
+The `life-of-prophet-muhammad` section (Paper 1, section 3) had only 4 lessons, covering a small
+fraction of the syllabus's actual required scope (birth through to death, plus the character/
+legacy/Seal-of-the-Prophets dimensions the syllabus explicitly lists). Added 28 new lessons to
+`data/topics/paper1-life-of-prophet.ts` and 28 matching subtopic entries to `data/syllabus.ts`,
+covering the Seerah chronologically (birth, childhood, al-Amin reputation, Hilf al-Fudul, marriage
+to Khadijah, secret/public preaching, persecution, Abyssinia, the boycott, the Year of Sorrow,
+Ta'if, Isra and Mi'raj, the Pledges of Aqabah, the Madinan community, Badr, Uhud, the Trench,
+Hudaybiyyah, Khaybar, the Conquest of Makkah, Hunayn/Tabuk) plus the thematic character/legacy
+lessons the syllabus separately requires (personal conduct, relations with women, relations with
+non-Muslims, relations with other states/diplomacy, Seal of the Prophets, death and its impact).
+The 4 pre-existing lessons (`arabia-before-islam`, `first-revelation-event`, `hijrah`,
+`farewell-sermon`) were left untouched. `data/model-answers.ts` was not touched; no `app/` route
+files were touched (all four consuming pages — `/paper-1`, `/quizzes`, `/quotes-references`, and
+the dynamic `/paper-1/[section]`/`SectionHub` — read the subtopic list live from
+`data/syllabus.ts`, so the new lessons appear automatically).
+
+Section now has 32 subtopics/lessons (up from 4), verified 1:1 (every subtopic slug has exactly
+one matching lesson, zero missing, zero orphaned — re-checked mechanically, not assumed). Paper 1
+overall now has 58 subtopics (up from the ~30 recorded in the prior pass, reflecting this
+section's expansion). `npm run lint`, `npm run typecheck`, and `npm run build` all pass clean.
+
+**Verification log** (facts checked against mainstream, academically-accepted Seerah scholarship
+before writing, per this project's established rigour — no fabricated dates/names/events, no
+`[VERIFY:]` placeholders needed as every fact below is well-established in standard Seerah
+references):
+- Year of the Elephant / Prophet's birth ≈ 570 CE, and the reference to Surah al-Fil (105) — standard, uncontested dating in Seerah literature.
+- Marriage to Khadijah (RA) ≈ 595 CE, ages ~25/~40 — the traditional and most widely cited figures (some minority scholarly views give Khadijah a younger age, noted but not the figure used here, consistent with mainstream sources).
+- Migration to Abyssinia ≈ 615 CE, led by Uthman ibn Affan (RA) and Ruqayyah (RA); Ja'far ibn Abi Talib's (RA) recitation from Surah Maryam before the Negus — standard account across Ibn Ishaq/Ibn Hisham-derived Seerah narratives.
+- Battle of Badr: 17 Ramadan, 2 AH/624 CE, ~313 Muslims vs ~1,000 Quraysh — consistently cited figures across standard Islamic-studies references.
+- Battle of Uhud: 3 AH/625 CE; archers under Abdullah ibn Jubayr (RA) leaving position; Khalid ibn al-Walid's flanking manoeuvre; Hamzah (RA) killed by Wahshi ibn Harb — standard, consistently reported sequence.
+- Battle of the Trench: 5 AH/627 CE; Salman al-Farisi's (RA) trench proposal; resolution via storm, per Qur'an 33:9 — standard account.
+- Treaty of Hudaybiyyah: 6 AH/628 CE; ten-year term; Bay'at al-Ridwan under a tree, per Qur'an 48:18; "clear victory" per Qur'an 48:1 — standard, directly Qur'an-referenced.
+- Conquest of Makkah: 8 AH/630 CE, triggered by the Banu Khuza'ah attack breaching Hudaybiyyah — standard causal account.
+- Isra and Mi'raj: dated to roughly a year before the Hijrah; Qur'an 17:1 as the anchoring verse; five daily prayers prescribed — standard, uncontested core facts (exact calendar date, e.g. 27 Rajab, is a later popularised tradition rather than a Qur'anic/certain date, so it was deliberately not asserted as fact in the lesson).
+- Prophet's (pbuh) death: 12 Rabi' al-Awwal, 11 AH, commonly dated 8 June 632 CE; Abu Bakr's (RA) address citing Qur'an 3:144; Saqifah selection of Abu Bakr (RA) as first caliph — standard, widely-attested sequence.
+- Seal of the Prophets: Qur'an 33:40 as the direct textual basis — quoted accurately.
+
 ## What "complete" means here
 
 Every route the site currently claims to have (via its own data files, nav config, and sitemap) now actually exists, builds, and cross-references correctly — there is no dangling link, no orphaned content, no silently-stale sitemap, and no fabricated data anywhere in the checks above. The one substantive open item (model answers beyond the initial 10) is a deliberate, communicated handoff to the site owner, not an oversight.

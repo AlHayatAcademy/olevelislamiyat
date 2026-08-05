@@ -983,3 +983,35 @@ every syllabus subtopic has a real, well-organized entry — not just the ones w
   paths, shared First Load JS 102 kB, no regressions.
 
 Files touched: `app/quizzes/page.tsx` only. `data/quizzes.ts` was read but not modified.
+
+## Life of the Prophet (pbuh) Section Expansion (this session, 2026-08-05)
+
+Scope: the Paper 1 section `life-of-prophet-muhammad` had only 4 lessons, covering a small
+fraction of the syllabus's actual required scope. Added 28 new lessons (32 total) covering the
+Seerah chronologically from birth to death, plus the character/legacy/Seal-of-the-Prophets
+dimensions the syllabus explicitly requires. See `docs/completeness-report.md` for the full list
+of new lessons and a verification log citing the specific facts checked.
+
+### What changed
+- `data/topics/paper1-life-of-prophet.ts` — 28 new `Topic` objects appended, matching the exact
+  schema and tone of the 4 existing lessons (title, standing, learningObjectives, keyTerms,
+  explanation, keyFacts, ao1Guidance, ao2Guidance, commonMistakes, examTip, relatedTopics). The 4
+  pre-existing lessons were left untouched.
+- `data/syllabus.ts` — 28 new subtopic entries added to the `life-of-prophet-muhammad` section's
+  `subtopics` array, in chronological/thematic order, matching the existing pattern for other
+  sections. This was the only change outside the topics file — no `app/` route files were touched,
+  since `/paper-1`, `/quizzes`, `/quotes-references`, and the dynamic `/paper-1/[section]` route
+  (via `SectionHub`) all read the subtopic list live from `data/syllabus.ts`.
+- `data/model-answers.ts` was not touched (out of scope, per instruction).
+
+### QA
+- `npm run lint` → clean, zero errors/warnings.
+- `npm run typecheck` → clean, zero errors.
+- `npm run build` → passed, all routes generated including the 28 new
+  `/paper-1/life-of-prophet-muhammad/[topic]` SSG paths.
+- 1:1 coverage check (subtopic slug ↔ lesson slug, same pattern as `completeness-report.md`):
+  32 subtopics in the section, 32 matching lessons, zero missing, zero orphaned. Paper 1 overall
+  subtopic count is now 58.
+
+Files touched: `data/topics/paper1-life-of-prophet.ts`, `data/syllabus.ts`,
+`docs/completeness-report.md`. `data/model-answers.ts` and all `app/` files were not touched.
