@@ -1,0 +1,563 @@
+From a72134c0b13357822d82b3ab555c6e57550e4811 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 5 Aug 2026 15:55:21 +0000
+Subject: [PATCH] Phase 3.4: Advanced Search with Filters
+
+Add comprehensive filtering to the advanced search page supporting paper, section,
+content type, and year filters. Filter preferences persist to localStorage using
+learner-store integration.
+
+New component:
+- SearchFilters: Filter UI with checkboxes for paper (1/2), content type
+  (lesson/past-paper/model-answer/quiz/reference), section (dynamic from syllabus),
+  and year (from available past papers). Includes "Clear all" button and active
+  filter indicator.
+
+Enhanced backend:
+- Extend SearchEntry interface with optional metadata: paper, section, type, year
+- Update search-index.ts to populate these fields for all content types
+- Add search filtering logic: matchesFilters() applies all active filters with AND logic
+- Add SearchFiltersPreference to learner-store for persistence
+- New functions: saveSearchFilters(), getSearchFilters()
+
+Enhanced UI:
+- SearchPageClient now displays SearchFilters component in left sidebar (lg:grid-cols-4)
+- Results area expanded to lg:col-span-3 for side-by-side layout
+- Filter state syncs to localStorage on every change
+- Filter preferences restored on page load
+- Max-width increased to accommodate filters
+
+Integration:
+- search() function now accepts optional SearchFiltersPreference parameter
+- Backward compatible: search works without filters (empty filters = no filtering)
+- Filter UI integrates seamlessly with existing search flow
+
+Testing:
+- All 61 unit tests pass
+- All 38 e2e tests pass (including existing search tests)
+- Lint clean, no type errors
+- Production build verified (780 pages generated)
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01PjAHsksER8C58ATRmTZYtK
+---
+ app/search/SearchPageClient.tsx |  21 ++++-
+ components/SearchFilters.tsx    | 141 ++++++++++++++++++++++++++++++++
+ data/search-index.ts            |  34 ++++++++
+ lib/learner-store.ts            |  22 ++++-
+ lib/search.ts                   |  20 ++++-
+ 5 files changed, 231 insertions(+), 7 deletions(-)
+ create mode 100644 components/SearchFilters.tsx
+
+diff --git a/app/search/SearchPageClient.tsx b/app/search/SearchPageClient.tsx
+index f3f04d0..b86f5b8 100644
+--- a/app/search/SearchPageClient.tsx
++++ b/app/search/SearchPageClient.tsx
+@@ -1,19 +1,28 @@
+ "use client";
+ 
+-import { useState } from "react";
++import { useEffect, useState } from "react";
+ import Link from "next/link";
+ import { useRouter, useSearchParams } from "next/navigation";
+ import { Search } from "lucide-react";
+ import { search, groupByCategory, popularSearches } from "@/lib/search";
++import { saveSearchFilters, getSearchFilters, type SearchFiltersPreference } from "@/lib/learner-store";
++import { SearchFilters as SearchFiltersComponent } from "@/components/SearchFilters";
++import { pastPaperQuestions } from "@/data/questions";
+ 
+ export function SearchPageClient() {
+   const router = useRouter();
+   const searchParams = useSearchParams();
+   const initialQuery = searchParams.get("q") ?? "";
+   const [query, setQuery] = useState(initialQuery);
++  const [filters, setFilters] = useState<SearchFiltersPreference>(() => getSearchFilters() ?? {});
+ 
+-  const results = search(query);
++  useEffect(() => {
++    saveSearchFilters(filters);
++  }, [filters]);
++
++  const results = search(query, filters);
+   const grouped = groupByCategory(results);
++  const availableYears = Array.from(new Set(pastPaperQuestions.map((q) => q.year))).sort((a, b) => b - a);
+ 
+   function handleSubmit(e: React.FormEvent) {
+     e.preventDefault();
+@@ -21,7 +30,7 @@ export function SearchPageClient() {
+   }
+ 
+   return (
+-    <div className="mx-auto max-w-4xl px-4 py-12">
++    <div className="mx-auto max-w-6xl px-4 py-12">
+       <h1 className="text-3xl font-bold font-heading text-text">Search</h1>
+       <p className="mt-3 text-text-muted">
+         Search across Paper 1 &amp; Paper 2 lessons, past-paper questions, model answers, quizzes, and references.
+@@ -44,7 +53,10 @@ export function SearchPageClient() {
+         </div>
+       </form>
+ 
+-      <div className="mt-8">
++      <div className="mt-8 grid gap-6 lg:grid-cols-4">
++        <SearchFiltersComponent filters={filters} onFilterChange={setFilters} availableYears={availableYears} />
++
++        <div className="lg:col-span-3">
+         {query.trim() === "" && (
+           <div className="rounded-xl border border-border bg-surface-soft px-6 py-10 text-center text-text-muted">
+             <p>Type to search the whole site.</p>
+@@ -96,6 +108,7 @@ export function SearchPageClient() {
+             </ul>
+           </div>
+         ))}
++        </div>
+       </div>
+     </div>
+   );
+diff --git a/components/SearchFilters.tsx b/components/SearchFilters.tsx
+new file mode 100644
+index 0000000..fb4958f
+--- /dev/null
++++ b/components/SearchFilters.tsx
+@@ -0,0 +1,141 @@
++"use client";
++
++import { paper1Sections, paper2Sections } from "@/data/syllabus";
++import { type SearchFiltersPreference } from "@/lib/learner-store";
++
++interface SearchFiltersProps {
++  filters: SearchFiltersPreference;
++  onFilterChange: (filters: SearchFiltersPreference) => void;
++  availableYears?: number[];
++}
++
++const RESULT_TYPES = [
++  { value: "lesson", label: "Lessons" },
++  { value: "past-paper", label: "Past Paper Questions" },
++  { value: "model-answer", label: "Model Answers" },
++  { value: "quiz", label: "Quizzes" },
++  { value: "reference", label: "References" },
++];
++
++export function SearchFilters({ filters, onFilterChange, availableYears = [] }: SearchFiltersProps) {
++  const handlePaperToggle = (paper: 1 | 2) => {
++    const papers = filters.papers ?? [];
++    const updated = papers.includes(paper) ? papers.filter((p) => p !== paper) : [...papers, paper];
++    onFilterChange({ ...filters, papers: updated.length > 0 ? updated : undefined });
++  };
++
++  const handleTypeToggle = (type: string) => {
++    const types = filters.types ?? [];
++    const updated = types.includes(type) ? types.filter((t) => t !== type) : [...types, type];
++    onFilterChange({ ...filters, types: updated.length > 0 ? updated : undefined });
++  };
++
++  const handleSectionToggle = (section: string) => {
++    const sections = filters.sections ?? [];
++    const updated = sections.includes(section) ? sections.filter((s) => s !== section) : [...sections, section];
++    onFilterChange({ ...filters, sections: updated.length > 0 ? updated : undefined });
++  };
++
++  const handleYearToggle = (year: number) => {
++    const years = filters.years ?? [];
++    const updated = years.includes(year) ? years.filter((y) => y !== year) : [...years, year];
++    onFilterChange({ ...filters, years: updated.length > 0 ? updated : undefined });
++  };
++
++  const handleClear = () => {
++    onFilterChange({});
++  };
++
++  const isActive = (filters.papers?.length ?? 0) + (filters.types?.length ?? 0) + (filters.sections?.length ?? 0) + (filters.years?.length ?? 0) > 0;
++
++  return (
++    <div className="space-y-6 rounded-xl border border-border bg-surface p-6 shadow-soft">
++      <div className="flex items-center justify-between">
++        <h2 className="font-semibold text-text">Filters</h2>
++        {isActive && (
++          <button
++            type="button"
++            onClick={handleClear}
++            className="text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
++          >
++            Clear all
++          </button>
++        )}
++      </div>
++
++      {/* Paper filter */}
++      <div>
++        <h3 className="text-sm font-medium text-text">Paper</h3>
++        <div className="mt-2 space-y-2">
++          {[1, 2].map((paper) => (
++            <label key={paper} className="flex items-center gap-2 cursor-pointer">
++              <input
++                type="checkbox"
++                checked={filters.papers?.includes(paper as 1 | 2) ?? false}
++                onChange={() => handlePaperToggle(paper as 1 | 2)}
++                className="h-4 w-4 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary"
++              />
++              <span className="text-sm text-text">Paper {paper}</span>
++            </label>
++          ))}
++        </div>
++      </div>
++
++      {/* Type filter */}
++      <div>
++        <h3 className="text-sm font-medium text-text">Content Type</h3>
++        <div className="mt-2 space-y-2">
++          {RESULT_TYPES.map((type) => (
++            <label key={type.value} className="flex items-center gap-2 cursor-pointer">
++              <input
++                type="checkbox"
++                checked={filters.types?.includes(type.value) ?? false}
++                onChange={() => handleTypeToggle(type.value)}
++                className="h-4 w-4 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary"
++              />
++              <span className="text-sm text-text">{type.label}</span>
++            </label>
++          ))}
++        </div>
++      </div>
++
++      {/* Section filter */}
++      <div>
++        <h3 className="text-sm font-medium text-text">Section</h3>
++        <div className="mt-2 max-h-48 space-y-2 overflow-y-auto">
++          {[...paper1Sections, ...paper2Sections].map((section) => (
++            <label key={section.slug} className="flex items-center gap-2 cursor-pointer">
++              <input
++                type="checkbox"
++                checked={filters.sections?.includes(section.slug) ?? false}
++                onChange={() => handleSectionToggle(section.slug)}
++                className="h-4 w-4 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary"
++              />
++              <span className="text-sm text-text">{section.title}</span>
++            </label>
++          ))}
++        </div>
++      </div>
++
++      {/* Year filter */}
++      {availableYears.length > 0 && (
++        <div>
++          <h3 className="text-sm font-medium text-text">Year</h3>
++          <div className="mt-2 space-y-2">
++            {availableYears.sort((a, b) => b - a).map((year) => (
++              <label key={year} className="flex items-center gap-2 cursor-pointer">
++                <input
++                  type="checkbox"
++                  checked={filters.years?.includes(year) ?? false}
++                  onChange={() => handleYearToggle(year)}
++                  className="h-4 w-4 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary"
++                />
++                <span className="text-sm text-text">{year}</span>
++              </label>
++            ))}
++          </div>
++        </div>
++      )}
++    </div>
++  );
++}
+diff --git a/data/search-index.ts b/data/search-index.ts
+index 21971b5..a48eed4 100644
+--- a/data/search-index.ts
++++ b/data/search-index.ts
+@@ -15,6 +15,10 @@ export interface SearchEntry {
+   url: string;
+   category: string;
+   keywords: string;
++  paper?: 1 | 2;
++  section?: string;
++  type?: "lesson" | "past-paper" | "model-answer" | "reference" | "quiz" | "page";
++  year?: number;
+ }
+ 
+ function sectionTitle(paper: 1 | 2, sectionSlug: string): string {
+@@ -29,6 +33,7 @@ const staticPages: SearchEntry[] = [
+     description: "O Level Islamiyat — Cambridge O Level 2058 and IGCSE 0493 Islamiyat study resources.",
+     url: "/",
+     category: "Page",
++    type: "page",
+     keywords: "home islamiyat 2058 0493 al-hayat academy",
+   },
+   {
+@@ -36,6 +41,7 @@ const staticPages: SearchEntry[] = [
+     description: "Full Cambridge O Level / IGCSE Islamiyat syllabus breakdown by section and marks.",
+     url: "/syllabus",
+     category: "Page",
++    type: "page",
+     keywords: "syllabus sections weightings 2058 0493",
+   },
+   {
+@@ -43,6 +49,7 @@ const staticPages: SearchEntry[] = [
+     description: "Paper structure, marks distribution, and assessment objectives for the Islamiyat exam.",
+     url: "/exam-pattern",
+     category: "Page",
++    type: "page",
+     keywords: "exam pattern paper structure marks AO1 AO2 assessment objectives",
+   },
+   {
+@@ -50,6 +57,7 @@ const staticPages: SearchEntry[] = [
+     description: "Paper 1 lessons: major themes of the Qur'an, its history, the life of the Prophet, and the first Islamic community.",
+     url: "/paper-1",
+     category: "Page",
++    type: "page",
+     keywords: "paper 1 quran seerah life of prophet first islamic community",
+   },
+   {
+@@ -57,6 +65,7 @@ const staticPages: SearchEntry[] = [
+     description: "Paper 2 lessons: history of Hadith, the Rightly Guided Caliphs, major teachings, and articles/pillars of faith.",
+     url: "/paper-2",
+     category: "Page",
++    type: "page",
+     keywords: "paper 2 hadith caliphs articles of faith pillars of islam",
+   },
+   {
+@@ -64,6 +73,7 @@ const staticPages: SearchEntry[] = [
+     description: "Browse past-paper questions by year and by topic, with model answers.",
+     url: "/past-papers",
+     category: "Page",
++    type: "page",
+     keywords: "past papers questions year topical",
+   },
+   {
+@@ -71,6 +81,7 @@ const staticPages: SearchEntry[] = [
+     description: "Fully worked model answers for a representative set of past-paper questions.",
+     url: "/model-answers",
+     category: "Page",
++    type: "page",
+     keywords: "model answers sample answers exam technique",
+   },
+   {
+@@ -78,6 +89,7 @@ const staticPages: SearchEntry[] = [
+     description: "Qur'anic verses, Hadith, and seerah quotations organised by category for exam use.",
+     url: "/quotes-references",
+     category: "Page",
++    type: "page",
+     keywords: "quotes references quran verses hadith citations",
+   },
+   {
+@@ -85,6 +97,7 @@ const staticPages: SearchEntry[] = [
+     description: "Revision resources and exam-technique guidance for Islamiyat.",
+     url: "/revision",
+     category: "Page",
++    type: "page",
+     keywords: "revision exam technique tips",
+   },
+   {
+@@ -92,6 +105,7 @@ const staticPages: SearchEntry[] = [
+     description: "Self-check quizzes to test recall and understanding across Paper 1 and Paper 2.",
+     url: "/quizzes",
+     category: "Page",
++    type: "page",
+     keywords: "quizzes self test mcq true false matching",
+   },
+   {
+@@ -99,6 +113,7 @@ const staticPages: SearchEntry[] = [
+     description: "Concise revision notes across the syllabus.",
+     url: "/notes",
+     category: "Page",
++    type: "page",
+     keywords: "notes revision summary",
+   },
+   {
+@@ -106,6 +121,7 @@ const staticPages: SearchEntry[] = [
+     description: "Further study resources for Islamiyat students.",
+     url: "/resources",
+     category: "Page",
++    type: "page",
+     keywords: "resources study material",
+   },
+   {
+@@ -113,6 +129,7 @@ const staticPages: SearchEntry[] = [
+     description: "Online Islamiyat classes with Al-Hayat Academy.",
+     url: "/online-classes",
+     category: "Page",
++    type: "page",
+     keywords: "online classes tuition academy",
+   },
+   {
+@@ -120,6 +137,7 @@ const staticPages: SearchEntry[] = [
+     description: "About O Level Islamiyat and Al-Hayat Research Institute of Social Sciences.",
+     url: "/about",
+     category: "Page",
++    type: "page",
+     keywords: "about founder institute academy",
+   },
+   {
+@@ -127,6 +145,7 @@ const staticPages: SearchEntry[] = [
+     description: "Get in touch with O Level Islamiyat / Al-Hayat Academy.",
+     url: "/contact",
+     category: "Page",
++    type: "page",
+     keywords: "contact email whatsapp phone",
+   },
+ ];
+@@ -142,6 +161,9 @@ const topicEntries: SearchEntry[] = allTopics.map((t) => ({
+     sectionTitle(t.paper, t.section),
+     ...t.keyTerms.map((k) => `${k.term} ${k.meaning}`),
+   ].join(" "),
++  paper: t.paper,
++  section: t.section,
++  type: "lesson",
+ }));
+ 
+ const questionEntries: SearchEntry[] = pastPaperQuestions.map((q) => ({
+@@ -152,6 +174,10 @@ const questionEntries: SearchEntry[] = pastPaperQuestions.map((q) => ({
+   keywords: [q.topicHint, q.prompt, sectionTitle(q.syllabusPaper, q.sectionSlug), q.year.toString(), q.session].join(
+     " ",
+   ),
++  paper: q.syllabusPaper,
++  section: q.sectionSlug,
++  type: "past-paper",
++  year: q.year,
+ }));
+ 
+ const modelAnswerEntries: SearchEntry[] = modelAnswers.map((m) => {
+@@ -167,6 +193,10 @@ const modelAnswerEntries: SearchEntry[] = modelAnswers.map((m) => {
+     url: `/model-answers/${m.id}`,
+     category: "Model Answer",
+     keywords: [question?.topicHint ?? "", question?.prompt ?? "", ...m.sampleAnswer].join(" "),
++    paper: question?.syllabusPaper,
++    section: question?.sectionSlug,
++    type: "model-answer",
++    year: question?.year,
+   };
+ });
+ 
+@@ -176,6 +206,7 @@ const referenceEntries: SearchEntry[] = references.map((r) => ({
+   url: `/quotes-references/${slugifyType(r.type)}/${r.id}`,
+   category: "Reference",
+   keywords: [r.title, r.type, r.translation, r.citation, r.explanation, r.topic].join(" "),
++  type: "reference",
+ }));
+ 
+ const quizEntries: SearchEntry[] = quizzes.map((q) => ({
+@@ -184,6 +215,9 @@ const quizEntries: SearchEntry[] = quizzes.map((q) => ({
+   url: `/quizzes/${q.id}`,
+   category: "Quiz",
+   keywords: [q.title, q.description, q.topicTitle, sectionTitle(q.paper, q.section)].join(" "),
++  paper: q.paper,
++  section: q.section,
++  type: "quiz",
+ }));
+ 
+ export const searchIndex: SearchEntry[] = [
+diff --git a/lib/learner-store.ts b/lib/learner-store.ts
+index 1a40dc8..26e51c2 100644
+--- a/lib/learner-store.ts
++++ b/lib/learner-store.ts
+@@ -39,16 +39,24 @@ export interface BookmarkEntry extends ContentRef {
+   bookmarkedAt: string; // ISO timestamp
+ }
+ 
++export interface SearchFiltersPreference {
++  papers?: (1 | 2)[];
++  types?: string[];
++  sections?: string[];
++  years?: number[];
++}
++
+ export interface LearnerProfile {
+   version: 1;
+   recentlyViewed: RecentlyViewedEntry[]; // most-recent first, capped at RECENTLY_VIEWED_LIMIT
+   bookmarks: BookmarkEntry[];
+   viewedTopicKeys: string[]; // unique contentKey() values, for per-section progress
+   lastVisited: RecentlyViewedEntry | null; // drives "Continue Learning"
++  searchFilters?: SearchFiltersPreference; // user's last-used search filters
+ }
+ 
+ function emptyProfile(): LearnerProfile {
+-  return { version: 1, recentlyViewed: [], bookmarks: [], viewedTopicKeys: [], lastVisited: null };
++  return { version: 1, recentlyViewed: [], bookmarks: [], viewedTopicKeys: [], lastVisited: null, searchFilters: undefined };
+ }
+ 
+ export function contentKey(ref: Pick<ContentRef, "type" | "paper" | "section" | "slug">): string {
+@@ -68,6 +76,7 @@ function loadProfile(): LearnerProfile {
+       bookmarks: parsed.bookmarks ?? [],
+       viewedTopicKeys: parsed.viewedTopicKeys ?? [],
+       lastVisited: parsed.lastVisited ?? null,
++      searchFilters: parsed.searchFilters,
+     };
+   } catch {
+     return emptyProfile();
+@@ -176,6 +185,17 @@ export function getQuizStatsSummary(): QuizStatSummary[] {
+   return results;
+ }
+ 
++/** Save the user's last-used search filters for persistence. */
++export function saveSearchFilters(filters: SearchFiltersPreference) {
++  const profile = loadProfile();
++  saveProfile({ ...profile, searchFilters: filters });
++}
++
++/** Retrieve the user's last-used search filters, or undefined if none set. */
++export function getSearchFilters(): SearchFiltersPreference | undefined {
++  return loadProfile().searchFilters;
++}
++
+ // --- Reactive hook -----------------------------------------------------------------------
+ // A cached read-through snapshot, so components can subscribe to changes made by *other*
+ // components (e.g. a BookmarkButton toggling a bookmark updates a dashboard already on screen).
+diff --git a/lib/search.ts b/lib/search.ts
+index 2da2b6b..227e758 100644
+--- a/lib/search.ts
++++ b/lib/search.ts
+@@ -3,11 +3,13 @@
+ 
+ import { searchIndex, type SearchEntry } from "@/data/search-index";
+ import { expandQueryTokens } from "@/data/search-synonyms";
++import type { SearchFiltersPreference } from "@/lib/learner-store";
+ 
+ export interface SearchResult extends SearchEntry {
+   score: number;
+ }
+ 
++
+ export const RESULT_LIMIT = 20;
+ 
+ export const popularSearches: { label: string; query: string }[] = [
+@@ -66,8 +68,9 @@ function scoreEntry(entry: SearchEntry, tokenVariants: string[][]): number {
+ /**
+  * Run a search over the site-wide index. Case-insensitive, token-based, synonym-expanded.
+  * Returns up to RESULT_LIMIT results ranked by relevance (title > description > keywords).
++ * Optionally filters by paper, type, section, and year.
+  */
+-export function search(query: string): SearchResult[] {
++export function search(query: string, filters?: SearchFiltersPreference): SearchResult[] {
+   const trimmed = query.trim();
+   if (!trimmed) return [];
+ 
+@@ -77,13 +80,26 @@ export function search(query: string): SearchResult[] {
+   const results: SearchResult[] = [];
+   for (const entry of searchIndex) {
+     const score = scoreEntry(entry, tokenVariants);
+-    if (score > 0) results.push({ ...entry, score });
++    if (score > 0) {
++      if (matchesFilters(entry, filters)) {
++        results.push({ ...entry, score });
++      }
++    }
+   }
+ 
+   results.sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
+   return results.slice(0, RESULT_LIMIT);
+ }
+ 
++function matchesFilters(entry: SearchEntry, filters?: SearchFiltersPreference): boolean {
++  if (!filters) return true;
++  if (filters.papers && filters.papers.length > 0 && entry.paper && !filters.papers.includes(entry.paper)) return false;
++  if (filters.types && filters.types.length > 0 && entry.type && !filters.types.includes(entry.type)) return false;
++  if (filters.sections && filters.sections.length > 0 && entry.section && !filters.sections.includes(entry.section)) return false;
++  if (filters.years && filters.years.length > 0 && entry.year && !filters.years.includes(entry.year)) return false;
++  return true;
++}
++
+ /**
+  * Group ranked results by category, preserving relevance order within each group and using
+  * the order categories first appear in as the group order.
+-- 
+2.43.0
+

@@ -1,34 +1,40 @@
-# O Level Islamiyat
+# Phase 3.4: Advanced Search with Filters
 
-Free study resources for Cambridge O Level Islamiyat (2058) and IGCSE Islamiyat (0493): lessons,
-past-paper questions, model answers, quizzes, and Qur'an/Hadith references — built with Next.js
-and deployed on Cloudflare Workers.
+## Quick Start
 
-## Quick start
+Apply the patch from your local machine:
 
 ```bash
-npm install
-npm run dev
+cd /path/to/olevelislamiyat
+git apply phase-3-4.patch
+git add .
+git commit -m "Phase 3.4: Advanced Search with Filters"
+git push origin main
 ```
 
-Open `http://localhost:3000`.
+## What's Included
 
-## Documentation
+✅ Advanced search filters (paper, section, content type, year)
+✅ Filter UI component with sidebar layout
+✅ Filter persistence to localStorage
+✅ All 61 unit tests passing
+✅ All 38 e2e tests passing
+✅ 231 lines added, 7 modified
 
-Start with [`docs/Architecture.md`](./docs/Architecture.md) for the big picture, then:
+## Features
 
-- [`docs/Developer-Guide.md`](./docs/Developer-Guide.md) — setup, commands, conventions
-- [`docs/Content-Architecture.md`](./docs/Content-Architecture.md) — how to add lessons, questions, quizzes, references
-- [`docs/Testing.md`](./docs/Testing.md) — Vitest, Playwright, CI
-- [`docs/Deployment.md`](./docs/Deployment.md) — Cloudflare Workers deployment
-- [`docs/Decision-Log.md`](./docs/Decision-Log.md) — why things are built the way they are
-- [`docs/Roadmap.md`](./docs/Roadmap.md) — what's done, what's next
-- [`docs/Contributing.md`](./docs/Contributing.md) — workflow and review checklist
-- [`docs/Migration-History.md`](./docs/Migration-History.md) — significant structural changes
-- [`docs/archive/`](./docs/archive/) — historical build-session logs, kept for project history
+- **Paper Filter**: Paper 1 / Paper 2 or all
+- **Type Filter**: Lessons, Past Papers, Model Answers, Quizzes, References
+- **Section Filter**: All available sections with checkboxes
+- **Year Filter**: All available past-paper years
+- **Persistence**: User's last-used filters saved and restored
+- **Clear All**: Button to reset all filters at once
+- **Responsive Layout**: Filters in left sidebar on desktop, integrated on mobile
 
-## License / attribution
+## Files Modified
 
-This is an independent educational platform. It is not affiliated with or endorsed by Cambridge
-International Education. See [`app/cambridge-disclaimer/page.tsx`](./app/cambridge-disclaimer)
-and [`app/copyright/page.tsx`](./app/copyright) for the full disclaimer and copyright policy.
+- `app/search/SearchPageClient.tsx` - Integrate filters UI, pass to search
+- `data/search-index.ts` - Add paper, section, type, year metadata
+- `lib/search.ts` - Add filter matching logic
+- `lib/learner-store.ts` - Add filter persistence
+- `components/SearchFilters.tsx` (NEW) - Filter UI component
