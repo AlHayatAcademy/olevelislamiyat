@@ -356,7 +356,7 @@ function McqOptions({
               checked={isSelected ?? false}
               disabled={submitted}
               onChange={() => onAnswer({ type: "multiple-choice", selectedIndex: i })}
-              className="h-4 w-4 accent-primary focus-visible:outline-none"
+              className="h-4 w-4 accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             />
             <span className="text-text">{option}</span>
           </label>
@@ -406,7 +406,7 @@ function TrueFalseOptions({
               checked={isSelected ?? false}
               disabled={submitted}
               onChange={() => onAnswer({ type: "true-false", selectedValue: opt.value })}
-              className="h-4 w-4 accent-primary focus-visible:outline-none"
+              className="h-4 w-4 accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             />
             <span className="text-text">{opt.label}</span>
           </label>

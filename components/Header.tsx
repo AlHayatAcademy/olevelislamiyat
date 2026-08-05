@@ -117,6 +117,19 @@ export function Header() {
     };
   }, [mobileOpen]);
 
+  // Escape closes whichever menu is open, so keyboard users aren't stuck.
+  useEffect(() => {
+    if (!mobileOpen && !megaOpen) return;
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        setMegaOpen(null);
+      }
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [mobileOpen, megaOpen]);
+
   const navByHref = new Map(siteConfig.primaryNav.map((l) => [l.href, l]));
 
   return (
@@ -155,6 +168,7 @@ export function Header() {
                 </button>
 
                 <div
+                  inert={megaOpen !== group.label}
                   className={`absolute left-0 top-full pt-2 transition-all duration-150 ${
                     megaOpen === group.label
                       ? "pointer-events-auto translate-y-0 opacity-100"
@@ -257,6 +271,7 @@ export function Header() {
         id="mobile-nav"
         className={`fixed inset-0 z-40 lg:hidden ${mobileOpen ? "" : "pointer-events-none"}`}
         aria-hidden={!mobileOpen}
+        inert={!mobileOpen}
       >
         <div
           className={`absolute inset-0 bg-black/50 transition-opacity duration-200 ${
