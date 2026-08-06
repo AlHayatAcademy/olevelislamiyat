@@ -1,0 +1,43 @@
+PHASE 10: FIREBASE AUTHENTICATION - QUICK START
+================================================
+
+1. CREATE FIREBASE PROJECT (5 min)
+   - Go to console.firebase.google.com
+   - Create project: "olevelislamiyat"
+   - Enable Email/Password authentication
+   - Create Firestore database
+
+2. GET CREDENTIALS (2 min)
+   - Project Settings → Your apps → Web
+   - Copy config to .env.local
+
+3. INSTALL FIREBASE (1 min)
+   npm install firebase
+
+4. COPY FILES (1 min)
+   - lib/auth.ts
+   - lib/auth-context.tsx
+   - lib/data-migration.ts
+   - components/AuthForm.tsx
+
+5. ADD SECURITY RULES (1 min)
+   - Copy from FIREBASE_SETUP.md
+   - Paste in Firestore Rules tab
+   - Publish
+
+6. UPDATE LAYOUT (2 min)
+   - Wrap with <AuthProvider>
+   - Add <DataMigration />
+
+7. CREATE AUTH PAGES (5 min)
+   - /auth/signin
+   - /auth/signup
+
+8. TEST (5 min)
+   - Go to /auth/signup
+   - Create account
+   - Check Firebase Console
+
+TOTAL TIME: ~20 minutes
+
+For detailed instructions, see FIREBASE_SETUP.md
