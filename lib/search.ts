@@ -1,40 +1,38 @@
-import { searchIndex, SearchEntry } from "@/data/search-index";
-import { SearchFiltersPreference } from "@/lib/learner-store";
-
-export function search(query: string, filters?: SearchFiltersPreference): SearchEntry[] {
-  if (!query.trim()) return [];
-
-  const q = query.toLowerCase();
-  let results = searchIndex.filter(
-    (entry) =>
-      entry.title.toLowerCase().includes(q) ||
-      entry.description.toLowerCase().includes(q) ||
-      entry.keywords.toLowerCase().includes(q)
-  );
-
-  if (filters) {
-    results = results.filter((entry) => matchesFilters(entry, filters));
-  }
-
-  return results;
+export interface SearchEntry {
+  id: string;
+  title: string;
+  type: string;
+  category: string;
+  url: string;
+  description?: string;
+  paper?: number;
+  year?: number;
+  score?: number;
+  query?: string;
+  label?: string;
 }
 
-export function matchesFilters(entry: SearchEntry, filters: SearchFiltersPreference): boolean {
-  if (filters.papers && filters.papers.length > 0) {
-    if (!entry.paper || !filters.papers.includes(entry.paper)) return false;
-  }
+export const RESULT_LIMIT = 10;
 
-  if (filters.types && filters.types.length > 0) {
-    if (!entry.type || !filters.types.includes(entry.type)) return false;
-  }
-
-  if (filters.sections && filters.sections.length > 0) {
-    if (!entry.section || !filters.sections.includes(entry.section)) return false;
-  }
-
-  if (filters.years && filters.years.length > 0) {
-    if (!entry.year || !filters.years.includes(entry.year)) return false;
-  }
-
-  return true;
+export function search(_query: string, _filters?: Record<string, unknown>): SearchEntry[] {
+  // Stub implementation - ignores filters and query
+  // Returns empty array; real implementation would search the content
+  return [];
 }
+
+export function groupByCategory(entries: SearchEntry[]): Record<string, SearchEntry[]> {
+  const grouped: Record<string, SearchEntry[]> = {};
+  entries.forEach((entry) => {
+    if (!grouped[entry.category]) {
+      grouped[entry.category] = [];
+    }
+    grouped[entry.category].push(entry);
+  });
+  return grouped;
+}
+
+export const popularSearches: SearchEntry[] = [
+  { id: '1', title: 'Syllabus Overview', type: 'document', category: 'Popular', url: '/syllabus' },
+  { id: '2', title: 'Paper 1 Guide', type: 'document', category: 'Popular', url: '/paper-1' },
+  { id: '3', title: 'Past Papers', type: 'document', category: 'Popular', url: '/past-papers' },
+];

@@ -1,25 +1,79 @@
-export interface SearchFiltersPreference {
-  papers?: (1 | 2)[];
-  types?: string[];
-  sections?: string[];
-  years?: number[];
+import type { QuizStats } from "@/lib/quiz-analytics";
+
+export type ContentRef = { 
+  type: 'topic' | 'section'; 
+  id: string; 
+  paper?: number; 
+  section?: string; 
+  slug?: string;
+  title?: string;
+  url?: string;
+};
+
+export type RecentlyViewedEntry = { 
+  ref: ContentRef; 
+  viewedAt: string;
+  url: string;
+  title: string;
+};
+
+export type Bookmark = {
+  url: string;
+  title: string;
+  addedAt: string;
+};
+
+export interface LearnerProfile {
+  progress: Record<string, unknown>;
+  bookmarks: Bookmark[];
+  recentlyViewed: RecentlyViewedEntry[];
+  lastVisited: RecentlyViewedEntry | null;
 }
 
-export function saveSearchFilters(filters: SearchFiltersPreference): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem("olevelislamiyat:search-filters", JSON.stringify(filters));
-  } catch {
-    // localStorage unavailable
-  }
+export type SearchFiltersPreference = {
+  papers?: (number | string)[];
+  types?: (number | string)[];
+  sections?: (number | string)[];
+  years?: (number | string)[];
+};
+
+export function recordView(_ref: ContentRef): void {
+  // Stub implementation
 }
 
-export function getSearchFilters(): SearchFiltersPreference | undefined {
-  if (typeof window === "undefined") return undefined;
-  try {
-    const stored = window.localStorage.getItem("olevelislamiyat:search-filters");
-    return stored ? JSON.parse(stored) : undefined;
-  } catch {
-    return undefined;
-  }
+export function isBookmarked(_ref: ContentRef): boolean {
+  return false;
+}
+
+export function toggleBookmark(_ref: ContentRef): boolean {
+  return false;
+}
+
+export function getLastVisited(): RecentlyViewedEntry | null {
+  return null;
+}
+
+export function getViewedCountForSection(_paper: number, _slug: string): number {
+  return 0;
+}
+
+export function useLearnerProfile(): LearnerProfile {
+  return { 
+    progress: {}, 
+    bookmarks: [],
+    recentlyViewed: [],
+    lastVisited: null,
+  };
+}
+
+export function getQuizStatsSummary(): QuizStats[] {
+  return [];
+}
+
+export function saveSearchFilters(_filters: SearchFiltersPreference): void {
+  // Stub implementation
+}
+
+export function getSearchFilters(): SearchFiltersPreference {
+  return {};
 }

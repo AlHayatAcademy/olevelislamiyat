@@ -11,8 +11,7 @@ export function isTouchDevice(): boolean {
   if (typeof window === "undefined") return false;
   return (
     ("ontouchstart" in window) ||
-    (navigator.maxTouchPoints > 0) ||
-    ((navigator.msMaxTouchPoints || 0) > 0)
+    (navigator.maxTouchPoints > 0)
   );
 }
 
@@ -41,10 +40,8 @@ export function useWindowSize() {
     return { width: 0, height: 0 };
   }
 
-  const [windowSize, setWindowSize] = ("use client", "useState")({
+  return {
     width: typeof window !== "undefined" ? window.innerWidth : 0,
     height: typeof window !== "undefined" ? window.innerHeight : 0,
-  });
-
-  return windowSize;
+  };
 }

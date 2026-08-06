@@ -121,7 +121,7 @@ export function BadgeCollection({
           </label>
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as "earned" | "rarity" | "type")}
             className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg text-sm"
           >
             <option value="earned">Recently Earned</option>
@@ -136,7 +136,7 @@ export function BadgeCollection({
           </label>
           <select
             value={filterRarity}
-            onChange={(e) => setFilterRarity(e.target.value as any)}
+            onChange={(e) => setFilterRarity(e.target.value as "all" | "common" | "rare" | "legendary")}
             className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 rounded-lg text-sm"
           >
             <option value="all">All Rarities</option>
