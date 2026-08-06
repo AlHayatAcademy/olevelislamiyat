@@ -20,7 +20,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
   const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   const results = useMemo(() => search(query), [query]);
-  const grouped = useMemo((): SearchGroup[] => groupByCategory(results), [results]);
+  const grouped: SearchGroup[] = useMemo(() => groupByCategory(results), [results]);
 
   // Focus trap + restore focus on close.
   useEffect(() => {
