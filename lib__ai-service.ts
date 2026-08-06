@@ -118,7 +118,7 @@ export async function callClaude(
           content: prompt,
         },
       ],
-    } as any);
+    }) as Anthropic.Messages.Message;
 
     clearTimeout(timeoutId);
 

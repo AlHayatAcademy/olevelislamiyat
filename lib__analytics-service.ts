@@ -176,7 +176,7 @@ export async function getClassAnalytics(
     }
 
     // Group by user
-    const byUser: { [userId: string]: any[] } = {};
+    const byUser: { [userId: string]: Array<Record<string, unknown>> } = {};
     attempts.forEach((attempt) => {
       if (!byUser[attempt.userId]) {
         byUser[attempt.userId] = [];
@@ -220,7 +220,7 @@ export async function getClassAnalytics(
       }));
 
     // Find weak topics
-    const byTopic: { [topicId: string]: any[] } = {};
+    const byTopic: { [topicId: string]: Array<Record<string, unknown>> } = {};
     attempts.forEach((attempt) => {
       if (!byTopic[attempt.quizId]) {
         byTopic[attempt.quizId] = [];
@@ -306,7 +306,7 @@ export async function getPerformanceTrend(
     const attempts = snapshot.docs.map((doc) => doc.data()) as any[];
 
     // Group by date
-    const byDate: { [date: string]: any[] } = {};
+    const byDate: { [date: string]: Array<Record<string, unknown>> } = {};
     attempts.forEach((attempt) => {
       const date = attempt.timestamp?.toDate?.()?.toISOString?.()?.split("T")[0];
       if (date) {
@@ -392,7 +392,7 @@ export async function getTopicAnalytics(
 }
 
 // Calculate engagement score
-function calculateEngagementScore(attempts: any[]): number {
+function calculateEngagementScore(attempts: Array<Record<string, unknown>>): number {
   if (attempts.length === 0) return 0;
 
   const recentAttempts = attempts.slice(0, 10);
@@ -411,7 +411,7 @@ function calculateEngagementScore(attempts: any[]): number {
 }
 
 // Calculate current study streak
-function calculateStreak(attempts: any[]): number {
+function calculateStreak(attempts: Array<Record<string, unknown>>): number {
   if (attempts.length === 0) return 0;
 
   const sortedByDate = attempts.sort((a, b) => {

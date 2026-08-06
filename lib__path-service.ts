@@ -143,7 +143,7 @@ async function createInitialLearningPath(
 }
 
 // Analyze quiz performance
-function analyzePerformance(attempts: any[]): {
+function analyzePerformance(attempts: Array<Record<string, unknown>>): {
   [topicId: string]: { score: number; attempts: number }
 } {
   const performance: {
@@ -234,11 +234,11 @@ Format as array. Prioritize weak areas first.`;
       const recommendations = JSON.parse(response.content);
 
       return recommendations
-        .map((rec: any) => ({
-          topicId: rec.topicId,
-          topicName: allTopics.find((t) => t.id === rec.topicId)?.name || rec.topicId,
-          priority: rec.priority,
-          reason: rec.reason,
+        .map((rec: Record<string, unknown>) => ({
+          topicId: rec.topicId as string,
+          topicName: allTopics.find((t) => t.id === rec.topicId)?.name || (rec.topicId as string),
+          priority: rec.priority as string,
+          reason: rec.reason as string,
           estimatedTime: rec.estimatedTime || 30,
           difficulty: rec.difficulty,
         }))

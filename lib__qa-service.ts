@@ -86,10 +86,10 @@ Response:`,
 
     try {
       const relevantTopics = JSON.parse(response.content);
-      return relevantTopics.map((topic: any) => ({
-        topicId: topic.topicId,
+      return relevantTopics.map((topic: Record<string, unknown>) => ({
+        topicId: topic.topicId as string,
         topicName: topics.find((t) => t.id === topic.topicId)?.name || "",
-        relevance: topic.relevance,
+        relevance: topic.relevance as number,
       }));
     } catch (e) {
       return [];

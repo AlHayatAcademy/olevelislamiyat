@@ -226,7 +226,7 @@ export function QAInterface({
 
       {/* Tips */}
       <div className="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded">
-        💡 Tip: Ask clear, specific questions for better answers. For example: "Explain the Five Pillars" is better than "Tell me about Islam"
+        💡 Tip: Ask clear, specific questions for better answers. For example: &quot;Explain the Five Pillars&quot; is better than &quot;Tell me about Islam&quot;
       </div>
     </div>
   );
