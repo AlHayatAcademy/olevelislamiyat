@@ -27,16 +27,18 @@ export function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
     new Set([...paper1Sections, ...paper2Sections].map((s) => s.slug))
   ).sort();
 
-  const updateFilter = (key: keyof SearchFiltersPreference, value: string | string[] | undefined) => {
+  const updateFilter = (key: keyof SearchFiltersPreference, value: string | number | (string | number)[] | undefined) => {
     const updated = { ...filters, [key]: value };
     setFilters(updated);
     saveSearchFilters(updated);
     onFiltersChange(updated);
   };
 
-  const toggleArrayValue = (key: keyof SearchFiltersPreference, value: string) => {
-    const current = (filters[key] as string[]) || [];
-    const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
+  const toggleArrayValue = (key: keyof SearchFiltersPreference, value: string | number): void => {
+    const current = (filters[key] as (string | number)[]) || [];
+    const updated: (string | number)[] = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
     updateFilter(key, updated.length > 0 ? updated : undefined);
   };
 
@@ -74,7 +76,7 @@ export function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
               <input
                 type="checkbox"
                 checked={(filters.papers || []).includes(paper)}
-                onChange={() => toggleArrayValue("papers", paper)}
+                onChange={() => toggleArrayValue("papers", paper as string | number)}
                 className="rounded border-border"
               />
               <span className="text-sm text-text">Paper {paper}</span>
@@ -128,7 +130,7 @@ export function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
               <input
                 type="checkbox"
                 checked={(filters.years || []).includes(year)}
-                onChange={() => toggleArrayValue("years", year)}
+                onChange={() => toggleArrayValue("years", year as string | number)}
                 className="rounded border-border"
               />
               <span className="text-sm text-text">{year}</span>
