@@ -1,98 +1,100 @@
-# Phase 13: AI Learning Aids & Adaptive Learning
+# Phase 14: Analytics & Insights Dashboard
 
 ## Overview
-Integrate Claude AI API to provide intelligent tutoring features including adaptive explanations, smart search, personalized learning paths, and AI-powered question answering.
+Implement comprehensive analytics dashboards for students, teachers, and administrators with real-time insights, progress tracking, performance visualization, and export capabilities.
 
 ## Architecture
 
-### 1. AI Services Layer
-- **OpenAI/Claude API Integration** - Leverage LLM for intelligent responses
-- **Prompt Engineering** - Optimized prompts for education context
-- **Rate Limiting** - Prevent abuse and manage API costs
-- **Caching** - Cache common explanations to reduce API calls
+### 1. Student Dashboard
+- Personal progress tracking
+- Quiz performance analytics
+- Learning path progress
+- Topic mastery visualization
+- Goal tracking
+- Study streak counter
+- Time spent analytics
 
-### 2. Core AI Features
+### 2. Teacher Dashboard
+- Class-wide performance metrics
+- Student progress overview
+- Quiz difficulty analysis
+- Time-on-task metrics
+- Engagement tracking
+- Common weak areas
+- Student grouping by performance
 
-#### Adaptive Explanations
-- Adjust complexity based on student level
-- Provide multiple explanation styles (simple, detailed, visual)
-- Include real-world examples relevant to Islamiyat
-- Generate follow-up questions
-
-#### Smart Q&A
-- Answer student questions in real-time
-- Cite relevant topics from curriculum
-- Suggest related learning materials
-- Track unanswered questions for teacher
-
-#### Personalized Learning Paths
-- Analyze quiz performance
-- Recommend topics to review
-- Suggest next topics to learn
-- Track progress toward goals
-
-#### Concept Breakdown
-- Simplify complex concepts
-- Create concept maps
-- Link to related topics
-- Provide mnemonic devices
+### 3. Admin Dashboard
+- Platform-wide analytics
+- User growth metrics
+- System health
+- Cost tracking (AI usage)
+- Feature adoption
+- Performance bottlenecks
+- Revenue analytics (if applicable)
 
 ## Database Schema
 
 ```typescript
-// ai_explanations table
-interface AIExplanation {
+// quiz_analytics table
+interface QuizAnalytics {
   id: string;
-  topicId: string;
-  originalContent: string;
-  simpleExplanation: string;
-  detailedExplanation: string;
-  visualDescription: string;
-  examples: string[];
-  relatedTopics: string[];
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  rating: number; // teacher rating 1-5
-  usageCount: number;
-}
-
-// ai_qna table
-interface AIQA {
-  id: string;
-  userId: string;
+  quizId: string;
   classId: string;
-  question: string;
-  answer: string;
-  sources: string[]; // topic references
-  followUpQuestions: string[];
-  helpful: boolean;
-  rating: number; // user rating
+  userId: string;
+  score: number;
+  maxScore: number;
+  timeSpent: number; // seconds
+  attemptNumber: number;
+  questionAnalytics: {
+    questionId: string;
+    correct: boolean;
+    timeSpent: number;
+    difficulty: number;
+  }[];
   createdAt: Timestamp;
 }
 
-// learning_paths table
-interface LearningPath {
-  id: string;
+// user_analytics table
+interface UserAnalytics {
   userId: string;
+  totalQuizzesAttempted: number;
+  averageScore: number;
+  totalTimeSpent: number; // seconds
+  streakDays: number;
+  lastActiveDate: Timestamp;
+  topicsCompleted: string[];
+  topicsInProgress: string[];
+  engagementScore: number; // 0-100
+  learningVelocity: number; // topics/week
+  peakStudyTime: string; // 'morning' | 'afternoon' | 'evening'
+}
+
+// class_analytics table
+interface ClassAnalytics {
   classId: string;
-  recommendedTopics: string[];
-  completedTopics: string[];
-  currentTopic: string;
-  estimatedTimeRemaining: number; // minutes
-  adaptiveScore: number; // 0-100
+  totalStudents: number;
+  averageScore: number;
+  completionRate: number; // 0-100
+  engagementRate: number; // 0-100
+  commonWeakTopics: string[];
+  topPerformers: string[];
+  needsSupport: string[];
   lastUpdated: Timestamp;
 }
 
-// ai_usage_analytics table
-interface AIUsageAnalytics {
-  id: string;
-  userId: string;
-  classId: string;
-  featureType: 'explanation' | 'qa' | 'suggestion' | 'path';
-  topicId: string;
-  usedAt: Timestamp;
-  timeSpent: number; // seconds
-  helpful: boolean;
+// platform_analytics table
+interface PlatformAnalytics {
+  date: string; // YYYY-MM-DD
+  dailyActiveUsers: number;
+  newUsers: number;
+  totalQuizzesTaken: number;
+  averageScore: number;
+  aiApiCost: number;
+  engagementMetrics: {
+    discussionCount: number;
+    questionCount: number;
+    explainationCount: number;
+  };
 }
 ```
 
@@ -101,351 +103,308 @@ interface AIUsageAnalytics {
 ```
 src/
 ├── lib/
-│   ├── ai-service.ts          // Claude/OpenAI API integration
-│   ├── explanation-service.ts // Generate explanations
-│   ├── qa-service.ts          // Q&A generation
-│   ├── path-service.ts        // Learning path recommendations
-│   ├── ai-cache.ts            // Caching layer
-│   └── ai-prompts.ts          // Prompt templates
+│   ├── analytics-service.ts       // Core analytics queries
+│   ├── metrics-calculator.ts      // Metric computations
+│   ├── export-service.ts          // PDF/CSV export
+│   └── chart-utils.ts             // Chart data formatting
 ├── hooks/
-│   ├── useAIExplanation.ts    // Fetch explanations
-│   ├── useAIQA.ts            // Ask questions
-│   └── useLearnigPath.ts      // Get recommendations
+│   ├── useStudentAnalytics.ts    // Student dashboard data
+│   ├── useTeacherAnalytics.ts    // Teacher dashboard data
+│   ├── useAdminAnalytics.ts      // Admin dashboard data
+│   └── useChartData.ts           // Format data for charts
 ├── components/
-│   ├── ExplanationCard.tsx    // Display explanations
-│   ├── ExplanationTabs.tsx    // Simple/detailed/visual tabs
-│   ├── QAInterface.tsx        // Question input interface
-│   ├── QAResponse.tsx         // Answer display with sources
-│   ├── LearningPathCard.tsx   // Progress and recommendations
-│   └── ConceptMap.tsx         // Visual topic relationships
+│   ├── StudentDashboard.tsx       // Student analytics view
+│   ├── TeacherDashboard.tsx       // Teacher analytics view
+│   ├── AdminDashboard.tsx         // Admin analytics view
+│   ├── charts/
+│   │   ├── PerformanceChart.tsx  // Line/area chart
+│   │   ├── DistributionChart.tsx // Bar chart
+│   │   ├── MasteryHeatmap.tsx    // Heatmap visualization
+│   │   ├── ProgressGauge.tsx     // Circular progress
+│   │   └── TrendChart.tsx        // Trend analysis
+│   ├── ProgressCard.tsx           // Stat card component
+│   ├── ExportButton.tsx           // Export to PDF/CSV
+│   └── FilterPanel.tsx            // Date/class filters
 └── app/
-    ├── topics/[id]/explain/page.tsx
-    ├── ask-ai/page.tsx
-    └── my-learning/page.tsx
+    ├── dashboard/page.tsx         // Main dashboard router
+    ├── analytics/student/page.tsx
+    ├── analytics/teacher/page.tsx
+    └── analytics/admin/page.tsx
 ```
 
 ## Key Services
 
-### ai-service.ts
+### analytics-service.ts
 ```typescript
-// Initialize AI client
-initializeAIClient(apiKey: string): void
+// Student analytics
+getStudentAnalytics(userId: string, classId: string): Promise<StudentAnalytics>
+getStudentProgress(userId: string, classId: string): Promise<ProgressData>
+getStudentStreaks(userId: string): Promise<StreakData>
 
-// Call Claude API
-callClaude(prompt: string, temperature?: number): Promise<string>
+// Teacher analytics
+getClassAnalytics(classId: string): Promise<ClassAnalytics>
+getStudentComparison(classId: string): Promise<StudentComparison[]>
+getWeakTopics(classId: string): Promise<{topic, percent}[]>
+getStudentGrouping(classId: string): Promise<StudentGroup[]>
 
-// Stream responses
-streamClaude(prompt: string, onChunk: (text: string) => void): Promise<void>
-
-// Manage rate limiting
-checkRateLimit(userId: string): Promise<boolean>
-incrementRateLimit(userId: string): Promise<void>
+// Admin analytics
+getPlatformAnalytics(dateRange: DateRange): Promise<PlatformMetrics>
+getUserGrowth(dateRange: DateRange): Promise<GrowthData[]>
+getEngagementMetrics(dateRange: DateRange): Promise<EngagementMetrics>
+getCostAnalytics(): Promise<CostData>
 ```
 
-### explanation-service.ts
+### metrics-calculator.ts
 ```typescript
-// Generate explanations
-generateSimpleExplanation(topicId: string, content: string): Promise<string>
-generateDetailedExplanation(topicId: string, content: string): Promise<string>
-generateVisualDescription(topicId: string, content: string): Promise<string>
-
-// Get cached or generate
-getExplanation(topicId: string, style: 'simple'|'detailed'|'visual'): Promise<string>
-
-// Generate examples
-generateExamples(topicId: string, count: number): Promise<string[]>
-
-// Create follow-ups
-generateFollowUpQuestions(topicId: string): Promise<string[]>
+// Calculate composite metrics
+calculateEngagementScore(userId: string): Promise<number>
+calculateLearningVelocity(userId: string): Promise<number>
+calculateStudyPatterns(userId: string): Promise<StudyPattern>
+calculateMastery(userId: string, topicId: string): Promise<number>
+calculateCompletion(classId: string): Promise<number>
 ```
 
-### qa-service.ts
+### export-service.ts
 ```typescript
-// Answer student questions
-answerQuestion(question: string, context: {userId, classId, topicId?}): Promise<AIQA>
+// Export to different formats
+exportStudentReport(userId: string, format: 'pdf'|'csv'): Promise<Buffer>
+exportClassReport(classId: string, format: 'pdf'|'csv'): Promise<Buffer>
+exportPlatformReport(dateRange: DateRange, format: 'pdf'|'csv'): Promise<Buffer>
 
-// Get sources from curriculum
-findRelevantTopics(question: string): Promise<string[]>
-
-// Rate answers
-rateAnswer(qaId: string, helpful: boolean): Promise<void>
-
-// Get Q&A history
-getQAHistory(userId: string, limit?: number): Promise<AIQA[]>
-
-// Unanswered questions
-getUnansweredQuestions(classId: string): Promise<{question, askedBy, count}[]>
+// Generate certificates
+generateCertificate(userId: string, classId: string): Promise<Buffer>
+generateBadges(userId: string): Promise<Badge[]>
 ```
 
-### path-service.ts
+### chart-utils.ts
 ```typescript
-// Generate learning path
-generateLearningPath(userId: string, classId: string): Promise<LearningPath>
-
-// Get recommendations
-getRecommendations(userId: string): Promise<{topic, reason, difficulty}[]>
-
-// Update progress
-updatePathProgress(userId: string, topicId: string): Promise<void>
-
-// Suggest next topics
-getNextTopics(userId: string): Promise<string[]>
-
-// Time estimate
-estimateTopicTime(topicId: string, userLevel: number): Promise<number>
-```
-
-## API Integration
-
-### Using Claude API (Recommended)
-```typescript
-import Anthropic from "@anthropic-ai/sdk";
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-const message = await client.messages.create({
-  model: "claude-3-5-sonnet-20241022",
-  max_tokens: 1024,
-  messages: [
-    { role: "user", content: "Explain Surah Al-Fatiha in simple terms" }
-  ],
-});
-```
-
-### Using OpenAI API (Alternative)
-```typescript
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const response = await openai.chat.completions.create({
-  model: "gpt-4",
-  messages: [
-    { role: "user", content: "Explain Surah Al-Fatiha in simple terms" }
-  ],
-});
-```
-
-## Prompt Templates
-
-### Simple Explanation
-```
-Explain "{topic}" in very simple terms suitable for a 15-year-old student.
-Use everyday language and relatable examples.
-Keep it to 2-3 paragraphs.
-Include: definition, key point, real-world example.
-```
-
-### Detailed Explanation
-```
-Provide a comprehensive explanation of "{topic}".
-Include: historical context, theological significance, practical applications.
-Add references to relevant Quranic verses or Hadith if applicable.
-Use academic but accessible language.
-Include 3-5 follow-up questions.
-```
-
-### Visual Description
-```
-Describe "{topic}" as if creating a visual diagram or infographic.
-Include: main concept at center, related ideas branching out, connections between ideas.
-Use visual metaphors and spatial descriptions.
-Suggest color coding or symbols that would help students remember.
-```
-
-### Q&A Response
-```
-Answer this student question about Islamiyat: "{question}"
-Context: The student is at {level} level, studying {topic}.
-Response guidelines:
-1. Answer directly and clearly
-2. If uncertain, explain your uncertainty
-3. Cite relevant Quranic verses or Hadith if applicable
-4. Suggest related topics to explore
-5. End with 1-2 follow-up questions
-
-Answer:
+// Format data for different chart types
+formatLineChartData(data: any[]): ChartData
+formatBarChartData(data: any[]): ChartData
+formatHeatmapData(data: any[]): HeatmapData
+formatGaugeData(score: number): GaugeData
 ```
 
 ## Component Specs
 
-### ExplanationCard.tsx
-- Displays explanation with tabs (Simple/Detailed/Visual)
-- Loading state with skeleton
-- Copy to clipboard button
-- Like/save functionality
-- Related topics section
-- Follow-up questions list
+### StudentDashboard.tsx
+**Cards:**
+- Overall score (gauge)
+- Quizzes completed (counter)
+- Topics mastered (counter)
+- Study streak (counter)
+- Current mastery level (gauge)
 
-### QAInterface.tsx
-- Text input for questions
-- Character limit indicator (500)
-- Send button (with loading state)
-- Recent questions quick-select
-- Suggested topics
-- Mobile: full-screen input
+**Charts:**
+- Performance trend (line chart - last 30 days)
+- Topic mastery heatmap (grid)
+- Time spent by topic (bar chart)
+- Quiz score distribution (histogram)
 
-### QAResponse.tsx
-- Display answer with streaming effect
-- Highlight source topics
-- Rate helpful/not helpful
-- Copy answer button
-- Follow-up questions as buttons
-- Related topics sidebar
+**Actions:**
+- View detailed analytics
+- Export progress report
+- Set goals
+- Compare with class average
 
-### LearningPathCard.tsx
-- Overall progress bar
-- Recommended topics with difficulty
-- Completed topics count
-- Time remaining estimate
-- Start learning button
-- Performance analytics
+### TeacherDashboard.tsx
+**Overview Cards:**
+- Class average (gauge)
+- Students on track (%)
+- Needs attention (count)
+- Completion rate (%)
 
-### ConceptMap.tsx
-- Visual network of topics
-- Click to explore topics
-- Color-coded by difficulty
-- Interactive edges
-- Search functionality
+**Charts:**
+- Class performance trend (line chart)
+- Student score distribution (histogram)
+- Topic difficulty analysis (bar chart)
+- Engagement heatmap by day/hour
 
-## Real-Time Streaming
+**Student List:**
+- Student name
+- Current score
+- Progress bar
+- Last activity
+- Action menu (view details, email)
+
+**Filters:**
+- By date range
+- By topic
+- By performance level
+
+### AdminDashboard.tsx
+**KPI Cards:**
+- DAU (Daily Active Users)
+- New users (week)
+- Total quizzes (week)
+- Platform engagement (%)
+- AI usage cost
+
+**Charts:**
+- User growth (line chart)
+- Daily quiz attempts (area chart)
+- Feature usage (pie chart)
+- Cost trends (line chart)
+
+**Tables:**
+- Top classes
+- Most attempted topics
+- System health metrics
+- Cost breakdown
+
+## Visualization Components
+
+### PerformanceChart.tsx (Line/Area)
+- X-axis: dates
+- Y-axis: score/percentage
+- Multiple series (if comparing)
+- Tooltip on hover
+- Legend
+- Responsive sizing
+
+### DistributionChart.tsx (Bar/Histogram)
+- X-axis: score ranges or categories
+- Y-axis: count
+- Color coding
+- Hover details
+- Export as image
+
+### MasteryHeatmap.tsx
+- Rows: topics or students
+- Columns: weeks
+- Cell color: mastery level (0-100)
+- Color scale: red(0%) → yellow(50%) → green(100%)
+- Click to drill down
+
+### ProgressGauge.tsx
+- Circular progress indicator
+- Percentage text in center
+- Color coding (red/yellow/green)
+- Optional target indicator
+- Animation on load
+
+### TrendChart.tsx
+- Multi-line chart
+- Compare trends over time
+- Forecast next 30 days (with ML)
+- Confidence interval
+- Hover details
+
+## Real-Time Updates
 
 ```typescript
-// Stream explanations for real-time feedback
-async function* streamExplanation(topicId: string) {
-  const prompt = buildPrompt(topicId);
-  
-  for await (const chunk of await streamClaude(prompt)) {
-    yield chunk.text;
-  }
-}
+// Listen to real-time quiz submissions
+onSnapshot(
+  query(collection(db, 'quiz_attempts'),
+    where('classId', '==', classId),
+    orderBy('timestamp', 'desc'),
+    limit(100)
+  ),
+  (snapshot) => updateAnalytics()
+)
 
-// UI updates as response arrives
-const [explanation, setExplanation] = useState('');
-const stream = streamExplanation(topicId);
-for await (const chunk of stream) {
-  setExplanation(prev => prev + chunk);
-}
+// Update dashboards every 5 minutes
+setInterval(() => refreshAnalytics(), 5 * 60 * 1000)
 ```
 
-## Caching Strategy
+## Export Formats
 
-### Cache Layers
-1. **Browser Cache** - Explanations cached for 1 week
-2. **Redis Cache** - API responses cached for 24 hours
-3. **Firestore Cache** - Frequently used explanations stored
-4. **CDN Cache** - Static explanations cached for 7 days
+### PDF Report
+- Header with student/class info
+- Charts as embedded images
+- Summary statistics
+- Detailed breakdown by topic
+- Professional styling
+- Page breaks for large reports
 
-### Cache Invalidation
-- Refresh when topic content updates
-- Invalidate on teacher rating changes
-- Clear old entries (>30 days)
-- Manual refresh option
+### CSV Export
+- Simple tabular format
+- One row per quiz attempt
+- Columns: date, topic, score, time, etc.
+- Compatible with Excel/Sheets
+- Suitable for further analysis
 
-## Rate Limiting
+### JSON Export
+- Raw analytics data
+- Complete structure
+- For integration with BI tools
+- All metrics included
 
-```typescript
-// Free tier: 10 requests/day per user
-// Pro tier: 100 requests/day per user
+## Performance Optimization
 
-// Store usage in Firestore
-interface RateLimitRecord {
-  userId: string;
-  date: string; // YYYY-MM-DD
-  count: number;
-  tier: 'free' | 'pro';
-}
-
-// Check before API call
-const canUseAI = await checkRateLimit(userId);
-if (!canUseAI) {
-  showUpgradePrompt();
-}
-```
-
-## Privacy & Safety
-
-- **No data sent to AI** beyond current question/topic
-- **Filter inappropriate content** before caching
-- **User consent** required for analytics
-- **FERPA compliance** - no PII in prompts
-- **Data deletion** on student account removal
-
-## Mobile Optimizations
-
-- Streaming responses with progressive display
-- Offline explanations cache
-- Smaller text input on mobile
-- Touch-friendly response cards
-- Auto-scroll to latest response
-- Quick-action buttons (Copy, Share, Save)
+- **Materialized Views** - Pre-calculate common metrics
+- **Caching** - Cache analytics for 1 hour
+- **Lazy Loading** - Load charts on demand
+- **Pagination** - Show top 50 items, load more on scroll
+- **Aggregation** - Batch process analytics updates
+- **Indexing** - Create Firestore indexes for common queries
 
 ## Dark Mode
-- All components support `dark:` prefixes
-- Code blocks with syntax highlighting
-- Equations readable in both themes
+- All charts support dark mode
+- Proper contrast ratios (4.5:1+)
+- Dark theme colors for charts
+- Readable labels in both modes
+
+## Mobile Optimization
+- Stacked layout on mobile
+- Smaller charts with touch interaction
+- Scrollable tables
+- Larger touch targets (44px+)
+- Collapsible sections
+- Swipe gestures for filtering
 
 ## Testing Checklist
 
-- [ ] Simple explanation generates
-- [ ] Detailed explanation generates
-- [ ] Visual description generates
-- [ ] Q&A accepts and answers questions
-- [ ] Sources are correctly identified
-- [ ] Learning path generates
-- [ ] Caching works (reuse cached explanations)
-- [ ] Rate limiting prevents abuse
-- [ ] Streaming displays progressively
-- [ ] Mobile layout responsive
-- [ ] Dark mode works
-- [ ] Keyboard navigation functional
-- [ ] Screen reader announces content
+- [ ] Student dashboard loads
+- [ ] Student performance chart displays
+- [ ] Topic mastery heatmap renders
+- [ ] Teacher dashboard shows class metrics
+- [ ] Student comparison table works
+- [ ] Weak topics identified correctly
+- [ ] Admin dashboard displays KPIs
+- [ ] User growth chart updates
 - [ ] Cost tracking accurate
-
-## Cost Considerations
-
-### Claude API
-- ~$0.003 per 1K input tokens
-- ~$0.015 per 1K output tokens
-- Average explanation: ~$0.05
-- Budget: $100/month = ~2000 explanations
-
-### OpenAI GPT-4
-- ~$0.03 per 1K input tokens
-- ~$0.06 per 1K output tokens
-- Average explanation: ~$0.18
-- Budget: $100/month = ~550 explanations
-
-**Recommendation:** Use Claude API for better cost efficiency.
+- [ ] Export to PDF works
+- [ ] Export to CSV works
+- [ ] Filters apply correctly
+- [ ] Real-time updates work
+- [ ] Dark mode renders properly
+- [ ] Mobile layout responsive
+- [ ] Touch interactions work
+- [ ] Accessibility labels present
+- [ ] Performance < 3s load time
 
 ## Success Metrics
 
-- Daily active users using AI features
-- Explanation helpfulness rating (target: 4.5/5)
-- Q&A response time (target: <10s)
-- Cache hit rate (target: 60%)
-- User satisfaction score
-- Cost per explanation
+- Dashboard load time < 3s
+- Chart render time < 1s
+- Export generation < 5s
+- Real-time updates every 5 min
+- Student engagement +30%
+- Teacher time saved: 5 hrs/week
+- Export usage > 70% of users
+- Mobile usage > 40%
 
 ## Next Steps
 
-1. Add `.env` variables for API keys
-2. Copy service files to `src/lib/`
-3. Copy components to `src/components/`
-4. Create routes for AI features
-5. Implement caching layer
-6. Set up rate limiting
-7. Test with sample topics
-8. Monitor costs and adjust
-9. Proceed to Phase 14 (Analytics)
+1. Copy service files to `src/lib/`
+2. Copy components to `src/components/`
+3. Create app routes
+4. Integrate with existing analytics
+5. Test all dashboards
+6. Deploy and monitor
+7. Proceed to Phase 15 (Certificates)
+
+## Dependencies
+
+- `recharts` - React charting library
+- `pdfkit` - PDF generation
+- `papaparse` - CSV parsing
+- `date-fns` - Date utilities
+- `firebase` - Real-time database
 
 ## Support
 
-- Claude API docs: https://docs.anthropic.com/claude/reference/getting-started-with-the-api
-- OpenAI docs: https://platform.openai.com/docs
-- Rate limiting patterns: https://developers.google.com/analytics/devguides/config/admin/v1/rate-limits
-- Streaming implementation: Web Streams API for progressive rendering
+- Recharts docs: https://recharts.org/
+- PDF generation: https://pdfkit.org/
+- Firestore queries: https://firebase.google.com/docs/firestore/query-data/queries
