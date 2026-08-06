@@ -1,0 +1,181 @@
+FIRESTORE SECURITY RULES FOR PHASE 12
+======================================
+
+Copy these rules to your Firebase Console → Firestore → Rules tab
+Replace the entire rules file with this content:
+
+---START RULES---
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // User documents
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Class documents
+    match /classes/{classId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null &&
+        resource.data.teacherId == request.auth.uid;
+
+      match /enrollments/{enrollmentId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+      }
+    }
+
+    // Class enrollments
+    match /class_enrollments/{enrollmentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+
+    // DISCUSSIONS - Forum topics
+    match /discussions/{discussionId} {
+      allow read: if request.auth != null;
+
+      allow create: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'student'];
+
+      allow update: if request.auth != null &&
+        (request.auth.uid == resource.data.authorId ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher');
+
+      allow delete: if request.auth != null &&
+        request.auth.uid == resource.data.authorId;
+    }
+
+    // DISCUSSION REPLIES - Comments on topics
+    match /discussion_replies/{replyId} {
+      allow read: if request.auth != null;
+
+      allow create: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'student'];
+
+      allow update: if request.auth != null &&
+        (request.auth.uid == resource.data.authorId ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher');
+
+      allow delete: if request.auth != null &&
+        request.auth.uid == resource.data.authorId;
+    }
+
+    // CONTENT FLAGS - Flagged inappropriate content
+    match /content_flags/{flagId} {
+      allow create: if request.auth != null;
+
+      allow read, update: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+
+    // DISCUSSION ENGAGEMENT - Activity tracking
+    match /discussion_engagement/{engagementId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+    }
+
+    // MODERATION SETTINGS - Class moderation configuration
+    match /moderation_settings/{classId} {
+      allow read: if request.auth != null;
+
+      allow write: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+
+    // Catch-all deny rule (safety default)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+---END RULES---
+
+IMPORTANT NOTES:
+================
+
+1. These rules assume:
+   - Users collection exists with 'role' field ('teacher' or 'student')
+   - Classes have teacherId field
+   - Class enrollments tracked in class_enrollments collection
+
+2. To fully implement, you need:
+   - User registration that sets role field
+   - Class creation with teacherId
+   - Enrollment tracking
+
+3. Permissions breakdown:
+
+   DISCUSSIONS:
+   - Read: All authenticated users
+   - Create: Teachers and students
+   - Update: Author or teacher
+   - Delete: Author only
+
+   DISCUSSION_REPLIES:
+   - Read: All authenticated users
+   - Create: Teachers and students
+   - Update: Author or teacher
+   - Delete: Author only
+
+   CONTENT_FLAGS:
+   - Create: Any authenticated user (report spam)
+   - Read/Update: Teachers only (moderation)
+
+   DISCUSSION_ENGAGEMENT:
+   - Create: Track views/likes (any user)
+   - Read: Any authenticated user
+
+   MODERATION_SETTINGS:
+   - Read: Any authenticated user
+   - Write: Teachers only
+
+4. Firestore Indexes (create if needed):
+   - discussions: classId + createdAt
+   - discussion_replies: discussionId + createdAt
+   - discussion_replies: discussionId + status + createdAt
+   - content_flags: classId + status
+   - discussion_engagement: classId + action
+
+5. To add these indexes:
+   - Go to Firebase Console
+   - Navigate to Firestore Database
+   - Go to Indexes tab
+   - Click "Create Index" and add the fields
+
+6. Testing the rules:
+   - Use Firebase Local Emulator Suite
+   - Test with different user roles
+   - Verify read/write permissions
+   - Check cascading deletes (manually implemented)
+
+7. Common issues:
+   - Get calls fail if document doesn't exist → use get(...).data.get('field', null)
+   - Role field must exist on user document
+   - Rules are case-sensitive
+   - Whitespace matters in rules syntax
+
+CUSTOMIZATION:
+===============
+
+To require teacher approval before discussions are visible:
+
+Replace discussions read rule with:
+  allow read: if request.auth != null &&
+    resource.data.status == 'approved';
+
+To restrict forum access to enrolled students only:
+
+Add enrollment check:
+  allow read: if request.auth != null &&
+    exists(/databases/$(database)/documents/class_enrollments/
+      where('classId', '==', resource.data.classId)
+      and 'userId', '==', request.auth.uid);

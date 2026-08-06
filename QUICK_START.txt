@@ -1,61 +1,117 @@
-PHASE 11: EDUCATOR DASHBOARD - QUICK START
-===========================================
+PHASE 12: SOCIAL LEARNING - QUICK START
+========================================
 
-✅ REQUIRES: Phase 10 (Firebase Auth)
+FILES TO COPY:
+--------------
+lib/
+  ✓ discussion-service.ts
+  ✓ moderation-service.ts
+  ✓ engagement-service.ts
 
-SETUP (15 minutes):
-==================
+src/components/
+  ✓ UserAvatar.tsx
+  ✓ DiscussionList.tsx
+  ✓ DiscussionThread.tsx
+  ✓ CommentInput.tsx
+  ✓ CommentItem.tsx
+  ✓ ForumPage.tsx
+  ✓ ModerationPanel.tsx
 
-1. UPDATE FIRESTORE RULES (2 min)
-   - See SETUP.md section "Step 1"
-   - Copy new rules for classes, class_enrollments, assignments
-   - Publish rules
+ROUTES TO CREATE:
+-----------------
+✓ app/classes/[id]/forum/page.tsx
+✓ app/admin/moderation/page.tsx
 
-2. COPY FILES (2 min)
-   - lib/class-service.ts
-   - components/TeacherDashboard.tsx
-   - components/ClassEnrollment.tsx
+DEPENDENCIES:
+-------------
+npm install date-fns
 
-3. CREATE ROUTES (5 min)
-   - app/classes/page.tsx (teacher view)
-   - app/enroll/page.tsx (student join)
+KEY FEATURES:
+-------------
+✓ Real-time discussions with nested replies
+✓ Student and teacher approval workflows
+✓ Content flagging and moderation
+✓ Like/helpful marking on replies
+✓ Engagement tracking and analytics
+✓ Mobile-responsive design
+✓ Dark mode support
+✓ User avatars with initials
 
-4. ADD NAVIGATION (2 min)
-   - Link to /classes
-   - Link to /enroll
+DATABASE TABLES:
+----------------
+• discussions - Forum topics
+• discussion_replies - Nested comment threads
+• content_flags - Inappropriate content reports
+• discussion_engagement - User activity tracking
+• moderation_settings - Class-level moderation config
 
-5. TEST (4 min)
-   - Teacher: Create class → Copy code
-   - Student: Join with code → Check dashboard
+QUICK SETUP (5 MINUTES):
+------------------------
+1. Update Firestore RLS (see SETUP.md)
+2. Copy all files to your project
+3. Create app/classes/[id]/forum/page.tsx
+4. Create app/admin/moderation/page.tsx
+5. Add navigation links
+6. Test forum creation and replies
 
-FEATURES:
-=========
-✅ Create classes
-✅ Generate unique class codes
-✅ Student enrollment
-✅ Progress tracking
-✅ Grade visualization
-✅ Student management
+TESTING:
+--------
+Student Flow:
+→ Open /classes/[id]/forum
+→ Click "New Discussion"
+→ Create topic and post
+→ Reply to other discussions
+→ Like/flag comments
 
-DATABASE:
-=========
-New Firestore collections:
-- classes (class metadata)
-- class_enrollments (student memberships)
-- assignments (quiz assignments)
+Teacher Flow:
+→ Open /admin/moderation
+→ Review pending content
+→ Approve/reject discussions
+→ Manage flagged content
+→ View engagement stats
 
-Plus existing: users, quiz_attempts, learner_profile
+MOBILE TESTING:
+---------------
+✓ Touch-friendly interface
+✓ Responsive on all screen sizes
+✓ 44px+ touch targets
+✓ Dark mode support
+✓ Works on iOS/Android
 
-FILE STRUCTURE:
-===============
-Phase 11/
-├── lib/
-│   └── class-service.ts      # Class management
-├── components/
-│   ├── TeacherDashboard.tsx  # Teacher UI
-│   └── ClassEnrollment.tsx   # Student join
-├── SETUP.md                  # Detailed setup
-├── README.md                 # Full documentation
-└── QUICK_START.txt          # This file
+SECURITY:
+---------
+✓ Firestore RLS enforces authorization
+✓ Only admins can delete users
+✓ Students can't edit others' posts
+✓ Teachers can moderate all content
+✓ HTML sanitization built-in
 
-For detailed instructions, see SETUP.md
+PERFORMANCE:
+------------
+• Real-time Firestore listeners
+• Optimized queries with indexes
+• Pagination support
+• Lazy loading replies
+• Efficient engagement tracking
+
+NEXT PHASE:
+-----------
+Phase 13: AI Learning Aids
+- Adaptive explanations
+- Smart search suggestions
+- Personalized learning paths
+- AI-powered Q&A
+
+SUPPORT:
+--------
+See SETUP.md for:
+- Detailed integration guide
+- Firestore RLS configuration
+- Route creation examples
+- Troubleshooting steps
+
+See README.md for:
+- Full architecture documentation
+- Database schemas
+- Component specifications
+- Performance considerations
