@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { WiFiOff, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { WifiOff, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { useServiceWorker } from "@/hooks/useServiceWorker";
 
 export function OfflineIndicator() {
@@ -42,7 +42,7 @@ export function OfflineIndicator() {
         <div className="flex items-center gap-2">
           {!isOnline ? (
             <>
-              <WiFiOff size={18} />
+              <WifiOff size={18} />
               <span className="text-sm font-medium">Offline</span>
             </>
           ) : syncInProgress ? (
@@ -197,7 +197,7 @@ export function SyncStatusBadge() {
     >
       {!isOnline ? (
         <>
-          <WiFiOff size={14} />
+          <WifiOff size={14} />
           Offline
         </>
       ) : syncInProgress ? (

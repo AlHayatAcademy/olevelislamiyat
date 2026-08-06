@@ -8,7 +8,7 @@ type ExportType = 'certificate' | 'transcript' | 'analytics' | 'class-report';
 interface ExportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onExport: (format: ExportFormat, type: ExportType, options: any) => Promise<void>;
+  onExport: (format: ExportFormat, type: ExportType, options: Record<string, unknown>) => Promise<void>;
   defaultType?: ExportType;
 }
 
