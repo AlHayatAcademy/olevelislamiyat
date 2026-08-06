@@ -158,11 +158,11 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
                 </p>
                 <p className="mt-1 text-text-muted">Try a related term, or one of these:</p>
                 <ul className="mt-3 flex flex-wrap justify-center gap-2">
-                  {popularSearches.map((s) => (
+                  {popularSearches.map((s: typeof popularSearches[number]) => (
                     <li key={s.query}>
                       <button
                         type="button"
-                        onClick={() => setQuery(s.query)}
+                        onClick={() => setQuery(s.query as string)}
                         className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       >
                         {s.label}
