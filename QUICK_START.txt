@@ -1,117 +1,247 @@
-PHASE 12: SOCIAL LEARNING - QUICK START
-========================================
+PHASE 13: AI LEARNING AIDS - QUICK START
+==========================================
 
-FILES TO COPY:
---------------
-lib/
-  ✓ discussion-service.ts
-  ✓ moderation-service.ts
-  ✓ engagement-service.ts
+🚀 SETUP IN 5 MINUTES:
+-----------------------
+1. Get API Key:
+   → Go to https://console.anthropic.com/api/keys
+   → Create new API key
+   → Copy key
 
-src/components/
-  ✓ UserAvatar.tsx
-  ✓ DiscussionList.tsx
-  ✓ DiscussionThread.tsx
-  ✓ CommentInput.tsx
-  ✓ CommentItem.tsx
-  ✓ ForumPage.tsx
-  ✓ ModerationPanel.tsx
+2. Add to .env.local:
+   NEXT_PUBLIC_ANTHROPIC_API_KEY=sk-ant-xxxxx
 
-ROUTES TO CREATE:
------------------
-✓ app/classes/[id]/forum/page.tsx
-✓ app/admin/moderation/page.tsx
+3. Copy Files:
+   lib__ai-service.ts → src/lib/ai-service.ts
+   lib__explanation-service.ts → src/lib/explanation-service.ts
+   lib__qa-service.ts → src/lib/qa-service.ts
+   lib__path-service.ts → src/lib/path-service.ts
+   components__ExplanationCard.tsx → src/components/ExplanationCard.tsx
+   components__QAInterface.tsx → src/components/QAInterface.tsx
 
-DEPENDENCIES:
--------------
-npm install date-fns
+4. Install:
+   npm install @anthropic-ai/sdk
+
+5. Create Routes:
+   app/topics/[id]/explain/page.tsx
+   app/ask-ai/page.tsx
+   app/my-learning/page.tsx
+
+6. Add Nav Links:
+   /ask-ai → ✨ Ask AI
+   /my-learning → 📚 My Learning
 
 KEY FEATURES:
 -------------
-✓ Real-time discussions with nested replies
-✓ Student and teacher approval workflows
-✓ Content flagging and moderation
-✓ Like/helpful marking on replies
-✓ Engagement tracking and analytics
-✓ Mobile-responsive design
-✓ Dark mode support
-✓ User avatars with initials
+✓ AI-Generated Explanations
+  - Simple (beginner-friendly)
+  - Detailed (comprehensive)
+  - Visual (diagram descriptions)
 
-DATABASE TABLES:
-----------------
-• discussions - Forum topics
-• discussion_replies - Nested comment threads
-• content_flags - Inappropriate content reports
-• discussion_engagement - User activity tracking
-• moderation_settings - Class-level moderation config
+✓ Smart Q&A
+  - Answer student questions
+  - Identify relevant topics
+  - Stream responses in real-time
 
-QUICK SETUP (5 MINUTES):
-------------------------
-1. Update Firestore RLS (see SETUP.md)
-2. Copy all files to your project
-3. Create app/classes/[id]/forum/page.tsx
-4. Create app/admin/moderation/page.tsx
-5. Add navigation links
-6. Test forum creation and replies
+✓ Personalized Learning Paths
+  - Analyze quiz performance
+  - Recommend topics to study
+  - Track progress & mastery
+
+✓ Usage Analytics
+  - Track API usage
+  - Monitor costs
+  - Rate limiting (10/day free)
+
+✓ Caching System
+  - Cache explanations 24h
+  - Reduce API costs
+  - Faster responses
+
+FILES INCLUDED:
+---------------
+lib/
+  ✓ ai-service.ts - Core API integration
+  ✓ explanation-service.ts - Explanation generation
+  ✓ qa-service.ts - Question answering
+  ✓ path-service.ts - Learning paths
+
+components/
+  ✓ ExplanationCard.tsx - Display explanations
+  ✓ QAInterface.tsx - Ask questions UI
+
+QUICK FEATURES:
+---------------
+• Claude 3.5 Sonnet API integration
+• Token usage tracking
+• 24-hour response caching
+• Rate limiting by user tier
+• Streaming responses
+• Mobile-responsive UI
+• Dark mode support
+• Accessibility-first design
 
 TESTING:
 --------
-Student Flow:
-→ Open /classes/[id]/forum
-→ Click "New Discussion"
-→ Create topic and post
-→ Reply to other discussions
-→ Like/flag comments
+Test Explanations:
+  1. Navigate to /topics/[id]/explain
+  2. Click tabs: Simple → Detailed → Visual
+  3. Verify streaming works
+  4. Test Copy button
 
-Teacher Flow:
-→ Open /admin/moderation
-→ Review pending content
-→ Approve/reject discussions
-→ Manage flagged content
-→ View engagement stats
+Test Q&A:
+  1. Navigate to /ask-ai
+  2. Ask: "What is Surah Al-Fatiha?"
+  3. Verify answer with sources
+  4. Rate helpful/unhelpful
+  5. Check history
 
-MOBILE TESTING:
----------------
-✓ Touch-friendly interface
-✓ Responsive on all screen sizes
-✓ 44px+ touch targets
-✓ Dark mode support
-✓ Works on iOS/Android
+Test Learning Path:
+  1. Navigate to /my-learning
+  2. See progress stats
+  3. Complete a quiz
+  4. Verify path updates
+
+API COSTS:
+----------
+Claude API:
+  Input: $0.003 per 1K tokens
+  Output: $0.015 per 1K tokens
+  Avg explanation: ~$0.05
+  Monthly budget: $100 = ~2000 explanations
+
+Cost Optimization:
+  ✓ Caching (24 hours)
+  ✓ Rate limiting (free: 10/day)
+  ✓ Teacher approval (save best)
+  ✓ Batch generation (off-hours)
+
+TROUBLESHOOTING:
+----------------
+API Key Error?
+  → Check .env.local has correct key
+  → Verify key at console.anthropic.com
+  → Ensure API is enabled
+
+No Explanations?
+  → Check browser console for errors
+  → Verify topic content is passed
+  → Test with different topic
+
+Streaming Not Working?
+  → Check browser supports ReadableStream
+  → Verify network connection
+  → Try different browser
+
+Rate Limit Hit?
+  → Free tier: 10 questions/day
+  → Upgrade to Pro tier
+  → Wait until next day
+
+DATABASE SCHEMA:
+----------------
+ai_usage
+  ├─ userId
+  ├─ date
+  ├─ featureType
+  ├─ inputTokens
+  ├─ outputTokens
+  ├─ cost
+  └─ timestamp
+
+ai_qna
+  ├─ userId
+  ├─ question
+  ├─ answer
+  ├─ sources (topic IDs)
+  ├─ helpful (rating)
+  └─ createdAt
+
+learning_paths
+  ├─ userId
+  ├─ classId
+  ├─ recommendedTopics
+  ├─ completedTopics
+  ├─ mastery (per topic)
+  └─ lastUpdated
+
+ai_cache
+  ├─ id (cache key)
+  ├─ content
+  ├─ createdAt
+  └─ accessCount
 
 SECURITY:
 ---------
-✓ Firestore RLS enforces authorization
-✓ Only admins can delete users
-✓ Students can't edit others' posts
-✓ Teachers can moderate all content
-✓ HTML sanitization built-in
+✓ API keys in .env.local (not committed)
+✓ Rate limiting prevents abuse
+✓ No PII sent to Claude
+✓ Content filtering for safety
+✓ Firestore RLS enforces auth
+✓ Usage tracking & alerts
+✓ Cost monitoring dashboard
 
-PERFORMANCE:
+NEXT PHASES:
 ------------
-• Real-time Firestore listeners
-• Optimized queries with indexes
-• Pagination support
-• Lazy loading replies
-• Efficient engagement tracking
+Phase 14: Analytics Dashboard
+  - Progress visualization
+  - Performance charts
+  - Engagement metrics
+  - Export reports
 
-NEXT PHASE:
------------
-Phase 13: AI Learning Aids
-- Adaptive explanations
-- Smart search suggestions
-- Personalized learning paths
-- AI-powered Q&A
+Phase 15: Export & Certificates
+  - Completion certificates
+  - Progress reports
+  - Grade exports
+  - Achievement badges
 
 SUPPORT:
 --------
 See SETUP.md for:
-- Detailed integration guide
-- Firestore RLS configuration
-- Route creation examples
-- Troubleshooting steps
+  - Detailed integration steps
+  - API configuration
+  - Route examples
+  - Troubleshooting
 
 See README.md for:
-- Full architecture documentation
-- Database schemas
-- Component specifications
-- Performance considerations
+  - Full architecture
+  - Service specifications
+  - Database schemas
+  - Performance tips
+
+ENVIRONMENT SETUP:
+------------------
+.env.local format:
+  NEXT_PUBLIC_ANTHROPIC_API_KEY=sk-ant-xxxxx
+
+Verify with:
+  console.log(process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY)
+
+Make sure to:
+  ✓ Add to .env.local (not .env!)
+  ✓ Restart dev server after adding
+  ✓ Never commit to git
+  ✓ Keep key private
+
+RATE LIMITING:
+--------------
+Free Tier: 10 requests/day
+Pro Tier: 100 requests/day
+
+Daily limit resets at UTC midnight
+Check remaining with: checkRateLimit(userId)
+Record usage with: recordAPIUsage()
+
+API MODELS:
+-----------
+Current: Claude 3.5 Sonnet
+  - Fast, capable, cost-effective
+  - Great for education context
+  - ~100K token context window
+
+Alternative: Claude 3 Opus
+  - More powerful, slower
+  - For complex explanations
+  - Higher cost
+
+Choose model in lib/ai-service.ts

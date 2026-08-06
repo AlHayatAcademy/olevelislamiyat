@@ -1,72 +1,64 @@
-# Phase 12: Social Learning Setup Guide
+# Phase 13: AI Learning Aids Setup Guide
 
-## 1. Update Firestore Security Rules
+## 1. Get API Keys
 
-Add these rules to your Firestore security rules console:
+### Claude API (Recommended)
+1. Go to https://console.anthropic.com
+2. Sign up or log in
+3. Navigate to API Keys
+4. Create new API key
+5. Copy the key
+
+### OpenAI API (Alternative)
+1. Go to https://platform.openai.com/account/api-keys
+2. Create new API key
+3. Copy the key
+
+## 2. Add Environment Variables
+
+Create `.env.local` in your project root:
 
 ```
-// Discussions collection
-match /discussions/{documentId} {
-  allow read: if request.auth != null && 
-    request.auth.uid in resource.data.get('classId', '') in get(/databases/$(database)/documents/class_enrollments/$(request.auth.uid)).data.get('classIds', []);
-  allow create: if request.auth != null && 
-    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['teacher', 'student'];
-  allow update, delete: if request.auth != null && 
-    (request.auth.uid == resource.data.authorId || 
-     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher');
-}
+# Claude API (Recommended)
+NEXT_PUBLIC_ANTHROPIC_API_KEY=sk-ant-xxxxx
 
-// Discussion replies collection
-match /discussion_replies/{documentId} {
-  allow read: if request.auth != null;
-  allow create: if request.auth != null;
-  allow update, delete: if request.auth != null && 
-    (request.auth.uid == resource.data.authorId || 
-     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher');
-}
+# OR OpenAI API (Alternative)
+# NEXT_PUBLIC_OPENAI_API_KEY=sk-xxxxx
 
-// Content flags collection
-match /content_flags/{documentId} {
-  allow create: if request.auth != null;
-  allow read, update: if request.auth != null && 
-    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
-}
-
-// Discussion engagement collection
-match /discussion_engagement/{documentId} {
-  allow create: if request.auth != null;
-  allow read: if request.auth != null;
-}
-
-// Moderation settings (teachers only)
-match /moderation_settings/{documentId} {
-  allow read: if request.auth != null;
-  allow write: if request.auth != null && 
-    get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
-}
+# Firebase (should already exist from Phase 10)
+NEXT_PUBLIC_FIREBASE_API_KEY=xxx
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=xxx.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=xxx
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=xxx.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=xxx
+NEXT_PUBLIC_FIREBASE_APP_ID=xxx
 ```
 
-## 2. Copy Files to Project
+## 3. Copy Files to Project
 
 ```bash
 # Copy service files
-cp lib__discussion-service.ts → src/lib/discussion-service.ts
-cp lib__moderation-service.ts → src/lib/moderation-service.ts
-cp lib__engagement-service.ts → src/lib/engagement-service.ts
+cp lib__ai-service.ts → src/lib/ai-service.ts
+cp lib__explanation-service.ts → src/lib/explanation-service.ts
+cp lib__qa-service.ts → src/lib/qa-service.ts
+cp lib__path-service.ts → src/lib/path-service.ts
 
 # Copy components
-cp components__UserAvatar.tsx → src/components/UserAvatar.tsx
-cp components__DiscussionList.tsx → src/components/DiscussionList.tsx
-cp components__DiscussionThread.tsx → src/components/DiscussionThread.tsx
-cp components__CommentInput.tsx → src/components/CommentInput.tsx
-cp components__CommentItem.tsx → src/components/CommentItem.tsx
-cp components__ForumPage.tsx → src/components/ForumPage.tsx
-cp components__ModerationPanel.tsx → src/components/ModerationPanel.tsx
+cp components__ExplanationCard.tsx → src/components/ExplanationCard.tsx
+cp components__QAInterface.tsx → src/components/QAInterface.tsx
 ```
 
-## 3. Create App Routes
+## 4. Install Dependencies
 
-### Create `app/classes/[id]/forum/page.tsx`
+```bash
+npm install @anthropic-ai/sdk
+# OR for OpenAI:
+# npm install openai
+```
+
+## 5. Create App Routes
+
+### Create `app/topics/[id]/explain/page.tsx`
 
 ```typescript
 'use client';
@@ -74,15 +66,15 @@ cp components__ModerationPanel.tsx → src/components/ModerationPanel.tsx
 import { useAuth } from '@/lib/auth-context';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ForumPage } from '@/components/ForumPage';
-import { getClassDetails } from '@/lib/class-service';
+import { ExplanationCard } from '@/components/ExplanationCard';
+import { getDocWithId } from '@/lib/firestore-utils';
 
-export default function ClassForumPage() {
-  const { user, userRole } = useAuth();
+export default function ExplainTopicPage() {
+  const { user } = useAuth();
   const params = useParams();
   const router = useRouter();
-  const classId = params.id as string;
-  const [classData, setClassData] = useState<any>(null);
+  const topicId = params.id as string;
+  const [topic, setTopic] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -91,19 +83,185 @@ export default function ClassForumPage() {
       return;
     }
 
-    const loadClass = async () => {
+    const loadTopic = async () => {
       try {
-        const classInfo = await getClassDetails(classId);
-        setClassData(classInfo);
+        const topicData = await getDocWithId('quizzes', topicId);
+        setTopic(topicData);
       } catch (err) {
-        console.error('Failed to load class:', err);
-        router.push('/classes');
+        console.error('Failed to load topic:', err);
+        router.push('/');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadClass();
+    loadTopic();
+  }, [user, topicId, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  if (!topic) {
+    return <div>Topic not found</div>;
+  }
+
+  return (
+    <div className="p-4 sm:p-8 max-w-4xl mx-auto">
+      <ExplanationCard
+        topicId={topicId}
+        topicName={topic.title}
+        topicContent={topic.description || topic.content}
+        userId={user?.uid}
+      />
+    </div>
+  );
+}
+```
+
+### Create `app/ask-ai/page.tsx`
+
+```typescript
+'use client';
+
+import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { QAInterface } from '@/components/QAInterface';
+import { getTeacherClasses } from '@/lib/class-service';
+import { getQAHistory } from '@/lib/qa-service';
+
+export default function AskAIPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [classes, setClasses] = useState<any[]>([]);
+  const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
+  const [qaHistory, setQAHistory] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    const loadData = async () => {
+      try {
+        const userClasses = await getTeacherClasses(user.uid).catch(() =>
+          // If not a teacher, get enrolled classes
+          Promise.resolve([])
+        );
+        
+        if (userClasses.length > 0) {
+          setClasses(userClasses);
+          setSelectedClassId(userClasses[0].id);
+        }
+
+        const history = await getQAHistory(user.uid, 5);
+        setQAHistory(history);
+      } catch (err) {
+        console.error('Failed to load data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [user, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 sm:p-8 max-w-4xl mx-auto space-y-8">
+      {/* Q&A Interface */}
+      {selectedClassId && (
+        <QAInterface
+          classId={selectedClassId}
+          userId={user!.uid}
+          userName={user!.displayName || 'Student'}
+          userEmail={user!.email || ''}
+        />
+      )}
+
+      {/* Recent Questions */}
+      {qaHistory.length > 0 && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 sm:p-6">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+            Your Recent Questions
+          </h2>
+
+          <div className="space-y-3">
+            {qaHistory.map((qa) => (
+              <div
+                key={qa.id}
+                className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <p className="font-medium text-slate-900 dark:text-slate-100">
+                  {qa.question}
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  {new Date(qa.createdAt?.toDate?.() || 0).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Create `app/my-learning/page.tsx`
+
+```typescript
+'use client';
+
+import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getProgressSummary } from '@/lib/path-service';
+import { generateLearningPath } from '@/lib/path-service';
+
+export default function MyLearningPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [classId] = useState('default-class'); // Get from user's enrolled class
+  const [progress, setProgress] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    const loadProgress = async () => {
+      try {
+        // Generate or update learning path
+        await generateLearningPath(user.uid, classId);
+
+        // Get progress summary
+        const summary = await getProgressSummary(user.uid, classId);
+        setProgress(summary);
+      } catch (err) {
+        console.error('Failed to load progress:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProgress();
   }, [user, classId, router]);
 
   if (isLoading) {
@@ -114,260 +272,231 @@ export default function ClassForumPage() {
     );
   }
 
-  if (!classData) {
-    return <div>Class not found</div>;
+  if (!progress) {
+    return <div>Failed to load learning progress</div>;
   }
 
   return (
-    <div className="p-4 sm:p-8">
-      <ForumPage
-        classId={classId}
-        className={classData.name}
-        currentUserId={user!.uid}
-        currentUserName={user!.displayName || 'Anonymous'}
-        userEmail={user!.email || ''}
-        userRole={userRole as 'teacher' | 'student'}
-      />
-    </div>
-  );
-}
-```
-
-### Create `app/admin/moderation/page.tsx`
-
-```typescript
-'use client';
-
-import { useAuth } from '@/lib/auth-context';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { ModerationPanel } from '@/components/ModerationPanel';
-import { getTeacherClasses } from '@/lib/class-service';
-import { useState } from 'react';
-
-export default function ModerationPage() {
-  const { user, userRole } = useAuth();
-  const router = useRouter();
-  const [classes, setClasses] = useState<any[]>([]);
-  const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!user || userRole !== 'teacher') {
-      router.push('/login');
-      return;
-    }
-
-    const loadClasses = async () => {
-      try {
-        const teacherClasses = await getTeacherClasses(user.uid);
-        setClasses(teacherClasses);
-        if (teacherClasses.length > 0) {
-          setSelectedClassId(teacherClasses[0].id);
-        }
-      } catch (err) {
-        console.error('Failed to load classes:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadClasses();
-  }, [user, userRole, router]);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin w-6 h-6 border-3 border-blue-500 border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="p-4 sm:p-8 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
-        Forum Moderation
+    <div className="p-4 sm:p-8 max-w-4xl mx-auto space-y-6">
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+        My Learning Path
       </h1>
 
-      {classes.length === 0 ? (
-        <div className="text-center py-12 text-slate-500 dark:text-slate-400">
-          No classes available
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Class selector */}
-          <div>
-            <div className="sticky top-4">
-              <h2 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                Classes
-              </h2>
-              <div className="space-y-2">
-                {classes.map((cls) => (
-                  <button
-                    key={cls.id}
-                    onClick={() => setSelectedClassId(cls.id)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors ${
-                      selectedClassId === cls.id
-                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                        : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
-                    }`}
-                  >
-                    <div className="font-medium">{cls.name}</div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">
-                      {cls.studentCount} students
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+      {/* Progress Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Completed Topics */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+            {progress.completedTopics}
           </div>
+          <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Topics Completed
+          </div>
+        </div>
 
-          {/* Moderation panel */}
-          <div className="lg:col-span-3">
-            {selectedClassId && (
-              <ModerationPanel classId={selectedClassId} />
-            )}
+        {/* Mastery Percent */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+            {progress.masterPercent}%
+          </div>
+          <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Overall Mastery
           </div>
         </div>
-      )}
+
+        {/* Time Remaining */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+            {Math.round(progress.timeRemaining / 60)}h
+          </div>
+          <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Estimated Time Left
+          </div>
+        </div>
+
+        {/* Total Topics */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+            {progress.totalTopics}
+          </div>
+          <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Total Topics
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4">
+          Progress
+        </h2>
+        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-8 overflow-hidden">
+          <div
+            className="bg-gradient-to-r from-blue-500 to-green-500 h-full flex items-center justify-center text-white text-sm font-bold transition-all duration-500"
+            style={{ width: `${progress.masterPercent}%` }}
+          >
+            {progress.masterPercent > 10 && `${progress.masterPercent}%`}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 ```
 
-## 4. Add Navigation Links
+## 6. Add Navigation Links
 
-Update your Header or Navigation component to include links to the forum:
+Update your Header or Navigation component:
 
 ```typescript
-// In your navigation
-<Link href={`/classes/${classId}/forum`}>
-  💬 Forum
+import Link from 'next/link';
+
+// Add these links to your navigation
+<Link href="/ask-ai" className="flex items-center gap-2 hover:text-blue-600">
+  ✨ Ask AI
 </Link>
 
-// For teachers, add moderation link
-{userRole === 'teacher' && (
-  <Link href="/admin/moderation">
-    🛡️ Moderation
-  </Link>
-)}
+<Link href="/my-learning" className="flex items-center gap-2 hover:text-blue-600">
+  📚 My Learning
+</Link>
 ```
 
-## 5. Install Dependencies
+## 7. Configure Firestore Indexes
 
-Make sure you have `date-fns` installed for date formatting:
+Add to your Firestore security rules if not already present:
 
-```bash
-npm install date-fns
+```
+match /ai_usage/{doc} {
+  allow write: if request.auth != null;
+  allow read: if request.auth.uid == resource.data.userId;
+}
+
+match /ai_qna/{doc} {
+  allow write: if request.auth != null;
+  allow read: if request.auth.uid == resource.data.userId;
+}
+
+match /ai_cache/{doc} {
+  allow read: if request.auth != null;
+  allow write: if false; // Server-only writes
+}
+
+match /learning_paths/{doc} {
+  allow read, write: if request.auth != null;
+}
+
+match /ai_explanations/{doc} {
+  allow read: if request.auth != null;
+  allow write: if false; // Teacher-only (implement via Cloud Function)
+}
 ```
 
-## 6. Testing Procedures
+## 8. Testing Procedures
 
-### Test as Student
-1. Navigate to your class
-2. Click "Forum" tab
-3. Create a new discussion
-4. Reply to discussions
-5. Like/flag content
-6. Verify content appears with "pending" status initially
+### Test Explanations
+1. Navigate to a quiz topic
+2. Click "Explain" (or create route `/topics/[id]/explain`)
+3. Try Simple explanation
+4. Try Detailed explanation
+5. Try Visual description
+6. Verify streaming works
+7. Test Copy button
 
-### Test as Teacher
-1. Navigate to `/admin/moderation`
-2. Review pending discussions and replies
-3. Approve/reject content
-4. Check moderation stats
-5. View and manage flagged content
+### Test Q&A
+1. Navigate to `/ask-ai`
+2. Ask a sample question: "What is the meaning of Surah Al-Fatiha?"
+3. Verify answer appears with sources
+4. Try different question types
+5. Check question history
 
-### Test Real-Time Features
-1. Open forum in two browser windows
-2. Create new discussion in one window
-3. Verify it appears in the other (after refresh or use Firestore listeners)
-4. Test reply updates
+### Test Learning Path
+1. Navigate to `/my-learning`
+2. Verify progress displays
+3. Check recommended topics
+4. Complete a quiz
+5. Verify path updates
 
-### Test Mobile
-1. Open forum on mobile device
-2. Verify layout is responsive
-3. Test swipe gestures (if implemented)
-4. Verify touch targets are 44px+
-5. Test dark mode
+### Test Rate Limiting
+1. Ask 10 questions in quick succession (free tier)
+2. Verify 11th question is blocked
+3. Check error message is helpful
 
-## 7. Advanced Configuration (Optional)
+## 9. Cost Optimization
 
-### Enable Pre-Approval Workflow
+### Claude API Pricing
+- ~$0.003 per 1K input tokens
+- ~$0.015 per 1K output tokens
+- Average explanation: ~$0.05
+- Budget: $100/month = ~2000 explanations
 
-In `lib/moderation-service.ts`, when creating new moderation settings for a class:
+### Strategies to Reduce Costs
+1. **Cache explanations** - Store AI-generated content
+2. **Limit topics** - Only generate for current topics
+3. **User tiers** - Free tier: 10 questions/day, Pro: unlimited
+4. **Batch generation** - Generate explanations during off-hours
+5. **Monitor usage** - Track costs in real-time
 
-```typescript
-// Set require approval for all content
-await setModerationMode(classId, true);
-```
+## 10. Performance Considerations
 
-### Track Engagement Metrics
-
-Use the engagement service to display leaderboards:
-
-```typescript
-import { getTopContributors } from '@/lib/engagement-service';
-
-const contributors = await getTopContributors(classId, 10);
-contributors.forEach(contributor => {
-  console.log(`${contributor.rank}. ${contributor.userName} - ${contributor.totalReplies} replies`);
-});
-```
-
-### Monitor Daily Activity
-
-```typescript
-import { getDailyActivityTrend } from '@/lib/engagement-service';
-
-const trend = await getDailyActivityTrend(classId, 7); // Last 7 days
-console.log(trend); // [{date: '2024-01-01', count: 5}, ...]
-```
+- **Streaming responses** - Show answers as they're generated
+- **Caching** - Store commonly asked questions
+- **Lazy loading** - Load explanations only when requested
+- **Worker threads** - Use Cloud Functions for batch processing
+- **Connection pooling** - Reuse API connections
 
 ## Troubleshooting
 
-### Discussions not appearing
-- Check Firestore RLS rules are correct
-- Verify classId matches the class they're enrolled in
-- Check browser console for Firebase errors
+### API Key Issues
+- Verify key is in `.env.local`
+- Check key has correct permissions
+- Ensure API is enabled in console
+- Check rate limits haven't been exceeded
 
-### Can't create discussions
-- Verify user is authenticated
-- Check Firestore RLS for create permissions
-- Ensure classId exists
+### No Explanations Generated
+- Check API key is valid
+- Verify topic content is being passed
+- Check browser console for errors
+- Try with different topic
 
-### Moderation panel empty
-- Verify user role is 'teacher'
-- Check Firestore has pending content
-- Verify RLS allows teacher access
+### Streaming Not Working
+- Check browser supports ReadableStream
+- Verify server supports streaming
+- Check network connection
 
-### Real-time updates not working
-- Firestore listeners need active subscription
-- Consider adding manual refresh button
-- Check network/Firebase connection
-
-## Next Steps
-
-1. ✅ Copy all files to your project
-2. ✅ Update Firestore security rules
-3. ✅ Create forum and moderation pages
-4. ✅ Test forum functionality
-5. → Deploy and monitor engagement
-6. → Proceed to Phase 13 (AI Learning Aids)
-
-## Performance Optimization
-
-- Paginate discussion lists (implement `startAfter` for pagination)
-- Add Firestore indexes for common queries
-- Cache discussion list for 5 minutes
-- Lazy load images in discussion content
-- Implement virtual scrolling for large reply lists
+### Rate Limit Errors
+- User has reached daily limit
+- Upgrade to Pro tier
+- Wait until next day
+- Check Firestore usage counts
 
 ## Security Checklist
 
+- ✅ API keys in `.env.local` (not committed)
+- ✅ Rate limiting prevents abuse
+- ✅ User authentication required
+- ✅ No PII in prompts
+- ✅ Content filtering for safety
 - ✅ Firestore RLS enforces authorization
-- ✅ Only authors can edit/delete own content
-- ✅ Teachers can moderate all content
-- ✅ HTML sanitization (React escapes by default)
-- ✅ Rate limiting on content creation (implement via Cloud Functions)
-- ✅ Prevent spam with moderation workflow
+- ✅ Cost monitoring in place
+
+## Next Steps
+
+1. ✅ Add API keys to `.env.local`
+2. ✅ Copy all files to project
+3. ✅ Create routes for AI features
+4. ✅ Test explanations and Q&A
+5. ✅ Monitor usage and costs
+6. → Proceed to Phase 14 (Analytics Dashboard)
+
+## Phase 13 Features Recap
+
+✅ AI-Generated Explanations (Simple/Detailed/Visual)
+✅ Streaming Responses for Real-Time Feedback
+✅ Smart Q&A with Source Topics
+✅ Personalized Learning Paths
+✅ Usage Analytics & Cost Tracking
+✅ Rate Limiting for Free/Pro Tiers
+✅ Caching for Performance
+✅ Mobile-Responsive Interface
+✅ Dark Mode Support
+✅ Accessibility Features

@@ -1,105 +1,98 @@
-# Phase 12: Social Learning & Peer Discussions
+# Phase 13: AI Learning Aids & Adaptive Learning
 
 ## Overview
-Implement peer discussion forums with real-time comments, topic creation, moderation, and community engagement features to foster collaborative learning.
+Integrate Claude AI API to provide intelligent tutoring features including adaptive explanations, smart search, personalized learning paths, and AI-powered question answering.
 
 ## Architecture
 
-### Core Components
-1. **Forum System** - Class-level forums with topic discussions
-2. **Real-Time Comments** - Live comment threads with Firestore listeners
-3. **User Profiles** - Student profiles with avatars and participation stats
-4. **Moderation** - Teacher approval workflows and content moderation
-5. **Mobile-First** - Touch-optimized for mobile devices
-6. **Analytics** - Track engagement and discussion metrics
+### 1. AI Services Layer
+- **OpenAI/Claude API Integration** - Leverage LLM for intelligent responses
+- **Prompt Engineering** - Optimized prompts for education context
+- **Rate Limiting** - Prevent abuse and manage API costs
+- **Caching** - Cache common explanations to reduce API calls
 
-### Key Features
+### 2. Core AI Features
 
-✅ **Class Forums**
-- Browse all forum topics for a class
-- Create new discussion topics
-- Real-time comment threads
-- Nested replies support
+#### Adaptive Explanations
+- Adjust complexity based on student level
+- Provide multiple explanation styles (simple, detailed, visual)
+- Include real-world examples relevant to Islamiyat
+- Generate follow-up questions
 
-✅ **Real-Time Updates**
-- Live comment rendering
-- Instant notification on new replies
-- User typing indicators
-- Active participant list
+#### Smart Q&A
+- Answer student questions in real-time
+- Cite relevant topics from curriculum
+- Suggest related learning materials
+- Track unanswered questions for teacher
 
-✅ **User Engagement**
-- User avatars with initials
-- Participation badges
-- Like/upvote system
-- Helpful answer marking
+#### Personalized Learning Paths
+- Analyze quiz performance
+- Recommend topics to review
+- Suggest next topics to learn
+- Track progress toward goals
 
-✅ **Moderation**
-- Teacher approval workflow
-- Flag inappropriate content
-- Delete/edit functionality
-- Moderation dashboard
-
-✅ **Mobile Optimized**
-- Touch-friendly interface
-- Swipe actions for mobile
-- Optimized text input
-- Responsive layout
-
-✅ **Accessibility**
-- Semantic HTML
-- ARIA labels
-- Keyboard navigation
-- Screen reader support
+#### Concept Breakdown
+- Simplify complex concepts
+- Create concept maps
+- Link to related topics
+- Provide mnemonic devices
 
 ## Database Schema
 
 ```typescript
-// discussions table
-interface Discussion {
+// ai_explanations table
+interface AIExplanation {
   id: string;
-  classId: string;
-  title: string;
-  content: string;
-  authorId: string;
-  authorName: string;
-  authorEmail: string;
+  topicId: string;
+  originalContent: string;
+  simpleExplanation: string;
+  detailedExplanation: string;
+  visualDescription: string;
+  examples: string[];
+  relatedTopics: string[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
-  isPinned: boolean;
-  isApproved: boolean;
-  status: 'pending' | 'approved' | 'rejected';
-  tagIds: string[]; // quiz topics
-  replyCount: number;
-  viewCount: number;
-  createdBy: 'teacher' | 'student';
+  rating: number; // teacher rating 1-5
+  usageCount: number;
 }
 
-// discussion_replies table
-interface DiscussionReply {
-  id: string;
-  discussionId: string;
-  parentReplyId?: string; // null for top-level reply
-  classId: string;
-  content: string;
-  authorId: string;
-  authorName: string;
-  authorEmail: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  isApproved: boolean;
-  status: 'pending' | 'approved' | 'rejected';
-  isHelpful: boolean; // marked as helpful answer
-  likeCount: number;
-  likedBy: string[]; // array of user IDs
-}
-
-// discussion_engagement table
-interface DiscussionEngagement {
+// ai_qna table
+interface AIQA {
   id: string;
   userId: string;
-  discussionId: string;
-  action: 'view' | 'reply' | 'like' | 'flag';
+  classId: string;
+  question: string;
+  answer: string;
+  sources: string[]; // topic references
+  followUpQuestions: string[];
+  helpful: boolean;
+  rating: number; // user rating
   createdAt: Timestamp;
+}
+
+// learning_paths table
+interface LearningPath {
+  id: string;
+  userId: string;
+  classId: string;
+  recommendedTopics: string[];
+  completedTopics: string[];
+  currentTopic: string;
+  estimatedTimeRemaining: number; // minutes
+  adaptiveScore: number; // 0-100
+  lastUpdated: Timestamp;
+}
+
+// ai_usage_analytics table
+interface AIUsageAnalytics {
+  id: string;
+  userId: string;
+  classId: string;
+  featureType: 'explanation' | 'qa' | 'suggestion' | 'path';
+  topicId: string;
+  usedAt: Timestamp;
+  timeSpent: number; // seconds
+  helpful: boolean;
 }
 ```
 
@@ -108,238 +101,351 @@ interface DiscussionEngagement {
 ```
 src/
 ├── lib/
-│   ├── discussion-service.ts      // Discussion CRUD operations
-│   ├── moderation-service.ts      // Content moderation
-│   └── engagement-service.ts      // Tracking user engagement
+│   ├── ai-service.ts          // Claude/OpenAI API integration
+│   ├── explanation-service.ts // Generate explanations
+│   ├── qa-service.ts          // Q&A generation
+│   ├── path-service.ts        // Learning path recommendations
+│   ├── ai-cache.ts            // Caching layer
+│   └── ai-prompts.ts          // Prompt templates
 ├── hooks/
-│   ├── useDiscussions.ts          // Fetch discussions real-time
-│   ├── useDiscussionReplies.ts    // Fetch replies with nesting
-│   └── useEngagement.ts           // Track view/interaction
+│   ├── useAIExplanation.ts    // Fetch explanations
+│   ├── useAIQA.ts            // Ask questions
+│   └── useLearnigPath.ts      // Get recommendations
 ├── components/
-│   ├── ForumPage.tsx              // Main forum container
-│   ├── DiscussionList.tsx         // List of topics
-│   ├── DiscussionThread.tsx       // Single discussion view
-│   ├── CommentInput.tsx           // Reply/comment composer
-│   ├── CommentItem.tsx            // Individual comment
-│   ├── UserAvatar.tsx             // User avatar with initials
-│   ├── ModerationPanel.tsx        // Teacher moderation UI
-│   └── EngagementBadges.tsx       // Participation indicators
+│   ├── ExplanationCard.tsx    // Display explanations
+│   ├── ExplanationTabs.tsx    // Simple/detailed/visual tabs
+│   ├── QAInterface.tsx        // Question input interface
+│   ├── QAResponse.tsx         // Answer display with sources
+│   ├── LearningPathCard.tsx   // Progress and recommendations
+│   └── ConceptMap.tsx         // Visual topic relationships
 └── app/
-    ├── classes/[id]/forum/page.tsx
-    └── admin/moderation/page.tsx
+    ├── topics/[id]/explain/page.tsx
+    ├── ask-ai/page.tsx
+    └── my-learning/page.tsx
 ```
 
 ## Key Services
 
-### discussion-service.ts
+### ai-service.ts
 ```typescript
-// Create discussion
-createDiscussion(classId, title, content, userId, userName, email): Promise<string>
+// Initialize AI client
+initializeAIClient(apiKey: string): void
 
-// Get discussions
-getDiscussions(classId, filters?): Promise<Discussion[]>
-getDiscussionById(discussionId): Promise<Discussion>
+// Call Claude API
+callClaude(prompt: string, temperature?: number): Promise<string>
 
-// Update discussion
-updateDiscussion(discussionId, userId, data): Promise<void>
-deleteDiscussion(discussionId, userId): Promise<void>
+// Stream responses
+streamClaude(prompt: string, onChunk: (text: string) => void): Promise<void>
 
-// Replies
-addReply(discussionId, content, userId, userName, email, parentReplyId?): Promise<string>
-getReplies(discussionId): Promise<DiscussionReply[]>
-updateReply(replyId, userId, content): Promise<void>
-deleteReply(replyId, userId): Promise<void>
-
-// Engagement
-likeReply(replyId, userId): Promise<void>
-markHelpful(replyId, userId): Promise<void>
-flagContent(contentId, reason, userId): Promise<void>
+// Manage rate limiting
+checkRateLimit(userId: string): Promise<boolean>
+incrementRateLimit(userId: string): Promise<void>
 ```
 
-### moderation-service.ts
+### explanation-service.ts
 ```typescript
-// Approval workflows
-getPendingDiscussions(classId): Promise<Discussion[]>
-getPendingReplies(classId): Promise<DiscussionReply[]>
+// Generate explanations
+generateSimpleExplanation(topicId: string, content: string): Promise<string>
+generateDetailedExplanation(topicId: string, content: string): Promise<string>
+generateVisualDescription(topicId: string, content: string): Promise<string>
 
-// Actions
-approveContent(contentId, contentType): Promise<void>
-rejectContent(contentId, reason): Promise<void>
-removeContent(contentId, reason): Promise<void>
+// Get cached or generate
+getExplanation(topicId: string, style: 'simple'|'detailed'|'visual'): Promise<string>
 
-// Settings
-setModerationMode(classId, mode): Promise<void>
-getClassModerationSettings(classId): Promise<ModerationSettings>
+// Generate examples
+generateExamples(topicId: string, count: number): Promise<string[]>
+
+// Create follow-ups
+generateFollowUpQuestions(topicId: string): Promise<string[]>
 ```
 
-### engagement-service.ts
+### qa-service.ts
 ```typescript
-// Track engagement
-trackView(discussionId, userId): Promise<void>
-trackReply(discussionId, userId): Promise<void>
+// Answer student questions
+answerQuestion(question: string, context: {userId, classId, topicId?}): Promise<AIQA>
 
-// Analytics
-getEngagementStats(classId, userId): Promise<EngagementStats>
-getClassEngagementMetrics(classId): Promise<ClassMetrics>
-getTopContributors(classId, limit): Promise<User[]>
+// Get sources from curriculum
+findRelevantTopics(question: string): Promise<string[]>
+
+// Rate answers
+rateAnswer(qaId: string, helpful: boolean): Promise<void>
+
+// Get Q&A history
+getQAHistory(userId: string, limit?: number): Promise<AIQA[]>
+
+// Unanswered questions
+getUnansweredQuestions(classId: string): Promise<{question, askedBy, count}[]>
+```
+
+### path-service.ts
+```typescript
+// Generate learning path
+generateLearningPath(userId: string, classId: string): Promise<LearningPath>
+
+// Get recommendations
+getRecommendations(userId: string): Promise<{topic, reason, difficulty}[]>
+
+// Update progress
+updatePathProgress(userId: string, topicId: string): Promise<void>
+
+// Suggest next topics
+getNextTopics(userId: string): Promise<string[]>
+
+// Time estimate
+estimateTopicTime(topicId: string, userLevel: number): Promise<number>
+```
+
+## API Integration
+
+### Using Claude API (Recommended)
+```typescript
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+const message = await client.messages.create({
+  model: "claude-3-5-sonnet-20241022",
+  max_tokens: 1024,
+  messages: [
+    { role: "user", content: "Explain Surah Al-Fatiha in simple terms" }
+  ],
+});
+```
+
+### Using OpenAI API (Alternative)
+```typescript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const response = await openai.chat.completions.create({
+  model: "gpt-4",
+  messages: [
+    { role: "user", content: "Explain Surah Al-Fatiha in simple terms" }
+  ],
+});
+```
+
+## Prompt Templates
+
+### Simple Explanation
+```
+Explain "{topic}" in very simple terms suitable for a 15-year-old student.
+Use everyday language and relatable examples.
+Keep it to 2-3 paragraphs.
+Include: definition, key point, real-world example.
+```
+
+### Detailed Explanation
+```
+Provide a comprehensive explanation of "{topic}".
+Include: historical context, theological significance, practical applications.
+Add references to relevant Quranic verses or Hadith if applicable.
+Use academic but accessible language.
+Include 3-5 follow-up questions.
+```
+
+### Visual Description
+```
+Describe "{topic}" as if creating a visual diagram or infographic.
+Include: main concept at center, related ideas branching out, connections between ideas.
+Use visual metaphors and spatial descriptions.
+Suggest color coding or symbols that would help students remember.
+```
+
+### Q&A Response
+```
+Answer this student question about Islamiyat: "{question}"
+Context: The student is at {level} level, studying {topic}.
+Response guidelines:
+1. Answer directly and clearly
+2. If uncertain, explain your uncertainty
+3. Cite relevant Quranic verses or Hadith if applicable
+4. Suggest related topics to explore
+5. End with 1-2 follow-up questions
+
+Answer:
 ```
 
 ## Component Specs
 
-### ForumPage.tsx
-- Tab navigation: "Recent" | "Popular" | "My Topics" | "Unanswered"
+### ExplanationCard.tsx
+- Displays explanation with tabs (Simple/Detailed/Visual)
+- Loading state with skeleton
+- Copy to clipboard button
+- Like/save functionality
+- Related topics section
+- Follow-up questions list
+
+### QAInterface.tsx
+- Text input for questions
+- Character limit indicator (500)
+- Send button (with loading state)
+- Recent questions quick-select
+- Suggested topics
+- Mobile: full-screen input
+
+### QAResponse.tsx
+- Display answer with streaming effect
+- Highlight source topics
+- Rate helpful/not helpful
+- Copy answer button
+- Follow-up questions as buttons
+- Related topics sidebar
+
+### LearningPathCard.tsx
+- Overall progress bar
+- Recommended topics with difficulty
+- Completed topics count
+- Time remaining estimate
+- Start learning button
+- Performance analytics
+
+### ConceptMap.tsx
+- Visual network of topics
+- Click to explore topics
+- Color-coded by difficulty
+- Interactive edges
 - Search functionality
-- Create new discussion button
-- Filter by tags (quiz topics)
-- Infinite scroll or pagination
-- Mobile: collapsible filters
 
-### DiscussionList.tsx
-- Displays topics with:
-  - Title and preview
-  - Author avatar + name
-  - Reply count
-  - View count
-  - Last activity timestamp
-  - Tag badges
-  - Pin indicator (for teacher)
-- Sorting: Recent | Popular | Most Replies
-- Mobile: card layout, full width
+## Real-Time Streaming
 
-### DiscussionThread.tsx
-- Full discussion content
-- Author info with profile link
-- Real-time reply count
-- Create reply input (bottom sticky on mobile)
-- Nested replies (max 2 levels)
-- Like/flag buttons
-- Edit/delete (if author)
-- Teacher: approve/reject buttons
-
-### CommentInput.tsx
-- Rich text editor (basic formatting)
-- Character limit indicator
-- Submit/Cancel buttons
-- Preview toggle
-- Mobile: full-width, auto-expand on focus
-- Keyboard: Ctrl+Enter to submit
-
-### UserAvatar.tsx
-- Circular avatar with initials
-- Background color from hash (consistent per user)
-- Fallback to default icon
-- Size variants: xs (24px), sm (32px), md (40px), lg (56px)
-- Clickable to profile
-
-## Real-Time Features
-
-### Firestore Listeners
 ```typescript
-// Listen for new replies
-onSnapshot(
-  query(collection(db, 'discussion_replies'), 
-    where('discussionId', '==', discussionId),
-    orderBy('createdAt', 'asc')
-  ),
-  (snapshot) => setReplies(snapshot.docs.map(doc => doc.data()))
-)
+// Stream explanations for real-time feedback
+async function* streamExplanation(topicId: string) {
+  const prompt = buildPrompt(topicId);
+  
+  for await (const chunk of await streamClaude(prompt)) {
+    yield chunk.text;
+  }
+}
 
-// Listen for discussion updates
-onSnapshot(doc(db, 'discussions', discussionId), (doc) => {
-  setDiscussion(doc.data())
-})
+// UI updates as response arrives
+const [explanation, setExplanation] = useState('');
+const stream = streamExplanation(topicId);
+for await (const chunk of stream) {
+  setExplanation(prev => prev + chunk);
+}
 ```
 
-### Typing Indicators
-- Track active typists in Firestore
-- Show "User is typing..." UI
-- Auto-clear after 5s of inactivity
+## Caching Strategy
 
-## Moderation Workflow
+### Cache Layers
+1. **Browser Cache** - Explanations cached for 1 week
+2. **Redis Cache** - API responses cached for 24 hours
+3. **Firestore Cache** - Frequently used explanations stored
+4. **CDN Cache** - Static explanations cached for 7 days
 
-### Pre-Approval (Default)
-1. Student creates discussion/reply
-2. Status set to "pending"
-3. Teacher reviews in moderation panel
-4. Teacher approves/rejects
-5. Content visible to class (if approved)
+### Cache Invalidation
+- Refresh when topic content updates
+- Invalidate on teacher rating changes
+- Clear old entries (>30 days)
+- Manual refresh option
 
-### Post-Approval (Optional)
-1. Content visible immediately
-2. Teacher can flag/remove later
-3. Use for high-trust communities
+## Rate Limiting
 
-### Flagging
-- Students can flag inappropriate content
-- Reason dropdown (spam, offensive, off-topic, etc.)
-- Teacher notified in moderation panel
-- Automatic removal after threshold
+```typescript
+// Free tier: 10 requests/day per user
+// Pro tier: 100 requests/day per user
+
+// Store usage in Firestore
+interface RateLimitRecord {
+  userId: string;
+  date: string; // YYYY-MM-DD
+  count: number;
+  tier: 'free' | 'pro';
+}
+
+// Check before API call
+const canUseAI = await checkRateLimit(userId);
+if (!canUseAI) {
+  showUpgradePrompt();
+}
+```
+
+## Privacy & Safety
+
+- **No data sent to AI** beyond current question/topic
+- **Filter inappropriate content** before caching
+- **User consent** required for analytics
+- **FERPA compliance** - no PII in prompts
+- **Data deletion** on student account removal
 
 ## Mobile Optimizations
 
-- Touch-friendly reply buttons (min 44px)
-- Swipe to edit/delete on mobile
-- Fixed input at bottom of screen
-- Auto-focus on compose
-- Soft keyboard handling
-- Scroll to latest reply on open
+- Streaming responses with progressive display
+- Offline explanations cache
+- Smaller text input on mobile
+- Touch-friendly response cards
+- Auto-scroll to latest response
+- Quick-action buttons (Copy, Share, Save)
 
 ## Dark Mode
 - All components support `dark:` prefixes
-- Avatar colors contrast-checked
-- Text readable in both modes
-- Badges inherit theme
+- Code blocks with syntax highlighting
+- Equations readable in both themes
 
 ## Testing Checklist
 
-- [ ] Create discussion as student
-- [ ] Reply to discussion
-- [ ] Nested replies working
-- [ ] Real-time updates appear instantly
-- [ ] Like/flag functionality
-- [ ] Teacher moderation flow
-- [ ] Edit/delete own content
+- [ ] Simple explanation generates
+- [ ] Detailed explanation generates
+- [ ] Visual description generates
+- [ ] Q&A accepts and answers questions
+- [ ] Sources are correctly identified
+- [ ] Learning path generates
+- [ ] Caching works (reuse cached explanations)
+- [ ] Rate limiting prevents abuse
+- [ ] Streaming displays progressively
 - [ ] Mobile layout responsive
-- [ ] Dark mode working
-- [ ] Keyboard navigation
-- [ ] Search functionality
-- [ ] Filter by tags
-- [ ] Pagination/infinite scroll
-- [ ] Typing indicators
-- [ ] Accessibility (ARIA labels)
+- [ ] Dark mode works
+- [ ] Keyboard navigation functional
+- [ ] Screen reader announces content
+- [ ] Cost tracking accurate
 
-## Performance Considerations
+## Cost Considerations
 
-- Paginate replies (20 per load)
-- Index on classId + createdAt
-- Cache discussion list (5 min)
-- Lazy load nested replies
-- Debounce typing indicator (500ms)
-- Optimize avatar rendering
+### Claude API
+- ~$0.003 per 1K input tokens
+- ~$0.015 per 1K output tokens
+- Average explanation: ~$0.05
+- Budget: $100/month = ~2000 explanations
 
-## Security
+### OpenAI GPT-4
+- ~$0.03 per 1K input tokens
+- ~$0.06 per 1K output tokens
+- Average explanation: ~$0.18
+- Budget: $100/month = ~550 explanations
 
-- Firestore RLS: students can't edit others' content
-- Teacher can always moderate
-- Prevent SQL injection in search
-- Rate limit API calls (10 req/s per user)
-- Sanitize HTML input
-- XSS protection via React escaping
+**Recommendation:** Use Claude API for better cost efficiency.
 
 ## Success Metrics
 
-- Daily Active Users in forum
-- Average replies per discussion
-- Time spent in forums
-- Student satisfaction (survey)
-- Teacher moderation load
-- Spam/flagged content ratio
+- Daily active users using AI features
+- Explanation helpfulness rating (target: 4.5/5)
+- Q&A response time (target: <10s)
+- Cache hit rate (target: 60%)
+- User satisfaction score
+- Cost per explanation
 
 ## Next Steps
 
-1. Copy files to project
-2. Update Firestore RLS for discussions collections
-3. Add routes: `/classes/[id]/forum`
-4. Test moderation workflow
-5. Deploy and monitor engagement
-6. Proceed to Phase 13 (AI Learning Aids)
+1. Add `.env` variables for API keys
+2. Copy service files to `src/lib/`
+3. Copy components to `src/components/`
+4. Create routes for AI features
+5. Implement caching layer
+6. Set up rate limiting
+7. Test with sample topics
+8. Monitor costs and adjust
+9. Proceed to Phase 14 (Analytics)
+
+## Support
+
+- Claude API docs: https://docs.anthropic.com/claude/reference/getting-started-with-the-api
+- OpenAI docs: https://platform.openai.com/docs
+- Rate limiting patterns: https://developers.google.com/analytics/devguides/config/admin/v1/rate-limits
+- Streaming implementation: Web Streams API for progressive rendering
