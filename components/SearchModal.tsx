@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import { search, groupByCategory, popularSearches } from "@/lib/search";
+import { search, groupByCategory, popularSearches, type SearchGroup } from "@/lib/search";
 
 interface SearchModalProps {
   open: boolean;
@@ -20,7 +20,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
   const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   const results = useMemo(() => search(query), [query]);
-  const grouped = useMemo(() => groupByCategory(results), [results]);
+  const grouped = useMemo((): SearchGroup[] => groupByCategory(results), [results]);
 
   // Focus trap + restore focus on close.
   useEffect(() => {
