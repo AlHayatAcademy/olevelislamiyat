@@ -1,43 +1,61 @@
-PHASE 10: FIREBASE AUTHENTICATION - QUICK START
-================================================
+PHASE 11: EDUCATOR DASHBOARD - QUICK START
+===========================================
 
-1. CREATE FIREBASE PROJECT (5 min)
-   - Go to console.firebase.google.com
-   - Create project: "olevelislamiyat"
-   - Enable Email/Password authentication
-   - Create Firestore database
+✅ REQUIRES: Phase 10 (Firebase Auth)
 
-2. GET CREDENTIALS (2 min)
-   - Project Settings → Your apps → Web
-   - Copy config to .env.local
+SETUP (15 minutes):
+==================
 
-3. INSTALL FIREBASE (1 min)
-   npm install firebase
+1. UPDATE FIRESTORE RULES (2 min)
+   - See SETUP.md section "Step 1"
+   - Copy new rules for classes, class_enrollments, assignments
+   - Publish rules
 
-4. COPY FILES (1 min)
-   - lib/auth.ts
-   - lib/auth-context.tsx
-   - lib/data-migration.ts
-   - components/AuthForm.tsx
+2. COPY FILES (2 min)
+   - lib/class-service.ts
+   - components/TeacherDashboard.tsx
+   - components/ClassEnrollment.tsx
 
-5. ADD SECURITY RULES (1 min)
-   - Copy from FIREBASE_SETUP.md
-   - Paste in Firestore Rules tab
-   - Publish
+3. CREATE ROUTES (5 min)
+   - app/classes/page.tsx (teacher view)
+   - app/enroll/page.tsx (student join)
 
-6. UPDATE LAYOUT (2 min)
-   - Wrap with <AuthProvider>
-   - Add <DataMigration />
+4. ADD NAVIGATION (2 min)
+   - Link to /classes
+   - Link to /enroll
 
-7. CREATE AUTH PAGES (5 min)
-   - /auth/signin
-   - /auth/signup
+5. TEST (4 min)
+   - Teacher: Create class → Copy code
+   - Student: Join with code → Check dashboard
 
-8. TEST (5 min)
-   - Go to /auth/signup
-   - Create account
-   - Check Firebase Console
+FEATURES:
+=========
+✅ Create classes
+✅ Generate unique class codes
+✅ Student enrollment
+✅ Progress tracking
+✅ Grade visualization
+✅ Student management
 
-TOTAL TIME: ~20 minutes
+DATABASE:
+=========
+New Firestore collections:
+- classes (class metadata)
+- class_enrollments (student memberships)
+- assignments (quiz assignments)
 
-For detailed instructions, see FIREBASE_SETUP.md
+Plus existing: users, quiz_attempts, learner_profile
+
+FILE STRUCTURE:
+===============
+Phase 11/
+├── lib/
+│   └── class-service.ts      # Class management
+├── components/
+│   ├── TeacherDashboard.tsx  # Teacher UI
+│   └── ClassEnrollment.tsx   # Student join
+├── SETUP.md                  # Detailed setup
+├── README.md                 # Full documentation
+└── QUICK_START.txt          # This file
+
+For detailed instructions, see SETUP.md
