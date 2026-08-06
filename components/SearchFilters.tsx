@@ -27,15 +27,15 @@ export function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
     new Set([...paper1Sections, ...paper2Sections].map((s) => s.slug))
   ).sort();
 
-  const updateFilter = (key: keyof SearchFiltersPreference, value: any) => {
+  const updateFilter = (key: keyof SearchFiltersPreference, value: string | string[] | undefined) => {
     const updated = { ...filters, [key]: value };
     setFilters(updated);
     saveSearchFilters(updated);
     onFiltersChange(updated);
   };
 
-  const toggleArrayValue = (key: keyof SearchFiltersPreference, value: any) => {
-    const current = (filters[key] as any[]) || [];
+  const toggleArrayValue = (key: keyof SearchFiltersPreference, value: string) => {
+    const current = (filters[key] as string[]) || [];
     const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
     updateFilter(key, updated.length > 0 ? updated : undefined);
   };

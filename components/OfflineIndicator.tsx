@@ -161,7 +161,7 @@ export function OfflineIndicator() {
           {/* Info message */}
           {!isOnline && (
             <div className="mt-3 p-3 bg-red-50 dark:bg-red-950 rounded-md text-xs text-red-700 dark:text-red-200">
-              Your quiz attempts will be saved locally and synced when you're back online.
+              Your quiz attempts will be saved locally and synced when you&apos;re back online.
             </div>
           )}
 

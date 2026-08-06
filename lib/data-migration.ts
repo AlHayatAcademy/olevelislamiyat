@@ -127,7 +127,7 @@ export async function migrateQuizAttemptsToServer(
 /**
  * Fetch quiz attempts from Firestore
  */
-export async function fetchQuizAttemptsFromServer(userId: string): Promise<any[]> {
+export async function fetchQuizAttemptsFromServer(userId: string): Promise<QuizAttemptRecord[]> {
   try {
     const quizAttemptsRef = collection(db, "quiz_attempts");
     const q = query(quizAttemptsRef, where("userId", "==", userId));
@@ -179,7 +179,7 @@ export async function syncQuizAttemptToServer(
 /**
  * Get learner profile from Firestore
  */
-export async function getLearnerProfile(userId: string): Promise<any | null> {
+export async function getLearnerProfile(userId: string): Promise<Record<string, unknown> | null> {
   try {
     const learnerProfileRef = doc(db, "learner_profile", userId);
     const profileSnapshot = await getDoc(learnerProfileRef);
@@ -200,7 +200,7 @@ export async function getLearnerProfile(userId: string): Promise<any | null> {
  */
 export async function updateLearnerProfile(
   userId: string,
-  data: Partial<any>,
+  data: Partial<Record<string, unknown>>,
 ): Promise<boolean> {
   try {
     const learnerProfileRef = doc(db, "learner_profile", userId);

@@ -1,0 +1,343 @@
+From 1d08d0e4131314b2c44d79e028bdd80d71511a44 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 6 Aug 2026 18:20:55 +0000
+Subject: [PATCH] Fix linting and TypeScript errors in deployment pipeline
+
+- Fix syntax error in data/site-config.ts by adding missing export statement
+- Escape unescaped HTML entities in JSX (quotes and apostrophes)
+- Replace `any` type usage with proper TypeScript types:
+  - Update SearchFilters to use specific string types
+  - Add interfaces for ModerationPanel data structures
+  - Use Record<string, unknown> for Firestore document data
+  - Use Anthropic SDK types for API responses
+  - Type analysis function parameters properly
+- Fixes 34 ESLint errors blocking CI/CD deployment
+
+Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01T6p3taasseaHSHqmrxeJht
+---
+ components/OfflineIndicator.tsx  |  2 +-
+ components/SearchFilters.tsx     |  6 ++---
+ components__ModerationPanel.tsx  | 29 +++++++++++++++++----
+ components__QAInterface.tsx      |  2 +-
+ components__StudentDashboard.tsx |  4 +--
+ data/site-config.ts              | 43 ++++++++++++++++++--------------
+ lib/data-migration.ts            |  6 ++---
+ lib__ai-service.ts               |  2 +-
+ lib__analytics-service.ts        | 10 ++++----
+ lib__path-service.ts             | 12 ++++-----
+ lib__qa-service.ts               |  6 ++---
+ 11 files changed, 73 insertions(+), 49 deletions(-)
+
+diff --git a/components/OfflineIndicator.tsx b/components/OfflineIndicator.tsx
+index ce140fe..622d38c 100644
+--- a/components/OfflineIndicator.tsx
++++ b/components/OfflineIndicator.tsx
+@@ -161,7 +161,7 @@ export function OfflineIndicator() {
+           {/* Info message */}
+           {!isOnline && (
+             <div className="mt-3 p-3 bg-red-50 dark:bg-red-950 rounded-md text-xs text-red-700 dark:text-red-200">
+-              Your quiz attempts will be saved locally and synced when you're back online.
++              Your quiz attempts will be saved locally and synced when you&apos;re back online.
+             </div>
+           )}
+ 
+diff --git a/components/SearchFilters.tsx b/components/SearchFilters.tsx
+index b17c218..1ed68d0 100644
+--- a/components/SearchFilters.tsx
++++ b/components/SearchFilters.tsx
+@@ -27,15 +27,15 @@ export function SearchFilters({ onFiltersChange }: SearchFiltersProps) {
+     new Set([...paper1Sections, ...paper2Sections].map((s) => s.slug))
+   ).sort();
+ 
+-  const updateFilter = (key: keyof SearchFiltersPreference, value: any) => {
++  const updateFilter = (key: keyof SearchFiltersPreference, value: string | string[] | undefined) => {
+     const updated = { ...filters, [key]: value };
+     setFilters(updated);
+     saveSearchFilters(updated);
+     onFiltersChange(updated);
+   };
+ 
+-  const toggleArrayValue = (key: keyof SearchFiltersPreference, value: any) => {
+-    const current = (filters[key] as any[]) || [];
++  const toggleArrayValue = (key: keyof SearchFiltersPreference, value: string) => {
++    const current = (filters[key] as string[]) || [];
+     const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
+     updateFilter(key, updated.length > 0 ? updated : undefined);
+   };
+diff --git a/components__ModerationPanel.tsx b/components__ModerationPanel.tsx
+index e833b72..2fcded3 100644
+--- a/components__ModerationPanel.tsx
++++ b/components__ModerationPanel.tsx
+@@ -26,12 +26,31 @@ interface ModerationPanelProps {
+ 
+ type Tab = 'pending-discussions' | 'pending-replies' | 'flagged';
+ 
++interface Discussion {
++  id: string;
++  [key: string]: unknown;
++}
++
++interface Reply {
++  id: string;
++  [key: string]: unknown;
++}
++
++interface Flag {
++  id: string;
++  [key: string]: unknown;
++}
++
++interface ModerationStats {
++  [key: string]: unknown;
++}
++
+ export function ModerationPanel({ classId }: ModerationPanelProps) {
+   const [activeTab, setActiveTab] = useState<Tab>('pending-discussions');
+-  const [pendingDiscussions, setPendingDiscussions] = useState<any[]>([]);
+-  const [pendingReplies, setPendingReplies] = useState<any[]>([]);
+-  const [flaggedContent, setFlaggedContent] = useState<any[]>([]);
+-  const [stats, setStats] = useState<any>(null);
++  const [pendingDiscussions, setPendingDiscussions] = useState<Discussion[]>([]);
++  const [pendingReplies, setPendingReplies] = useState<Reply[]>([]);
++  const [flaggedContent, setFlaggedContent] = useState<Flag[]>([]);
++  const [stats, setStats] = useState<ModerationStats | null>(null);
+   const [isLoading, setIsLoading] = useState(true);
+   const [error, setError] = useState<string | null>(null);
+   const [processingId, setProcessingId] = useState<string | null>(null);
+@@ -402,7 +421,7 @@ export function ModerationPanel({ classId }: ModerationPanelProps) {
+                 No flagged content
+               </p>
+             ) : (
+-              flaggedContent.map((flag: any) => (
++              flaggedContent.map((flag: Flag) => (
+                 <div
+                   key={flag.id}
+                   className="bg-white dark:bg-slate-800 rounded-lg border border-red-200 dark:border-red-800 p-4 space-y-3"
+diff --git a/components__QAInterface.tsx b/components__QAInterface.tsx
+index 99a294f..8112304 100644
+--- a/components__QAInterface.tsx
++++ b/components__QAInterface.tsx
+@@ -226,7 +226,7 @@ export function QAInterface({
+ 
+       {/* Tips */}
+       <div className="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded">
+-        💡 Tip: Ask clear, specific questions for better answers. For example: "Explain the Five Pillars" is better than "Tell me about Islam"
++        💡 Tip: Ask clear, specific questions for better answers. For example: &quot;Explain the Five Pillars&quot; is better than &quot;Tell me about Islam&quot;
+       </div>
+     </div>
+   );
+diff --git a/components__StudentDashboard.tsx b/components__StudentDashboard.tsx
+index 6db1aba..9a33b45 100644
+--- a/components__StudentDashboard.tsx
++++ b/components__StudentDashboard.tsx
+@@ -306,13 +306,13 @@ export function StudentDashboard({
+             <li>✓ Amazing streak! Your consistency is paying off.</li>
+           )}
+           {analytics.topicsCompleted >= analytics.topicsStarted && (
+-            <li>✓ You've completed all started topics. Time to challenge yourself!</li>
++            <li>✓ You&apos;ve completed all started topics. Time to challenge yourself!</li>
+           )}
+           {analytics.averageScore < 60 && (
+             <li>⚠ Focus on understanding weak topics before moving forward.</li>
+           )}
+           {analytics.quizzesThisWeek === 0 && (
+-            <li>💪 Haven't studied this week yet. Let's get started!</li>
++            <li>💪 Haven&apos;t studied this week yet. Let&apos;s get started!</li>
+           )}
+         </ul>
+       </div>
+diff --git a/data/site-config.ts b/data/site-config.ts
+index 342ee33..40acbfb 100644
+--- a/data/site-config.ts
++++ b/data/site-config.ts
+@@ -1,19 +1,24 @@
+-primaryNav: [
+-  { label: "Syllabus", href: "/syllabus" },
+-  { label: "Exam Pattern", href: "/exam-pattern" },
+-  { label: "Paper 1", href: "/paper-1" },
+-  { label: "Paper 2", href: "/paper-2" },
+-  { label: "Past Papers", href: "/past-papers" },
+-  { label: "Model Answers", href: "/model-answers" },
+-  { label: "Quotes & References", href: "/quotes-references" },
+-  { label: "Revision", href: "/revision" },
+-  { label: "Quizzes", href: "/quizzes" },
+-  { label: "Analytics", href: "/analytics" },
+-  { label: "Dashboard", href: "/dashboard" },
+-  { label: "Notes", href: "/notes" },
+-  { label: "Resources", href: "/resources" },
+-  { label: "Online Classes", href: "/online-classes" },
+-  { label: "Teacher Resources", href: "/teacher-resources" },
+-  { label: "About", href: "/about" },
+-  { label: "Contact", href: "/contact" },
+-] satisfies NavLink[],
+\ No newline at end of file
++export type NavLink = { label: string; href: string };
++
++export const siteConfig = {
++  domain: "olevelislamiyat.drimranhayat.com",
++  primaryNav: [
++    { label: "Syllabus", href: "/syllabus" },
++    { label: "Exam Pattern", href: "/exam-pattern" },
++    { label: "Paper 1", href: "/paper-1" },
++    { label: "Paper 2", href: "/paper-2" },
++    { label: "Past Papers", href: "/past-papers" },
++    { label: "Model Answers", href: "/model-answers" },
++    { label: "Quotes & References", href: "/quotes-references" },
++    { label: "Revision", href: "/revision" },
++    { label: "Quizzes", href: "/quizzes" },
++    { label: "Analytics", href: "/analytics" },
++    { label: "Dashboard", href: "/dashboard" },
++    { label: "Notes", href: "/notes" },
++    { label: "Resources", href: "/resources" },
++    { label: "Online Classes", href: "/online-classes" },
++    { label: "Teacher Resources", href: "/teacher-resources" },
++    { label: "About", href: "/about" },
++    { label: "Contact", href: "/contact" },
++  ] satisfies NavLink[],
++} as const;
+\ No newline at end of file
+diff --git a/lib/data-migration.ts b/lib/data-migration.ts
+index e138e15..b5c86f7 100644
+--- a/lib/data-migration.ts
++++ b/lib/data-migration.ts
+@@ -127,7 +127,7 @@ export async function migrateQuizAttemptsToServer(
+ /**
+  * Fetch quiz attempts from Firestore
+  */
+-export async function fetchQuizAttemptsFromServer(userId: string): Promise<any[]> {
++export async function fetchQuizAttemptsFromServer(userId: string): Promise<QuizAttemptRecord[]> {
+   try {
+     const quizAttemptsRef = collection(db, "quiz_attempts");
+     const q = query(quizAttemptsRef, where("userId", "==", userId));
+@@ -179,7 +179,7 @@ export async function syncQuizAttemptToServer(
+ /**
+  * Get learner profile from Firestore
+  */
+-export async function getLearnerProfile(userId: string): Promise<any | null> {
++export async function getLearnerProfile(userId: string): Promise<Record<string, unknown> | null> {
+   try {
+     const learnerProfileRef = doc(db, "learner_profile", userId);
+     const profileSnapshot = await getDoc(learnerProfileRef);
+@@ -200,7 +200,7 @@ export async function getLearnerProfile(userId: string): Promise<any | null> {
+  */
+ export async function updateLearnerProfile(
+   userId: string,
+-  data: Partial<any>,
++  data: Partial<Record<string, unknown>>,
+ ): Promise<boolean> {
+   try {
+     const learnerProfileRef = doc(db, "learner_profile", userId);
+diff --git a/lib__ai-service.ts b/lib__ai-service.ts
+index bf34786..52cb54a 100644
+--- a/lib__ai-service.ts
++++ b/lib__ai-service.ts
+@@ -118,7 +118,7 @@ export async function callClaude(
+           content: prompt,
+         },
+       ],
+-    } as any);
++    }) as Anthropic.Messages.Message;
+ 
+     clearTimeout(timeoutId);
+ 
+diff --git a/lib__analytics-service.ts b/lib__analytics-service.ts
+index 3b1bfdf..9aa90ce 100644
+--- a/lib__analytics-service.ts
++++ b/lib__analytics-service.ts
+@@ -176,7 +176,7 @@ export async function getClassAnalytics(
+     }
+ 
+     // Group by user
+-    const byUser: { [userId: string]: any[] } = {};
++    const byUser: { [userId: string]: Array<Record<string, unknown>> } = {};
+     attempts.forEach((attempt) => {
+       if (!byUser[attempt.userId]) {
+         byUser[attempt.userId] = [];
+@@ -220,7 +220,7 @@ export async function getClassAnalytics(
+       }));
+ 
+     // Find weak topics
+-    const byTopic: { [topicId: string]: any[] } = {};
++    const byTopic: { [topicId: string]: Array<Record<string, unknown>> } = {};
+     attempts.forEach((attempt) => {
+       if (!byTopic[attempt.quizId]) {
+         byTopic[attempt.quizId] = [];
+@@ -306,7 +306,7 @@ export async function getPerformanceTrend(
+     const attempts = snapshot.docs.map((doc) => doc.data()) as any[];
+ 
+     // Group by date
+-    const byDate: { [date: string]: any[] } = {};
++    const byDate: { [date: string]: Array<Record<string, unknown>> } = {};
+     attempts.forEach((attempt) => {
+       const date = attempt.timestamp?.toDate?.()?.toISOString?.()?.split("T")[0];
+       if (date) {
+@@ -392,7 +392,7 @@ export async function getTopicAnalytics(
+ }
+ 
+ // Calculate engagement score
+-function calculateEngagementScore(attempts: any[]): number {
++function calculateEngagementScore(attempts: Array<Record<string, unknown>>): number {
+   if (attempts.length === 0) return 0;
+ 
+   const recentAttempts = attempts.slice(0, 10);
+@@ -411,7 +411,7 @@ function calculateEngagementScore(attempts: any[]): number {
+ }
+ 
+ // Calculate current study streak
+-function calculateStreak(attempts: any[]): number {
++function calculateStreak(attempts: Array<Record<string, unknown>>): number {
+   if (attempts.length === 0) return 0;
+ 
+   const sortedByDate = attempts.sort((a, b) => {
+diff --git a/lib__path-service.ts b/lib__path-service.ts
+index 7903514..1bbac8f 100644
+--- a/lib__path-service.ts
++++ b/lib__path-service.ts
+@@ -143,7 +143,7 @@ async function createInitialLearningPath(
+ }
+ 
+ // Analyze quiz performance
+-function analyzePerformance(attempts: any[]): {
++function analyzePerformance(attempts: Array<Record<string, unknown>>): {
+   [topicId: string]: { score: number; attempts: number }
+ } {
+   const performance: {
+@@ -234,11 +234,11 @@ Format as array. Prioritize weak areas first.`;
+       const recommendations = JSON.parse(response.content);
+ 
+       return recommendations
+-        .map((rec: any) => ({
+-          topicId: rec.topicId,
+-          topicName: allTopics.find((t) => t.id === rec.topicId)?.name || rec.topicId,
+-          priority: rec.priority,
+-          reason: rec.reason,
++        .map((rec: Record<string, unknown>) => ({
++          topicId: rec.topicId as string,
++          topicName: allTopics.find((t) => t.id === rec.topicId)?.name || (rec.topicId as string),
++          priority: rec.priority as string,
++          reason: rec.reason as string,
+           estimatedTime: rec.estimatedTime || 30,
+           difficulty: rec.difficulty,
+         }))
+diff --git a/lib__qa-service.ts b/lib__qa-service.ts
+index f1e56dc..ba04d69 100644
+--- a/lib__qa-service.ts
++++ b/lib__qa-service.ts
+@@ -86,10 +86,10 @@ Response:`,
+ 
+     try {
+       const relevantTopics = JSON.parse(response.content);
+-      return relevantTopics.map((topic: any) => ({
+-        topicId: topic.topicId,
++      return relevantTopics.map((topic: Record<string, unknown>) => ({
++        topicId: topic.topicId as string,
+         topicName: topics.find((t) => t.id === topic.topicId)?.name || "",
+-        relevance: topic.relevance,
++        relevance: topic.relevance as number,
+       }));
+     } catch (e) {
+       return [];
+-- 
+2.43.0
+

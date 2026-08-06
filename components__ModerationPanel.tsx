@@ -26,12 +26,31 @@ interface ModerationPanelProps {
 
 type Tab = 'pending-discussions' | 'pending-replies' | 'flagged';
 
+interface Discussion {
+  id: string;
+  [key: string]: unknown;
+}
+
+interface Reply {
+  id: string;
+  [key: string]: unknown;
+}
+
+interface Flag {
+  id: string;
+  [key: string]: unknown;
+}
+
+interface ModerationStats {
+  [key: string]: unknown;
+}
+
 export function ModerationPanel({ classId }: ModerationPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>('pending-discussions');
-  const [pendingDiscussions, setPendingDiscussions] = useState<any[]>([]);
-  const [pendingReplies, setPendingReplies] = useState<any[]>([]);
-  const [flaggedContent, setFlaggedContent] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>(null);
+  const [pendingDiscussions, setPendingDiscussions] = useState<Discussion[]>([]);
+  const [pendingReplies, setPendingReplies] = useState<Reply[]>([]);
+  const [flaggedContent, setFlaggedContent] = useState<Flag[]>([]);
+  const [stats, setStats] = useState<ModerationStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -402,7 +421,7 @@ export function ModerationPanel({ classId }: ModerationPanelProps) {
                 No flagged content
               </p>
             ) : (
-              flaggedContent.map((flag: any) => (
+              flaggedContent.map((flag: Flag) => (
                 <div
                   key={flag.id}
                   className="bg-white dark:bg-slate-800 rounded-lg border border-red-200 dark:border-red-800 p-4 space-y-3"

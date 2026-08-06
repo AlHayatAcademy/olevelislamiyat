@@ -306,13 +306,13 @@ export function StudentDashboard({
             <li>✓ Amazing streak! Your consistency is paying off.</li>
           )}
           {analytics.topicsCompleted >= analytics.topicsStarted && (
-            <li>✓ You've completed all started topics. Time to challenge yourself!</li>
+            <li>✓ You&apos;ve completed all started topics. Time to challenge yourself!</li>
           )}
           {analytics.averageScore < 60 && (
             <li>⚠ Focus on understanding weak topics before moving forward.</li>
           )}
           {analytics.quizzesThisWeek === 0 && (
-            <li>💪 Haven't studied this week yet. Let's get started!</li>
+            <li>💪 Haven&apos;t studied this week yet. Let&apos;s get started!</li>
           )}
         </ul>
       </div>
