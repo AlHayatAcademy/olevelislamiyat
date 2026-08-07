@@ -39,8 +39,8 @@ export function BadgeCollection({
     switch (sortBy) {
       case 'earned':
         return (
-          b.awardedDate.toDate?.()?.getTime() -
-          a.awardedDate.toDate?.()?.getTime()
+          b.awardedDate.getTime() -
+          a.awardedDate.getTime()
         );
       case 'rarity':
         const rarityOrder = { common: 0, rare: 1, epic: 2, legendary: 3 };
@@ -209,9 +209,7 @@ export function BadgeCollection({
               <div className="text-sm text-slate-600 dark:text-slate-400 mb-4">
                 Earned on{' '}
                 <strong>
-                  {selectedBadge.awardedDate
-                    .toDate?.()
-                    ?.toLocaleDateString()}
+                  {selectedBadge.awardedDate.toLocaleDateString()}
                 </strong>
               </div>
 

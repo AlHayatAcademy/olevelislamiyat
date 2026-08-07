@@ -70,7 +70,7 @@ export function CertificatePreview({
             <div className="text-slate-600 dark:text-slate-400">
               Completed on{' '}
               <strong>
-                {certificate.completionDate.toDate?.()?.toLocaleDateString('en-US', {
+                {certificate.completionDate?.toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -182,7 +182,7 @@ export function CertificatePreview({
               Issued:
             </dt>
             <dd className="text-blue-600 dark:text-blue-400">
-              {certificate.issuanceDate.toDate?.()?.toLocaleDateString()}
+              {certificate.issuanceDate?.toLocaleDateString()}
             </dd>
           </div>
           <div>

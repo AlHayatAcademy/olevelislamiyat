@@ -155,13 +155,13 @@ export function useServiceWorker() {
 
       // Request background sync for any remaining items
       if (result.failed > 0) {
-        await requestBackgroundSync();
+        await requestBackgroundSync("quiz-sync");
       }
     } catch (error) {
       console.error("[SW] Sync failed:", error);
 
       // Request background sync to retry
-      await requestBackgroundSync();
+      await requestBackgroundSync("quiz-sync");
     } finally {
       setSyncInProgress(false);
     }
