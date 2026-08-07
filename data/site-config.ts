@@ -1,7 +1,7 @@
 export type NavLink = { label: string; href: string };
 
 export const siteConfig = {
-  domain: "olevelislamiyat.drimranhayat.com",
+  domain: "https://olevelislamiyat.drimranhayat.com",
   siteName: "O Level Islamiyat",
   tagline: "Comprehensive Islamic Education Resource",
   institution: {
