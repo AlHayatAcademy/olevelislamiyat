@@ -127,12 +127,12 @@ export function Leaderboard({
                   {entry.topicsCompleted}
                 </td>
                 <td className="px-4 py-3 text-center text-sm font-medium text-slate-900 dark:text-slate-100">
-                  {entry.streak > 0 && '🔥'}
-                  {entry.streak} days
+                  {(entry.streak ?? 0) > 0 && '🔥'}
+                  {entry.streak ?? 0} days
                 </td>
                 <td className="px-4 py-3 text-center text-sm font-medium text-slate-900 dark:text-slate-100">
-                  {entry.badges.length > 0 ? (
-                    <span className="text-lg">{entry.badges.length}</span>
+                  {(entry.badges?.length ?? 0) > 0 ? (
+                    <span className="text-lg">{entry.badges?.length}</span>
                   ) : (
                     <span className="text-slate-400">-</span>
                   )}
@@ -208,8 +208,8 @@ export function Leaderboard({
                     Streak
                   </p>
                   <p className="font-semibold text-slate-900 dark:text-slate-100">
-                    {entry.streak > 0 && '🔥'}
-                    {entry.streak} days
+                    {(entry.streak ?? 0) > 0 && '🔥'}
+                    {entry.streak ?? 0} days
                   </p>
                 </div>
                 <div>
@@ -217,7 +217,7 @@ export function Leaderboard({
                     Badges
                   </p>
                   <p className="font-semibold text-slate-900 dark:text-slate-100">
-                    {entry.badges.length}
+                    {entry.badges?.length ?? 0}
                   </p>
                 </div>
               </div>

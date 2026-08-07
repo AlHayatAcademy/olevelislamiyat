@@ -184,7 +184,7 @@ export function CertificateDownload({
               💼 LinkedIn
             </a>
             <a
-              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(certificate.shareLink || '')}&text=I earned a certificate for ${encodeURIComponent(certificate.className)}!`}
+              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(certificate.shareLink || '')}&text=I earned a certificate for ${encodeURIComponent(certificate.className || 'Islamiyat')}!`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 px-3 py-2 bg-blue-400 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors text-sm text-center"

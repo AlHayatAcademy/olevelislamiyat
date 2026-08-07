@@ -26,7 +26,10 @@ export interface ClassEnrollment {
 
 export interface StudentProgress {
   studentId: string;
+  userId: string;
   studentName: string;
+  userName: string;
+  email: string;
   quizzesCompleted: number;
   averageScore: number;
   lastActivity?: Date;
@@ -56,6 +59,6 @@ export async function getClassProgress(_classId: string): Promise<StudentProgres
   return [];
 }
 
-export async function deleteClass(_classId: string): Promise<void> {
+export async function deleteClass(_classId: string, _userId?: string): Promise<void> {
   return;
 }

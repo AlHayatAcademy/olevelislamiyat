@@ -1,10 +1,10 @@
 import type { QuizStats } from "@/lib/quiz-analytics";
 
-export type ContentRef = { 
-  type: 'topic' | 'section'; 
-  id: string; 
-  paper?: number; 
-  section?: string; 
+export type ContentRef = {
+  type: 'topic' | 'section';
+  id?: string;
+  paper?: number;
+  section?: string;
   slug?: string;
   title?: string;
   url?: string;
